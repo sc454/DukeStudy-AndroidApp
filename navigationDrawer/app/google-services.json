@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1095113423549",
+    "firebase_url": "https://dukestudy-36f32.firebaseio.com",
+    "project_id": "dukestudy-36f32",
+    "storage_bucket": "dukestudy-36f32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095113423549:android:7e6c3b240b990078",
+        "android_client_info": {
+          "package_name": "com.example.cheli.navigationdrawer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1095113423549-h034mm6jsbu2qa0gd0g9gi4b0kuo26rp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cheli.navigationdrawer",
+            "certificate_hash": "e2b7b58a9abf8da5620afeb5a625125130fc199c"
+          }
+        },
+        {
+          "client_id": "1095113423549-vddjuohbvonp9931i3lhnuf6cbm0aupm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6O4ihFpwFH2fb_tIB_sIWrifolcWoXAA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1095113423549-vddjuohbvonp9931i3lhnuf6cbm0aupm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
