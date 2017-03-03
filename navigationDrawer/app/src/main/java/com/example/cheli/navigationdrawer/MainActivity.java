@@ -1,10 +1,12 @@
 package com.example.cheli.navigationdrawer;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,20 +18,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.model.people.Person;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 import static com.example.cheli.navigationdrawer.R.id.toolbar;
+import static com.example.cheli.navigationdrawer.R.id.userNameInput;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
-    private DatabaseReference mDatabase;
+
     private String mUserId;
+    private EditText usernameEdit;
+    private TextView databaseAns;
+    private Button submitBut;
+    private Button readBut;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +68,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // add NavigationItemSelectedListener to check the navigation clicks
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
+        //This is code I added
+        setContentView(R.layout.user_prof_frag);
+        submitBut = (Button) findViewById(R.id.submitButton);
+        readBut = (Button) findViewById(R.id.readButton);
+        usernameEdit =(EditText) findViewById(R.id.userNameInput);
+        databaseAns=(TextView) findViewById(R.id.dataBaseText);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        submitBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating firebase object
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                database.child("note").push().setValue(usernameEdit.getText().toString());
+            }
+        });
+
+        readBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating firebase object
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                ArrayList<String> myarray=new ArrayList<String>();
+                //myarray=database.child("note").orderByValue();
+
+            }
+        });
+
     }
 
     @Override
@@ -118,12 +166,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             case R.id.nav_profile:
                 fragmentClass = ProfileActivity.class;
+                System.out.println("prof");
                 break;
             case R.id.nav_groups:
                 fragmentClass = GroupsActivity.class;
+                System.out.println("group");
                 break;
             case R.id.nav_viewClasses:
                 fragmentClass = CourseActivity.class;
+                System.out.println("viewClasses");
                 break;
             default:
                 fragmentClass = ProfileActivity.class;
@@ -140,6 +191,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             e.printStackTrace();
         }
+
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
 
