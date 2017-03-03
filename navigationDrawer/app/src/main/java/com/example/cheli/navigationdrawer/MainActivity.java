@@ -37,8 +37,11 @@ import java.util.ArrayList;
 import static com.example.cheli.navigationdrawer.R.id.toolbar;
 import static com.example.cheli.navigationdrawer.R.id.userNameInput;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener {
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+    private DatabaseReference mDatabase;
     private String mUserId;
     private EditText usernameEdit;
     private TextView databaseAns;
@@ -57,6 +60,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        fragmentClass = ProfileFragment.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -135,28 +149,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-       /* int id = item.getItemId();
-
+        int id = item.getItemId();
+        Fragment fragment = null;
+        Class fragmentClass = null;
         if (id == R.id.nav_profile) {
-            Intent profileIntent = new Intent(MainActivity.this,ProfileActivity.class);
-            startActivity(profileIntent);
-        } else if (id == R.id.nav_viewClasses) {
-
-        } else if (id == R.id.nav_addClass) {
-
+            fragmentClass = ProfileFragment.class;
         } else if (id == R.id.nav_groups) {
-
+            fragmentClass = GroupsFragment.class;
+        } /*else if (id == R.id.nav_viewClasses) {
+            fragmentClass = .class;
+        } else if (id == R.id.nav_manage) {
+            fragmentClass = FragmentTwo.class;
+        } else if (id == R.id.nav_share) {
+            fragmentClass = FragmentOne.class;
+        } else if (id == R.id.nav_send) {
+            fragmentClass = FragmentTwo.class;
         }
-
+        */
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-        */
-        selectDrawerItem(item);
-        return true;
     }
 
+<<<<<<< HEAD
     public void selectDrawerItem(MenuItem menuItem) {
         Fragment fragment = null;
 
@@ -228,6 +251,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+=======
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+>>>>>>> 7f9a5c8c68ee64e5343298052b634d077d7c2f2d
     }
 }
 
