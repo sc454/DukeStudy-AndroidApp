@@ -13,6 +13,12 @@
             android:icon="@drawable/ic_menu_groups"
             android:title="Groups" />
     </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/firebase_ex"
+            android:icon="@drawable/ic_menu_groups"
+            android:title="Firebase Ex" />
+    </group>
     <item android:title="Classes">
         <menu>
             <item

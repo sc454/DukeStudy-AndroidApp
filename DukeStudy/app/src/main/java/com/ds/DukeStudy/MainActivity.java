@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
@@ -97,7 +97,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentClass = ProfileFragment.class;
         } else if (id == R.id.nav_groups) {
             fragmentClass = GroupsFragment.class;
-        } /*else if (id == R.id.nav_viewClasses) {
+        }
+        else if (id == R.id.firebase_ex) {
+            fragmentClass = FirebaseExFragment.class;
+        }
+        /*else if (id == R.id.nav_viewClasses) {
             fragmentClass = .class;
         } else if (id == R.id.nav_manage) {
             fragmentClass = FragmentTwo.class;
