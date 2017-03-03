@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.user_prof_frag);
         submitBut = (Button) findViewById(R.id.submitButton);
         readBut = (Button) findViewById(R.id.readButton);
-        usernameEdit =(EditText) findViewById(R.id.userNameInput);
-        databaseAns=(TextView) findViewById(R.id.dataBaseText);
+        usernameEdit = (EditText) findViewById(R.id.userNameInput);
+        databaseAns = (TextView) findViewById(R.id.dataBaseText);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 //Creating firebase object
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-                ArrayList<String> myarray=new ArrayList<String>();
+                ArrayList<String> myarray = new ArrayList<String>();
                 //myarray=database.child("note").orderByValue();
 
             }
@@ -179,43 +179,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-<<<<<<< HEAD
-    public void selectDrawerItem(MenuItem menuItem) {
-        Fragment fragment = null;
-
-        Class fragmentClass;
-        switch (menuItem.getItemId())
-
-        {
-            case R.id.nav_profile:
-                fragmentClass = ProfileActivity.class;
-                System.out.println("prof");
-                break;
-            case R.id.nav_groups:
-                fragmentClass = GroupsActivity.class;
-                System.out.println("group");
-                break;
-            case R.id.nav_viewClasses:
-                fragmentClass = CourseActivity.class;
-                System.out.println("viewClasses");
-                break;
-            default:
-                fragmentClass = ProfileActivity.class;
-        }
-
-        try
-
-        {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (
-                Exception e
-                )
-
-        {
-            e.printStackTrace();
-        }
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -251,11 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
-=======
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
->>>>>>> 7f9a5c8c68ee64e5343298052b634d077d7c2f2d
     }
 }
 
