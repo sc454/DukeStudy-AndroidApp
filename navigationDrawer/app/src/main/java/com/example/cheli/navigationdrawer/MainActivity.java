@@ -1,10 +1,12 @@
 package com.example.cheli.navigationdrawer;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,7 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import static com.example.cheli.navigationdrawer.R.id.toolbar;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
@@ -38,6 +40,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        fragmentClass = ProfileFragment.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -87,59 +100,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-       /* int id = item.getItemId();
-
+        int id = item.getItemId();
+        Fragment fragment = null;
+        Class fragmentClass = null;
         if (id == R.id.nav_profile) {
-            Intent profileIntent = new Intent(MainActivity.this,ProfileActivity.class);
-            startActivity(profileIntent);
-        } else if (id == R.id.nav_viewClasses) {
-
-        } else if (id == R.id.nav_addClass) {
-
+            fragmentClass = ProfileFragment.class;
         } else if (id == R.id.nav_groups) {
-
+            fragmentClass = GroupsFragment.class;
+        } /*else if (id == R.id.nav_viewClasses) {
+            fragmentClass = .class;
+        } else if (id == R.id.nav_manage) {
+            fragmentClass = FragmentTwo.class;
+        } else if (id == R.id.nav_share) {
+            fragmentClass = FragmentOne.class;
+        } else if (id == R.id.nav_send) {
+            fragmentClass = FragmentTwo.class;
         }
-
+        */
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-        */
-        selectDrawerItem(item);
-        return true;
     }
 
-    public void selectDrawerItem(MenuItem menuItem) {
-        Fragment fragment = null;
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
-        Class fragmentClass;
-        switch (menuItem.getItemId())
-
-        {
-            case R.id.nav_profile:
-                fragmentClass = ProfileActivity.class;
-                break;
-            case R.id.nav_groups:
-                fragmentClass = GroupsActivity.class;
-                break;
-            case R.id.nav_viewClasses:
-                fragmentClass = CourseActivity.class;
-                break;
-            default:
-                fragmentClass = ProfileActivity.class;
-        }
-
-        try
-
-        {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (
-                Exception e
-                )
-
-        {
-            e.printStackTrace();
-        }
     }
 }
 
