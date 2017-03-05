@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
         ImageButton editImageButton = (ImageButton) initalProfileView.findViewById(R.id.profileImageButton);
@@ -81,6 +82,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         editProfileButton.setOnClickListener(this);
         editImageButton.setOnClickListener(this);
         return initalProfileView;
+
     }
 
 
