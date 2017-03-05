@@ -4,15 +4,25 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -35,11 +45,13 @@ public class FirebaseExFragment extends Fragment {
     private DatabaseReference mDatabase;
     private String mUserId;
     private EditText usernameEdit;
-    private TextView databaseAns;
+    private ListView databaseAns;
     private Button submitBut;
     private Button readBut;
     private OnFragmentInteractionListener mListener;
-
+    private ArrayList<String> mynames=new ArrayList<String>();
+    private ArrayAdapter<String> adapter;
+    private FirebaseListAdapter<String> adapter1;
     public FirebaseExFragment() {
         // Required empty public constructor
     }
@@ -77,9 +89,41 @@ public class FirebaseExFragment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_firebase_ex, container, false);
         submitBut = (Button) view.findViewById(R.id.submitButton);
-        readBut = (Button) view.findViewById(R.id.readButton);
+        //readBut = (Button) view.findViewById(R.id.readButton);
         usernameEdit = (EditText) view.findViewById(R.id.userNameInput);
-        databaseAns = (TextView) view.findViewById(R.id.dataBaseText);
+        databaseAns = (ListView) view.findViewById(R.id.databaseListView);
+        //Make the array adapter
+        //adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, mynames);
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference notesRef=databaseRef.child("note");
+        adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.simple_expandable_list_item_1,notesRef) {
+            @Override
+            protected void populateView(View v, String model, int position) {
+                TextView mytext=(TextView) v.findViewById(android.R.id.text1);
+                mytext.setText(model);
+            }
+        };
+        databaseAns.setAdapter(adapter1);
+
+//        databaseRef.child("note").addValueEventListener(new ValueEventListener() {
+//            @Override //Gets data initially and whenever things change
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Iterable<DataSnapshot> mychildren = dataSnapshot.getChildren();
+//                adapter.clear();
+//                mynames.clear();
+//                for (DataSnapshot child: mychildren){
+//                    String curName = child.getValue(String.class);
+//                    mynames.add(curName);
+//                    adapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more informatio
         submitBut.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +134,14 @@ public class FirebaseExFragment extends Fragment {
                 database.child("note").push().setValue(usernameEdit.getText().toString());
             }
         });
+        /*readBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating firebase object
+
+
+            }
+       });*/
 
         return view;
     }
@@ -117,6 +169,7 @@ public class FirebaseExFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

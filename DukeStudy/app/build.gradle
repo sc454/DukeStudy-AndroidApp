@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.ds.DukeStudy"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -30,5 +30,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.2.0'
     testCompile 'junit:junit:4.12'
     compile 'com.google.firebase:firebase-database:10.0.1'
+    compile 'com.firebaseui:firebase-ui:0.6.2'
 }
 apply plugin: 'com.google.gms.google-services'

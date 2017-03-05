@@ -21,17 +21,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/submitButton" />
-    <Button
-        android:text="Read Database"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/readButton" />
-
     <TextView
-        android:text="TextView"
+        android:text="Database Vals:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dataBaseText"
-        android:layout_weight="0.24" />
+        android:id="@+id/textDBIntro" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/databaseListView"/>
 
 </LinearLayout>
