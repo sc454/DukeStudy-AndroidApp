@@ -66,7 +66,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
-        EditText userName = (EditText)findViewById(R.id.userNameInput);
+//        EditText userName = (EditText)findViewById(R.id.userNameInput);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
