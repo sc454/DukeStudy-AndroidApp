@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener {
+
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        /* Add fragments to navigate between items in the navigation bar*/
         Fragment fragment = null;
         Class fragmentClass = null;
         fragmentClass = ProfileFragment.class;
@@ -49,9 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
         // get menu from navigationView
-
         // add NavigationItemSelectedListener to check the navigation clicks
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.action_logout) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -104,16 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.firebase_ex) {
             fragmentClass = FirebaseExFragment.class;
         }
-        /*else if (id == R.id.nav_viewClasses) {
-            fragmentClass = .class;
-        } else if (id == R.id.nav_manage) {
-            fragmentClass = FragmentTwo.class;
-        } else if (id == R.id.nav_share) {
-            fragmentClass = FragmentOne.class;
-        } else if (id == R.id.nav_send) {
-            fragmentClass = FragmentTwo.class;
-        }
-        */
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
