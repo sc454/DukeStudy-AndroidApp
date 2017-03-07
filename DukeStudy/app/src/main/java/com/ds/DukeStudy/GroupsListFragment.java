@@ -17,17 +17,17 @@ import com.google.firebase.database.FirebaseDatabase;
  * Created by cheli on 3/5/2017.
  */
 //This is a generic posts Fragment. This will be expanded to work for classes and groups.
-public class MembersFragment extends Fragment {
+public class GroupsListFragment extends Fragment {
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<String> adapter1;
     private ListView membersListView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.members_layout,null);
-        membersListView=(ListView) view.findViewById(R.id.membersListView);
+        View view=inflater.inflate(R.layout.groupslist_layout,null);
+        membersListView=(ListView) view.findViewById(R.id.groupsListListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference postsRef=databaseRef.child("Members");
+        DatabaseReference postsRef=databaseRef.child("Groups");
         adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.simple_expandable_list_item_1,postsRef) {
             @Override
             protected void populateView(View v, String model, int position) {

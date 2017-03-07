@@ -22,12 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link GroupsFragment.OnFragmentInteractionListener} interface
+ * {@link CoursesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link GroupsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GroupsFragment extends Fragment {
+public class CoursesFragment extends Fragment {
     //Use tab_layout.xml to show three tabs in Groups
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
@@ -36,13 +36,13 @@ public class GroupsFragment extends Fragment {
     private FirebaseListAdapter<String> adapterGroup;
     private FirebaseListAdapter<String> adapterMember;
     private OnFragmentInteractionListener mListener;
-    public GroupsFragment() {
+    public CoursesFragment() {
         // Required empty public constructor
     }
 
 
-    public static GroupsFragment newInstance(String param1, String param2) {
-        GroupsFragment fragment = new GroupsFragment();
+    public static CoursesFragment newInstance(String param1, String param2) {
+        CoursesFragment fragment = new CoursesFragment();
         Bundle args = new Bundle();
         return fragment;
     }
@@ -56,9 +56,9 @@ public class GroupsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-            View x =  inflater.inflate(R.layout.tab_layout,null);
-            tabLayout = (TabLayout) x.findViewById(R.id.tabs);
-            viewPager = (ViewPager) x.findViewById(R.id.viewpager);
+        View x =  inflater.inflate(R.layout.tab_layout,null);
+        tabLayout = (TabLayout) x.findViewById(R.id.tabs);
+        viewPager = (ViewPager) x.findViewById(R.id.viewpager);
         /**
          *Set an Adapter for the View Pager
          */
@@ -89,7 +89,7 @@ public class GroupsFragment extends Fragment {
                 case 0:
                     return new PostsFragment();
                 case 1:
-                    return new EventsFragment();
+                    return new GroupsListFragment();
                 case 2:
                     return new MembersFragment();
             }
@@ -114,7 +114,7 @@ public class GroupsFragment extends Fragment {
                 case 0:
                     return "Posts";
                 case 1:
-                    return "Events";
+                    return "Groups";
                 case 2:
                     return "Members";
             }

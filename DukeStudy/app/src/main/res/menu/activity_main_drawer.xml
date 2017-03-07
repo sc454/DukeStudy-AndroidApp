@@ -29,6 +29,18 @@
                 android:id="@+id/nav_addClass"
                 android:icon="@drawable/ic_menu_addclass"
                 android:title="Add Class" />
+            <item
+                android:id="@+id/sampleClass1"
+                android:icon="@drawable/ic_menu_addclass"
+                android:title="Sample Class 1" />
+            <item
+                android:id="@+id/sampleClass2"
+                android:icon="@drawable/ic_menu_addclass"
+                android:title="Sample Class 2" />
+            <item
+                android:id="@+id/sampleClass3"
+                android:icon="@drawable/ic_menu_addclass"
+                android:title="Sample Class 3" />
         </menu>
     </item>
     </menu>

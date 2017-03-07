@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
@@ -57,6 +57,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // add NavigationItemSelectedListener to check the navigation clicks
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Adding classes to navigation bar. This will be done through the database later
+        //Menu menu =navigationView.getMenu();
+        //for (int i = 1; i <= 3; i++) {
+        //    menu.add(0,i,0,"Class"+i);
+        //}
+
+
     }
 
     @Override
@@ -104,6 +112,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (id == R.id.firebase_ex) {
             fragmentClass = FirebaseExFragment.class;
+        }
+        else if (id==R.id.nav_addClass|| id==R.id.nav_viewClasses){
+            fragmentClass=CourseListFragment.class;
+        }
+        else if (id==R.id.sampleClass1||id==R.id.sampleClass2||id==R.id.sampleClass3){
+            //Going to need to figure out how to pass information to the fragment for individual courses
+            fragmentClass = CoursesFragment.class;
         }
 
         try {
