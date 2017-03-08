@@ -23,11 +23,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
-
+    private String profileEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        profileEmail = getIntent().getStringExtra("Email");
         setContentView(R.layout.activity_main);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -42,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Bundle bundle = new Bundle();
+        bundle.putString("Email",profileEmail);
+        bundle.putString("Username","");
+        fragment.setArguments(bundle);
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -98,13 +104,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.firebase_ex) {
             fragmentClass = FirebaseExFragment.class;
         }
-//        else if (id==R.id.nav_addClass|| id==R.id.nav_viewClasses){
-//            fragmentClass=CourseListFragment.class;
-//        }
+        else if(id == R.id.nav_addClass) {
+            fragmentClass = CourseListFragment.class;
+        }
         else if (id==R.id.sampleClass1||id==R.id.sampleClass2||id==R.id.sampleClass3){
             //Going to need to figure out how to pass information to the fragment for individual courses
             fragmentClass = CoursesFragment.class;
         }
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -150,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentClass = ProfileFragment.class;
         }
         Bundle bundle = new Bundle();
-        bundle.putString("UserName",userName);
+        bundle.putString("UserName",profileEmail);
+        bundle.putString("Email",profileEmail);
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
             }
@@ -162,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
-
 }
 
 
