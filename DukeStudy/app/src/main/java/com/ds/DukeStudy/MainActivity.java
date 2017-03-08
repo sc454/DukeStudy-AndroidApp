@@ -98,9 +98,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.firebase_ex) {
             fragmentClass = FirebaseExFragment.class;
         }
-        else if (id==R.id.nav_addClass|| id==R.id.nav_viewClasses){
-            fragmentClass=CourseListFragment.class;
-        }
+//        else if (id==R.id.nav_addClass|| id==R.id.nav_viewClasses){
+//            fragmentClass=CourseListFragment.class;
+//        }
         else if (id==R.id.sampleClass1||id==R.id.sampleClass2||id==R.id.sampleClass3){
             //Going to need to figure out how to pass information to the fragment for individual courses
             fragmentClass = CoursesFragment.class;
