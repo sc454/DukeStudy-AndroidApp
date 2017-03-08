@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 /**
  * Created by cheli on 3/5/2017.
  */
-//This is a generic posts Fragment. This will be expanded to work for classes and groups.
+//This is a generic Members Fragment. This will be expanded to work for classes and groups.
 public class MembersFragment extends Fragment {
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<String> adapter1;

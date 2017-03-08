@@ -30,8 +30,8 @@ import android.widget.ImageView;
 public class ProfileFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String userName = "param1";
-    private static String param;
+    private static String param2;
+    private static String param1;
 
     // TODO: Rename and change types of parameters
 
@@ -70,11 +70,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
         ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         TextView userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
+        TextView emailView = (TextView) initalProfileView.findViewById(R.id.emailView);
         if (getArguments() != null) {
             Bundle args = this.getArguments();
-            param = args.getString("UserName");
-            userNameView.setText(param);
+            param1 = args.getString("UserName");
+            param2 = args.getString("Email");
+            userNameView.setText("UserName "+": "+param1);
+            emailView.setText("Email "+": "+param2);
         }
+        editProfileButton.setOnClickListener(this);
         return initalProfileView;
     }
 
