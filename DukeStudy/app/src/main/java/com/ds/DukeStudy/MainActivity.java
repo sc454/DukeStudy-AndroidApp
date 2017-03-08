@@ -98,7 +98,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Class fragmentClass = null;
         if (id == R.id.nav_profile) {
             fragmentClass = ProfileFragment.class;
-        } else if (id == R.id.nav_groups) {
+        } else if (id == R.id.nav_groups1) {
+            fragmentClass = GroupsFragment.class;
+        }
+        else if (id == R.id.nav_groups2) {
             fragmentClass = GroupsFragment.class;
         }
         else if (id == R.id.firebase_ex) {
