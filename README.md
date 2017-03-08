@@ -6,7 +6,7 @@ This project should be imported into Android Studio. This was tested with the Ne
 ### Completed Tasks
 All tasks listed in our Sprint 1 Plan were completed.
 
-1) Side Navigation Bar: The side naviagtion bar was completed. It is a hideable 
+1) Side Navigation Bar: The side naviagtion bar was completed. It is a hideable as described in the plan. All of the options have basic functionality. 
 
 2) Top Bar Naviation: The top bar navigation page template was completed and can be seen by clicking on groups or one of the sample courses. Note that these tabs each read dummy data from our database.
 
