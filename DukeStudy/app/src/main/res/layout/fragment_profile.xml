@@ -10,13 +10,15 @@
     tools:context="com.ds.DukeStudy.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ImageButton android:id="@+id/profileImageButton"
-        android:layout_width="277dp"
-        android:layout_height="wrap_content"
+    <!--<ImageButton android:id="@+id/profileImageButton"-->
+    <ImageView android:id="@+id/profileImageButton"
+        android:layout_width="260dp"
+        android:layout_height="243dp"
         android:layout_marginTop="50dip"
         android:layout_marginLeft="50dip"
-        android:padding="100dip"
-        android:src="@drawable/ic_menu_profile" />
+        android:layout_marginBottom="50dip"
+        android:src="@drawable/sample_profile_pic"
+        />
 
     <TextView
         android:text="UserName"

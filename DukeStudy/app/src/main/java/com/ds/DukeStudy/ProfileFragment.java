@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
+import android.widget.ImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,20 +68,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
-        ImageButton editImageButton = (ImageButton) initalProfileView.findViewById(R.id.profileImageButton);
+        ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         TextView userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
         if(getArguments()!=null){
             Bundle args = this.getArguments();
             param = args.getString("UserName");
             userNameView.setText(param);
         }
-        drawer = (DrawerLayout) initalProfileView.findViewById(R.id.drawer_layout);
-        editProfileButton.setOnClickListener(this);
-        editImageButton.setOnClickListener(this);
-        return initalProfileView;
-    }
-
-
 
     @Override
     public void onAttach(Context context) {
