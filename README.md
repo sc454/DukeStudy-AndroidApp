@@ -20,7 +20,7 @@ All tasks listed in our Sprint 1 Plan were completed.
 
 7) Navigation Integration: Navigation integration was performed as all of the side navigation bar options direct to appropriate pages.
 
-8) Database setup: An example for reading from and writing to the database can be seen by selecting the "Firebase Ex" option. Values in the database are written to a list. This list is updated when new values are added to the database. This can be tested by typing in the text field and pressing "SUBMIT".
+8) Database setup: An example for reading from and writing to the database can be seen by selecting the "Database" option. Values in the database are written to a list. This list is updated when new values are added to the database. This can be tested by typing in the text field and pressing "SUBMIT".
 
 We also completed a dummy sign-in page. Any text can be entered in username or password and the sign-in button wll take you to the main page of the application. This will eventually communicatie with the firebase authentication module.
 
