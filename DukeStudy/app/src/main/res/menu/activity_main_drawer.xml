@@ -6,38 +6,58 @@
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_profile"
             android:title="Profile" />
-        </group>
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_groups"
-            android:icon="@drawable/ic_menu_groups"
-            android:title="Groups" />
-    </group>
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/firebase_ex"
-            android:icon="@drawable/ic_menu_groups"
-            android:title="Firebase Ex" />
     </group>
     <item android:title="Classes">
         <menu>
+            <!--<item-->
+                <!--android:id="@+id/nav_viewClasses"-->
+                <!--android:icon="@drawable/ic_menu_viewclasses"-->
+                <!--android:title="View Classes" />-->
             <item
-                android:id="@+id/nav_viewClasses"
-                android:icon="@drawable/ic_menu_viewclasses"
-                android:title="View Classes" />
+                android:id="@+id/sampleClass1"
+                android:icon="@drawable/ic_menu_class"
+                android:title="Sample Class 1" />
+            <item
+                android:id="@+id/sampleClass2"
+                android:icon="@drawable/ic_menu_class"
+                android:title="Sample Class 2" />
+            <item
+                android:id="@+id/sampleClass3"
+                android:icon="@drawable/ic_menu_class"
+                android:title="Sample Class 3" />
             <item
                 android:id="@+id/nav_addClass"
                 android:icon="@drawable/ic_menu_addclass"
                 android:title="Add Class" />
-            <item
-                android:id="@+id/sampleClass1"
-                android:title="Sample Class 1" />
-            <item
-                android:id="@+id/sampleClass2"
-                android:title="Sample Class 2" />
-            <item
-                android:id="@+id/sampleClass3"
-                android:title="Sample Class 3" />
         </menu>
     </item>
-    </menu>
+
+    <item android:title="Groups">
+        <menu>
+            <item
+            android:id="@+id/nav_groups"
+            android:icon="@drawable/ic_menu_groups"
+            android:title="Groups" />
+        </menu>
+    </item>
+    <!--<group android:checkableBehavior="single">-->
+        <!--<item-->
+            <!--android:id="@+id/nav_groups"-->
+            <!--android:icon="@drawable/ic_menu_groups"-->
+            <!--android:title="Groups" />-->
+        <!--</group>-->
+    <item android:title="Database Test">
+        <menu>
+            <item
+                android:id="@+id/firebase_ex"
+                android:icon="@drawable/ic_menu_groups"
+                android:title="Database Test" />
+        </menu>
+    </item>
+    <!--<group android:checkableBehavior="single">-->
+    <!--<item-->
+        <!--android:id="@+id/firebase_ex"-->
+        <!--android:icon="@drawable/ic_menu_groups"-->
+        <!--android:title="Database Test" />-->
+    <!--</group>-->
+</menu>
