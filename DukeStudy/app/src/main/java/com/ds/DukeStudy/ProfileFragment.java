@@ -70,11 +70,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
         ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         TextView userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
-        if(getArguments()!=null){
+        if (getArguments() != null) {
             Bundle args = this.getArguments();
             param = args.getString("UserName");
             userNameView.setText(param);
         }
+        return initalProfileView;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -85,7 +87,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
     }
 
     @Override
