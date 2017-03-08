@@ -34,10 +34,14 @@
 
     <item android:title="Groups">
         <menu>
-            <item
-            android:id="@+id/nav_groups"
+        <item
+            android:id="@+id/nav_groups1"
             android:icon="@drawable/ic_menu_groups"
-            android:title="Groups" />
+            android:title="JBiebs" />
+            <item
+                android:id="@+id/nav_groups2"
+                android:icon="@drawable/ic_menu_groups"
+                android:title="Never Say Never" />
         </menu>
     </item>
     <!--<group android:checkableBehavior="single">-->
