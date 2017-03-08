@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 
 /**
@@ -29,12 +30,10 @@ import android.widget.ImageButton;
 public class ProfileFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String userName = "param1";
+    private static String param;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     DrawerLayout drawer;
@@ -54,20 +53,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -78,11 +69,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
         ImageButton editImageButton = (ImageButton) initalProfileView.findViewById(R.id.profileImageButton);
+        TextView userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
+        if(getArguments()!=null){
+            Bundle args = this.getArguments();
+            param = args.getString("UserName");
+            userNameView.setText(param);
+        }
         drawer = (DrawerLayout) initalProfileView.findViewById(R.id.drawer_layout);
         editProfileButton.setOnClickListener(this);
         editImageButton.setOnClickListener(this);
         return initalProfileView;
-
     }
 
 

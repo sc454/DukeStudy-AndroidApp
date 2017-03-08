@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
     private String mUserId;
+    private String profileUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,8 +153,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
     }
+    @Override
+    public void onFragmentInteraction(int tag,String userName) {
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        if (tag == 1) {
+            Log.d("MyApp","I am here");
+            fragmentClass = ProfileFragment.class;
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("UserName",userName);
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            }
+
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            fragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+
+
+    public String getUserName() {
+        return profileUserName;
+    }
+
 }
 
 
