@@ -16,7 +16,7 @@ All tasks listed in our Sprint 1 Plan were completed.
 
 5) Add Course Page: This can be seen be clicking on the "Add Class" option in the side navigation bar. This reads a dummy list of classes from the database.
 
-6) Groups Page: This can be seen by clicking on the "Groups" option on the side navigation bar. The top bar navigation is again used and dummy data is read from the database.
+6) Groups Page: This can be seen by clicking on one of the listed groups under the "Groups" subsection of the side navigation bar. The top bar navigation is again used and dummy data is read from the database.
 
 7) Navigation Integration: Navigation integration was performed as all of the side navigation bar options direct to appropriate pages.
 
