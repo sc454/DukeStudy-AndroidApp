@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 
 /**
@@ -77,7 +78,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
-        ImageButton editImageButton = (ImageButton) initalProfileView.findViewById(R.id.profileImageButton);
+        ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         drawer = (DrawerLayout) initalProfileView.findViewById(R.id.drawer_layout);
         editProfileButton.setOnClickListener(this);
         editImageButton.setOnClickListener(this);
