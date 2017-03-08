@@ -10,7 +10,7 @@
         android:inputType="textPersonName"
         android:text="Name"
         android:ems="10"
-        android:id="@+id/userNameInput" />
+        android:id="@+id/userNameEdit" />
 
     <Button
         android:text="Submit"
