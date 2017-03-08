@@ -1,5 +1,8 @@
 package com.ds.DukeStudy;
-
+/**
+ * Main Activity which defaults to Profile page of the user
+ * This activity handles navigation drawer clicks
+* */
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -21,23 +24,16 @@ import com.google.firebase.database.DatabaseReference;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
 
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
-    private DatabaseReference mDatabase;
-    private String mUserId;
-    private String profileUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Login
-//        setContentView(R.layout.activity_login);
         setContentView(R.layout.activity_main);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        /* Add fragments to navigate between items in the navigation bar*/
+
+        /* Add fragments to navigate between items in the navigation bar. Set profile page as default*/
         Fragment fragment = null;
         Class fragmentClass = null;
         fragmentClass = ProfileFragment.class;
@@ -46,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -54,18 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        // get menu from navigationView
-        // add NavigationItemSelectedListener to check the navigation clicks
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
-
-        //Adding classes to navigation bar. This will be done through the database later
-        //Menu menu =navigationView.getMenu();
-        //for (int i = 1; i <= 3; i++) {
-        //    menu.add(0,i,0,"Class"+i);
-        //}
-
-
     }
 
     @Override
@@ -91,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             return true;
@@ -121,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Going to need to figure out how to pass information to the fragment for individual courses
             fragmentClass = CoursesFragment.class;
         }
-
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -137,11 +120,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onFragmentInteraction(int tag,int view) {
+        //On clicking edit profile, start up edit profile fragment
         Fragment fragment = null;
         Class fragmentClass = null;
        if(tag==0){
            if(view==R.id.editProfileButton){
-               Log.d("MyApp","I am here");
+            //   Log.d("MyApp","I am here");
                fragmentClass = EditProfileFragment.class;
            }
        }
@@ -154,12 +138,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
+
     @Override
     public void onFragmentInteraction(int tag,String userName) {
+        //Allow interaction between fragments.
+        // Change tags for different fragments
         Fragment fragment = null;
         Class fragmentClass = null;
         if (tag == 1) {
-            Log.d("MyApp","I am here");
+         //   Log.d("MyApp","I am here");
             fragmentClass = ProfileFragment.class;
         }
         Bundle bundle = new Bundle();
@@ -174,11 +161,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        }
-
-
-    public String getUserName() {
-        return profileUserName;
     }
 
 }
