@@ -21,6 +21,7 @@ import android.widget.Toast;
  * Use the {@link EditProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+//Displays and retrieves profile information saved in database.
 public class EditProfileFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +65,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
+    //Displays profile information and set listeners for edit button
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment

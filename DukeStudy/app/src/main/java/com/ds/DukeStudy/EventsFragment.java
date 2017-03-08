@@ -16,7 +16,8 @@ import com.google.firebase.database.FirebaseDatabase;
 /**
  * Created by cheli on 3/5/2017.
  */
-//This is a generic posts Fragment. This will be expanded to work for classes and groups.
+//This is an events fragment that retrieves events listed and displays them in a list for a given
+    //course
 public class EventsFragment extends Fragment {
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<String> adapter1;

@@ -27,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
  * Use the {@link GroupsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+//This is the groups fragment that loads group specific data from the database and displays in
+    //3 tab view
 public class GroupsFragment extends Fragment {
     //Use tab_layout.xml to show three tabs in Groups
     public static TabLayout tabLayout;
@@ -53,6 +55,7 @@ public class GroupsFragment extends Fragment {
     }
     @Nullable
     @Override
+    //Sets database listeners and populates listviews.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment

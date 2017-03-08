@@ -27,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
  * Use the {@link GroupsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+//This fragment retrieves information for a specific class from the database and displays in 3 tab
+    //view
 public class CoursesFragment extends Fragment {
     //Use tab_layout.xml to show three tabs in Groups
     public static TabLayout tabLayout;
@@ -82,7 +84,7 @@ public class CoursesFragment extends Fragment {
         /**
          * Return fragment with respect to Position .
          */
-
+        //Opens fragment based on the tab selected
         @Override
         public Fragment getItem(int position) {
             switch (position) {

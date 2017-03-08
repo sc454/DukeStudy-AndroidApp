@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 /**
  * Created by cheli on 3/5/2017.
  */
-//This is a generic groups list Fragment. This will be expanded to work for classes and groups.
+//This fragment loads groups lists for a particular course from the database and displays in listview.
 public class GroupsListFragment extends Fragment {
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<String> adapter1;

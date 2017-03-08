@@ -33,6 +33,7 @@ import java.util.List;
  * Use the {@link FirebaseExFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+//This example shows the read and write functionality from our firebase database.
 public class FirebaseExFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,6 +85,7 @@ public class FirebaseExFragment extends Fragment {
     }
 
     @Override
+    //Sets listeners for the items added to a particular database child.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment

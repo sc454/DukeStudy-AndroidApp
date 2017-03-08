@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 /**
  * Created by cheli on 3/5/2017.
  */
-//This is a generic posts Fragment. This will be expanded to work for classes and groups.
+//This is a fragment that retrieves class List from database and displays in listView
 public class CourseListFragment extends Fragment {
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<String> adapter1;
