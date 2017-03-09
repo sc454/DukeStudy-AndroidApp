@@ -22,16 +22,10 @@ For this task, we planned to create an expandable side navigation bar to subsequ
 For this task, we planned to create a template for a top navigation bar to be used in multiple pages. This template is demonstrated in the sample class and group pages.
 
 #### 3. Profile Page
-For this task, we planned to create a profile page where the user could see and edit personal account information. This page can be reached by navigating to the "Profile" option in the side navigation.
-
-To demonstrate, the name field is editable by clicking the edit button.
+For this task, we planned to create a profile page where the user could see and edit personal account information. This page can be reached by navigating to the "Profile" option in the side navigation. Note that only the name field is currently editable. 
 
 #### 4. Class Page
-For this task, we planned to create a class page, implementing the top navigation and filled with dummy data. These pages can be reached by navigating to one of the options in the "Classes" section of the side navigation.
-
-Example class pages can be found in the side navigation's "Classes" section.
-
-Example course pages can be in "Classes" subsection. There are 3 sample courses. These have the 3 tab top navigation bar implemented in (3). The tabs read dummy data from the database.
+For this task, we planned to create a class page, implementing the top navigation and filled with dummy data. This page can be reached by navigating to one of the options in the "Classes" section of the side navigation. The data displayed is read from the database.
 
 #### 5. Add Class Page
 For this task, we planned to create a non-functional Add Class page. This page can be reached by navigating to the "Add Class" option in the side navigation. The data displayed is read from the database.
@@ -48,6 +42,6 @@ For this task, we planned to setup a database and create a page to display the r
 #### Extra Features
 In addition to the above tasks, we also created a Sign In page. For now, any text can be entered in the username and password fields. After signing in, the user is taken to the profile page. In subsequent sprints, this will communicate with the Firebase authentication module.
 
-Finally, we planned to use static, dummy data across pages. Instead, we actually implemented our database to fill the data on these pages instead.
+Finally, we planned to use static, dummy data across pages. Instead, we actually went a step further and utilized our database to fill the data on these pages instead.
 
 :copyright: JBeibS 2017

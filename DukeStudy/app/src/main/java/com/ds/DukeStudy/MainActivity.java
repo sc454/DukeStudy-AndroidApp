@@ -162,8 +162,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentClass = ProfileFragment.class;
         }
         Bundle bundle = new Bundle();
-        bundle.putString("UserName",profileEmail);
-        bundle.putString("Email",profileEmail);
+        bundle.putString("UserName",userName);
+        // bundle.putString("Email",profileEmail);
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
             }
@@ -176,9 +176,3 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 }
-
-
-
-
-
-

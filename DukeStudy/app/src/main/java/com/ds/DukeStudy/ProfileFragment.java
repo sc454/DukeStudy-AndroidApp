@@ -76,11 +76,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             param1 = args.getString("UserName");
             param2 = args.getString("Email");
             if(param1!=null){
-                userNameView.setText("UserName " + ": " + param1);
+                userNameView.setText("Name: " + param1);
             }
-            if(param2!=null) {
-                emailView.setText("Email " + ": " + param2);
-            }
+            // if(param2!=null) {
+            //     emailView.setText("Email " + ": " + param2);
+            // }
         }
         editProfileButton.setOnClickListener(this);
         return initalProfileView;

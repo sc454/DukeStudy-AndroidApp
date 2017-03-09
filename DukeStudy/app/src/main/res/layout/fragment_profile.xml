@@ -21,21 +21,35 @@
         />
 
     <TextView
-        android:text="UserName"
+        android:text="Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/userNameView"
         android:layout_weight="0.20"/>
 
     <TextView
-        android:text="Email"
+        android:text="Email: jb@duke.edu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/emailView"
         android:layout_weight="0.20" />
 
+    <TextView
+        android:text="Major: Music"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/majorView"
+        android:layout_weight="0.20"/>
+
+    <TextView
+        android:text="Year: Class of 2018"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/classView"
+        android:layout_weight="0.20" />
+
     <Button
-        android:text="Edit Profile"
+        android:text="Edit Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editProfileButton" />
