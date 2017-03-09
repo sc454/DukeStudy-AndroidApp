@@ -96,9 +96,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         Fragment fragment = null;
         Class fragmentClass = null;
+        getSupportActionBar().setTitle(item.getTitle());
         if (id == R.id.nav_profile) {
             fragmentClass = ProfileFragment.class;
-        } else if (id == R.id.nav_groups1) {
+        }
+        else if (id == R.id.nav_groups1) {
             fragmentClass = GroupsFragment.class;
         }
         else if (id == R.id.nav_groups2) {

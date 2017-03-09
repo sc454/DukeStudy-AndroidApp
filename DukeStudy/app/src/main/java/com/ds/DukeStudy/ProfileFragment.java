@@ -67,8 +67,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
         ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         TextView userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
-        userNameView.setText("UserName : Justin Bieber");
+        userNameView.setText("Name: Justin Bieber");
         TextView emailView = (TextView) initalProfileView.findViewById(R.id.emailView);
+        emailView.setText("Email: jb@duke.edu");
+
         if (getArguments() != null) {
             Bundle args = this.getArguments();
             param1 = args.getString("UserName");

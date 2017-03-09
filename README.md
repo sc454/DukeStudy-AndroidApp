@@ -1,27 +1,53 @@
-# README for DukeStudy Application
-DukeStudy is an application to help Duke students find study groups. This is the readme for the DukeStudy Application V1. In this version, the basic User Interface as well as basic database read and write functionality is implemented.
-### Installation Instructions
-This project should be imported into Android Studio. This was tested with the Nexus 5 emulator API 24: 5554.
+# DukeStudy
+DukeStudy is a mobile Android application designed to help connect Duke University classmates in order to produce a more productive learning environment.
 
-### Completed Tasks
-All tasks listed in our Sprint 1 Plan were completed.
+## Overview
+This initial version was built for Sprint 1. The goal was to create the basic user interface, which will serve as the foundation for the final application, as well as to setup a database, which will serve as the application's backend. In subsequent sprints, the application’s core functionalities will be developed into this initial framework.
 
-1) Side Navigation Bar: The side naviagtion bar was completed. It is a hideable as described in the plan. All of the options have basic functionality. 
+## Installation
+DukeStudy should be imported into Android Studio as a project.
 
-2) Top Bar Naviation: The top bar navigation page template was completed and can be seen by clicking on groups or one of the sample courses. Note that these tabs each read dummy data from our database.
+Note that our development was performed using Android Studio 2.3. Our testing was performed with the Nexus 5 Emulator, API 24:5554.
 
-3) Profile Page: A profile page was implemented. This can be seen by clicking on the Profile option in the navigation bar. The name field is editable by clicking the edit button.
+## Workflow
+Once launched, the user will be prompted to sign in. For now, there is no authentication. Then, the user is directed to the profile page. To navigate throughout the application, a side navigation menu is provided. Pages to explore included course and group pages, as well as a temporary database testing page.
 
-4) Course Page: Example course pages can be in "Classes" subsection. There are 3 sample courses. These have the 3 tab top navigation bar implemented in (3). The tabs read dummy data from the database.
+## Task Summary
+Listed below is a summary of our planned task cards and the completion status. See our task cards from Homework 3 for more information.
 
-5) Add Course Page: This can be seen be clicking on the "Add Class" option in the side navigation bar. This reads a dummy list of classes from the database.
+#### 1. Side Navigation
+For this task, we planned to create an expandable side navigation bar to subsequently link to all pages. This menu can be reached by clicking the button on the top left corner of the application.
 
-6) Groups Page: This can be seen by clicking on one of the listed groups under the "Groups" subsection of the side navigation bar. The top bar navigation is again used and dummy data is read from the database.
+#### 2. Top Navigation Template
+For this task, we planned to create a template for a top navigation bar to be used in multiple pages. This template is demonstrated in the sample class and group pages.
 
-7) Navigation Integration: Navigation integration was performed as all of the side navigation bar options direct to appropriate pages.
+#### 3. Profile Page
+For this task, we planned to create a profile page where the user could see and edit personal account information. This page can be reached by navigating to the "Profile" option in the side navigation.
 
-8) Database setup: An example for reading from and writing to the database can be seen by selecting the "Database" option. Values in the database are written to a list. This list is updated when new values are added to the database. This can be tested by typing in the text field and pressing "SUBMIT".
+To demonstrate, the name field is editable by clicking the edit button.
 
-We also completed a dummy sign-in page. Any text can be entered in username or password and the sign-in button wll take you to the main page of the application. This will eventually communicatie with the firebase authentication module.
+#### 4. Class Page
+For this task, we planned to create a class page, implementing the top navigation and filled with dummy data. These pages can be reached by navigating to one of the options in the "Classes" section of the side navigation.
+
+Example class pages can be found in the side navigation's "Classes" section.
+
+Example course pages can be in "Classes" subsection. There are 3 sample courses. These have the 3 tab top navigation bar implemented in (3). The tabs read dummy data from the database.
+
+#### 5. Add Class Page
+For this task, we planned to create a non-functional Add Class page. This page can be reached by navigating to the "Add Class" option in the side navigation. The data displayed is read from the database.
+
+#### 6. Groups Page
+For this task, we planned to create a Groups page, implementing the top navigation and filled with dummy data. This page can be reached by navigating to one of the options in the "Groups" section of the side navigation. The data displayed is read from the database.
+
+#### 7. Navigation Integration
+For this task, we planned to integrate the navigation with each page by creating links. This feature is demonstrated within the side navigation.
+
+#### 8. Database Setup
+For this task, we planned to setup a database and create a page to display the reading and writing process. This feature can be reached by navigating to the "Database" option in the side navigation. The page displays current values in the database and can be updated by typing in the text field and pressing "SUBMIT."
+
+#### Extra Features
+In addition to the above tasks, we also created a Sign In page. For now, any text can be entered in the username and password fields. After signing in, the user is taken to the profile page. In subsequent sprints, this will communicate with the Firebase authentication module.
+
+Finally, we planned to use static, dummy data across pages. Instead, we actually implemented our database to fill the data on these pages instead.
 
 :copyright: JBeibS 2017
