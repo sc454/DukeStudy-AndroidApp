@@ -5,5 +5,5 @@ package com.ds.DukeStudy;
  */
 //This fragment contains the URL for our firebase database.
 public class Config {
-    public static final String FIREBASE_URL = "https://dbnav-4be47.firebaseio.com/";
+    public static final String FIREBASE_URL = "https://dukestudy-a11a3.firebaseio.com";
 }
