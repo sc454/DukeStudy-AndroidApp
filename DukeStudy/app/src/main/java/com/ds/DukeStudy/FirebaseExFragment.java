@@ -52,7 +52,7 @@ public class FirebaseExFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ArrayList<String> mynames=new ArrayList<String>();
     private ArrayAdapter<String> adapter;
-    private FirebaseListAdapter<String> adapter1;
+    private FirebaseListAdapter<PostObject> adapter1;
     public FirebaseExFragment() {
         // Required empty public constructor
     }
@@ -97,12 +97,14 @@ public class FirebaseExFragment extends Fragment {
         //Make the array adapter
         //adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, mynames);
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference notesRef=databaseRef.child("note");
-        adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.simple_expandable_list_item_1,notesRef) {
+        DatabaseReference notesRef=databaseRef.child("postNote").child("class3");
+        adapter1=new FirebaseListAdapter<PostObject>(getActivity(),PostObject.class,android.R.layout.two_line_list_item,notesRef) {
             @Override
-            protected void populateView(View v, String model, int position) {
-                TextView mytext=(TextView) v.findViewById(android.R.id.text1);
-                mytext.setText(model);
+            protected void populateView(View v, PostObject model, int position) {
+                TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
+                TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
+                mytext1.setText(model.getmyMessage());
+                mytext2.setText(model.getmyAuthor());
             }
         };
         databaseAns.setAdapter(adapter1);
@@ -133,7 +135,8 @@ public class FirebaseExFragment extends Fragment {
             public void onClick(View v) {
                 //Creating firebase object
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-                database.child("note").push().setValue(usernameEdit.getText().toString());
+                //database.child("note").push().setValue(usernameEdit.getText().toString());
+                database.child("postNote").child("class3").push().setValue(new PostObject("John",usernameEdit.getText().toString()));
             }
         });
         /*readBut.setOnClickListener(new View.OnClickListener() {

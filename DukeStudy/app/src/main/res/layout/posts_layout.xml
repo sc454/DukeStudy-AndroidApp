@@ -3,8 +3,22 @@
 android:orientation="vertical" android:layout_width="match_parent"
 android:layout_height="match_parent">
 
-<ListView
-    android:id="@+id/postsListView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    <ListView
+        android:id="@+id/postsListView"
+        android:layout_width="match_parent"
+        android:layout_height="303dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text=""
+        android:ems="10"
+        android:id="@+id/postMessage" />
+
+    <Button
+        android:text="Post Message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/submitPost" />
 </LinearLayout>
