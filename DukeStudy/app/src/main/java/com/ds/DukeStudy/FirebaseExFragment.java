@@ -24,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -52,7 +51,7 @@ public class FirebaseExFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ArrayList<String> mynames=new ArrayList<String>();
     private ArrayAdapter<String> adapter;
-    private FirebaseListAdapter<PostObject> adapter1;
+    private FirebaseListAdapter<Student> adapter1;
     public FirebaseExFragment() {
         // Required empty public constructor
     }
@@ -97,17 +96,17 @@ public class FirebaseExFragment extends Fragment {
         //Make the array adapter
         //adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, mynames);
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference notesRef=databaseRef.child("postNote").child("class3");
-        adapter1=new FirebaseListAdapter<PostObject>(getActivity(),PostObject.class,android.R.layout.two_line_list_item,notesRef) {
-            @Override
-            protected void populateView(View v, PostObject model, int position) {
-                TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
-                TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
-                mytext1.setText(model.getmyMessage());
-                mytext2.setText(model.getmyAuthor());
-            }
-        };
-        databaseAns.setAdapter(adapter1);
+        DatabaseReference notesRef=databaseRef.child("StudentList");
+//        adapter1=new FirebaseListAdapter<Student>(getActivity(),Student.class,android.R.layout.two_line_list_item,notesRef) {
+//            @Override
+//            protected void populateView(View v, Student model, int position) {
+//                TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
+//                TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
+//                mytext1.setText(model.getEmail());
+//                mytext2.setText(model.getGradYear());
+//            }
+//        };
+//        databaseAns.setAdapter(adapter1);
 
 //        databaseRef.child("note").addValueEventListener(new ValueEventListener() {
 //            @Override //Gets data initially and whenever things change
@@ -136,7 +135,8 @@ public class FirebaseExFragment extends Fragment {
                 //Creating firebase object
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                 //database.child("note").push().setValue(usernameEdit.getText().toString());
-                database.child("postNote").child("class3").push().setValue(new PostObject("John",usernameEdit.getText().toString()));
+                String customField = usernameEdit.getText().toString();
+                database.child("StudentList").push().setValue(new Student(customField,"blank@duke.edu","music","2016"));
             }
         });
         /*readBut.setOnClickListener(new View.OnClickListener() {
