@@ -1,5 +1,10 @@
 package com.ds.DukeStudy;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class Student {
@@ -24,6 +29,9 @@ public class Student {
         this.courseIds = new ArrayList<String>();
         this.groupIds = new ArrayList<String>();
         this.eventIds = new ArrayList<String>();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.child("StudentList").child(uid).setValue(this);
     }
 
     public Student(String email) {
@@ -34,6 +42,9 @@ public class Student {
         this.courseIds = new ArrayList<String>();
         this.groupIds = new ArrayList<String>();
         this.eventIds = new ArrayList<String>();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db.child("StudentList").child(user.getUid()).setValue(this);
     }
 
 //	Getters
@@ -58,6 +69,7 @@ public class Student {
     public void addCourse(String id) {
         if (!courseIds.contains(id)) {
             courseIds.add(id);
+//            FirebaseDatabase.getInstance().getReference().child("CourseList").;
         }
     }
 
