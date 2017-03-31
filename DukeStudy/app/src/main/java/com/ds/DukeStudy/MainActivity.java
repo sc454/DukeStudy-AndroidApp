@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-    @Override
+  //  @Override
+    /*
     public void onStop(){
         super.onStop();
         if (authListener != null) {
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
-
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -112,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (authListener != null) {
                     mAuth.removeAuthStateListener(authListener);
                     mAuth.signOut();
+                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
                 }
 
             default:
