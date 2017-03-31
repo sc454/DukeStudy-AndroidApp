@@ -27,7 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
     private String profileEmail;
     private FirebaseAuth.AuthStateListener authListener;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +37,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         authListener = new FirebaseAuth.AuthStateListener() {
+
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onStop(){
         super.onStop();
         if (authListener != null) {
-            mAuth.removeAuthStateListener(authListener);
+            auth.removeAuthStateListener(authListener);
             FirebaseAuth.getInstance().signOut();
         }
 
@@ -107,12 +109,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         switch (item.getItemId()) {
 
             case R.id.action_logout:
                 if (authListener != null) {
-                    mAuth.removeAuthStateListener(authListener);
-                    mAuth.signOut();
+
+                    auth.removeAuthStateListener(authListener);
+                    auth.signOut();
                     Intent intent = new Intent(MainActivity.this,LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
