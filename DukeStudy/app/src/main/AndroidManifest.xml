@@ -18,7 +18,7 @@
         <!-- Log in -->
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
+            android:label="DukeStudy"
             android:theme="@style/AppTheme.NoActionBar">
             <!-- Set as startup -->
             <intent-filter>
