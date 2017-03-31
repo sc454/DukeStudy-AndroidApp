@@ -108,6 +108,8 @@ public class FirebaseExFragment extends Fragment {
 //        };
 //        databaseAns.setAdapter(adapter1);
 
+
+
 //        databaseRef.child("note").addValueEventListener(new ValueEventListener() {
 //            @Override //Gets data initially and whenever things change
 //            public void onDataChange(DataSnapshot dataSnapshot) {

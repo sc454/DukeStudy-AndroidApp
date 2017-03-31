@@ -39,6 +39,7 @@ public class Course {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db.child("CourseList").child(uid).setValue(this);
+//        DatabaseReference pushedPostRef
     }
 
 //	Getters
