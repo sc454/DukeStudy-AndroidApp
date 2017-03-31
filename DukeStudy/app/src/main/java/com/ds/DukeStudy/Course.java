@@ -11,6 +11,7 @@ public class Course {
 
 //  Fields
 
+    private String id;
     private String title;
     private String department;
     private String code;
@@ -24,51 +25,44 @@ public class Course {
 
 //	Constructors
 
-    public Student(String name, String email, String major, String gradYear) {
-        this.name = name;
-        this.email = email;
-        this.major = major;
-        this.gradYear = gradYear;
-        this.courseIds = new ArrayList<String>();
+    public Course(String title, String department, String code) {
+        this.title = title;
+        this.department = department;
+        this.code = code;
+        this.instructor = "";
+        this.startTime = "";
+        this.endTime = "";
+        this.location = "";
+        this.studentIds = new ArrayList<String>();
         this.groupIds = new ArrayList<String>();
-        this.eventIds = new ArrayList<String>();
+        this.postIds = new ArrayList<String>();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.child("StudentList").child(uid).setValue(this);
-    }
-
-    public Student(String email) {
-        this.name = "";
-        this.email = email;
-        this.major = "";
-        this.gradYear = "";
-        this.profileURL = "";
-        this.courseIds = new ArrayList<String>();
-        this.groupIds = new ArrayList<String>();
-        this.eventIds = new ArrayList<String>();
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        db.child("StudentList").child(user.getUid()).setValue(this);
+        db.child("CourseList").child(uid).setValue(this);
     }
 
 //	Getters
 
-    public String getName() {return name;}
-    public String getEmail() {return email;}
-    public String getMajor() {return major;}
-    public String getGradYear() {return gradYear;}
-    public ArrayList<String> getCourseIds() {return courseIds;}
+    public String getTitle() {return title;}
+    public String getDepartment() {return department;}
+    public String getCode() {return code;}
+    public String getInstructor() {return instructor;}
+    public String getStartTime() {return startTime;}
+    public String getEndTime() {return endTime;}
+    public String getLocation() {return location;}
+    public ArrayList<String> getStudentIds() {return studentIds;}
     public ArrayList<String> getGroupIds() {return groupIds;}
-    public ArrayList<String> getEventIds() {return eventIds;}
-    public String getProfileURL(){return profileURL;}
+    public ArrayList<String> getPostIds() {return postIds;}
 
 //	Setters
 
-    public void setName(String name) {this.name = name;}
-    public void setEmail(String email) {this.email = email;}
-    public void setMajor(String major) {this.major = major;}
-    public void setGradYear(String gradYear) {this.gradYear = gradYear;}
-    public void setProfileURL(String url){this.profileURL = url;}
+    public void setTitle(String title) {this.title = title;}
+    public void setDepartment(String department) {this.department = department;}
+    public void setCode(String code) {this.code = code;}
+    public void setInstructor(String instructor) {this.instructor = instructor;}
+    public void setStartTime(String startTime) {this.startTime = startTime;}
+    public void setEndTime(String endTime) {this.endTime = endTime;}
+    public void setLocation(String location) {this.location = location;}
 
 //  Mutators
 
