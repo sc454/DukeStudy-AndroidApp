@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         auth = FirebaseAuth.getInstance();
         authListener = new FirebaseAuth.AuthStateListener() {
+
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -86,6 +86,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+    @Override
+    public void onStop(){
+        super.onStop();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
+            FirebaseAuth.getInstance().signOut();
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,14 +108,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            auth.signOut();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            return true;
+
+        switch (item.getItemId()) {
+
+            case R.id.action_logout:
+                if (authListener != null) {
+                    auth.removeAuthStateListener(authListener);
+                    auth.signOut();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    return true;
+                }
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        //noinspection SimplifiableIfStatement
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -136,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Going to need to figure out how to pass information to the fragment for individual courses
             fragmentClass = CoursesFragment.class;
         }
+
+
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
