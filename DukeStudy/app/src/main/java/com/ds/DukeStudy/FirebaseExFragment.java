@@ -138,7 +138,8 @@ public class FirebaseExFragment extends Fragment {
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                 //database.child("note").push().setValue(usernameEdit.getText().toString());
                 String customField = usernameEdit.getText().toString();
-                database.child("StudentList").push().setValue(new Student(customField,"blank@duke.edu","music","2016"));
+                Student s = new Student(customField,"blank@duke.edu","music","2016");
+//                database.child("StudentList").push().setValue(new Student(customField,"blank@duke.edu","music","2016"));
             }
         });
         /*readBut.setOnClickListener(new View.OnClickListener() {

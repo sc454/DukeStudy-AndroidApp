@@ -1,7 +1,7 @@
 package com.ds.DukeStudy;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,8 +37,7 @@ public class Course {
         this.groupIds = new ArrayList<String>();
         this.postIds = new ArrayList<String>();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.child("CourseList").child(uid).setValue(this);
+        db.child("CourseList").setValue(this);
 //        DatabaseReference pushedPostRef
     }
 
