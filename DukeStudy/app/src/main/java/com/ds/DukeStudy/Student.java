@@ -11,11 +11,12 @@ public class Student {
 
 //  Fields
 
+    private String id;
     private String name;
     private String email;
-    private String profileURL;
     private String major;
     private String gradYear;
+    private String profileURL;
     private ArrayList<String> courseIds;
     private ArrayList<String> groupIds;
     private ArrayList<String> eventIds;
@@ -23,6 +24,7 @@ public class Student {
 //	Constructors
 
     public Student(String name, String email, String major, String gradYear) {
+        this.id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.name = name;
         this.email = email;
         this.major = major;
@@ -31,11 +33,12 @@ public class Student {
         this.groupIds = new ArrayList<String>();
         this.eventIds = new ArrayList<String>();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.child("StudentList").child(uid).setValue(this);
+        db.child("Students").child(id).setValue(this);
+        System.out.println(db.getKey());
     }
 
     public Student(String email) {
+        this.id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.name = "";
         this.email = email;
         this.major = "";
@@ -46,7 +49,8 @@ public class Student {
         this.eventIds = new ArrayList<String>();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        db.child("StudentList").child(user.getUid()).setValue(this);
+        db.child("Students").child(id).setValue(this);
+        System.out.println(db.getKey());
     }
 
 //	Getters
@@ -58,7 +62,8 @@ public class Student {
     public ArrayList<String> getCourseIds() {return courseIds;}
     public ArrayList<String> getGroupIds() {return groupIds;}
     public ArrayList<String> getEventIds() {return eventIds;}
-    public String getProfileURL(){return profileURL;}
+    public String getProfileURL() {return profileURL;}
+
 //	Setters
 
     public void setName(String name) {this.name = name;}
@@ -66,6 +71,7 @@ public class Student {
     public void setMajor(String major) {this.major = major;}
     public void setGradYear(String gradYear) {this.gradYear = gradYear;}
     public void setProfileURL(String url){this.profileURL = url;}
+
 //  Mutators
 
     public void addCourse(String id) {
