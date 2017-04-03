@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import static com.ds.DukeStudy.R.id.emailView;
+import static com.ds.DukeStudy.R.id.snap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +46,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private static String param1;
     private static String param2;
     private OnFragmentInteractionListener mListener;
-    DrawerLayout drawer;
+    FirebaseUser user;
+    TextView userNameView;
+    TextView emailView;
+    TextView majorView;
+    TextView yearView;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -66,21 +83,38 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
         ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
-        TextView userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
-        userNameView.setText("Name: Justin Bieber");
-        TextView emailView = (TextView) initalProfileView.findViewById(R.id.emailView);
-        emailView.setText("Email: jb@duke.edu");
+        userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
+        emailView = (TextView) initalProfileView.findViewById(R.id.emailView);
+        majorView = (TextView)initalProfileView.findViewById(R.id.majorView);
+        yearView = (TextView)initalProfileView.findViewById(R.id.classView);
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+               rootRef.child("StudentList").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
 
-        if (getArguments() != null) {
-            Bundle args = this.getArguments();
-            param1 = args.getString("UserName");
-            param2 = args.getString("Email");
-            if(param1!=null){
-                userNameView.setText("Name: " + param1);
-            }
-            // if(param2!=null) {
-            //     emailView.setText("Email " + ": " + param2);
-            // }
+
+                            userNameView.setText(snapshot.child("name").getValue().toString());
+                            emailView.setText(snapshot.child("email").getValue().toString());
+                            majorView.setText(snapshot.child("major").getValue().toString());
+                            yearView.setText(snapshot.child("gradYear").getValue().toString());
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    //  Toast(databaseError.getMessage().toString(),"Error in Database retrieval");
+                    Log.e("", "Failed to read app title value.");
+                }
+            });
+        }
+        else{
+            userNameView.setText("Name");
+            emailView.setText("Email");
+            majorView.setText("Major");
+            yearView.setText("Year");
         }
         editProfileButton.setOnClickListener(this);
         return initalProfileView;

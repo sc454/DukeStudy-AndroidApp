@@ -12,6 +12,30 @@
         android:ems="10"
         android:id="@+id/userNameEdit" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Email"
+        android:ems="10"
+        android:id="@+id/userEmailEdit" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Major"
+        android:ems="10"
+        android:id="@+id/userMajorEdit" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Year"
+        android:ems="10"
+        android:id="@+id/userYearEdit" />
+
     <Button
         android:text="Submit"
         android:layout_width="match_parent"
