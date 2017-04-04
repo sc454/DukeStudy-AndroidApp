@@ -38,6 +38,7 @@ public class GroupsFragment extends Fragment {
     private FirebaseListAdapter<String> adapterGroup;
     private FirebaseListAdapter<String> adapterMember;
     private OnFragmentInteractionListener mListener;
+    private String groupName;
     public GroupsFragment() {
         // Required empty public constructor
     }

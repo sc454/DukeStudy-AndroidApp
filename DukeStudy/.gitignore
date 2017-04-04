@@ -10,4 +10,4 @@
 .externalNativeBuild
 
 # Added by Branch
-.idea/
+/.idea
