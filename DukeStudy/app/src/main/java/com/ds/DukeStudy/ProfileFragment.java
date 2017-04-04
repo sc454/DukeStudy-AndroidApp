@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -87,34 +88,31 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         emailView = (TextView) initalProfileView.findViewById(R.id.emailView);
         majorView = (TextView)initalProfileView.findViewById(R.id.majorView);
         yearView = (TextView)initalProfileView.findViewById(R.id.classView);
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
             user = FirebaseAuth.getInstance().getCurrentUser();
-            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-               rootRef.child("StudentList").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            rootRef.child("StudentList").addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot snapshot) {
-
-
-                            userNameView.setText(snapshot.child("name").getValue().toString());
-                            emailView.setText(snapshot.child("email").getValue().toString());
-                            majorView.setText(snapshot.child("major").getValue().toString());
-                            yearView.setText(snapshot.child("gradYear").getValue().toString());
-
-
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(user.getUid())){
+                        userNameView.setText(dataSnapshot.child(user.getUid()).child("name").getValue().toString());
+                        emailView.setText(dataSnapshot.child(user.getUid()).child("email").getValue().toString());
+                        majorView.setText(dataSnapshot.child(user.getUid()).child("major").getValue().toString());
+                        yearView.setText(dataSnapshot.child(user.getUid()).child("gradYear").getValue().toString());
+                    }
+                    else{
+                        userNameView.setText("Name");
+                        emailView.setText("Email");
+                        majorView.setText("Major");
+                        yearView.setText("Year");
+                    }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    //  Toast(databaseError.getMessage().toString(),"Error in Database retrieval");
-                    Log.e("", "Failed to read app title value.");
+
                 }
             });
-        }
-        else{
-            userNameView.setText("Name");
-            emailView.setText("Email");
-            majorView.setText("Major");
-            yearView.setText("Year");
         }
         editProfileButton.setOnClickListener(this);
         return initalProfileView;
