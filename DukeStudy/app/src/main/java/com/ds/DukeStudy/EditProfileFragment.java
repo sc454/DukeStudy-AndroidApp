@@ -119,7 +119,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         String userEmail = userEmailText.getText().toString();
         String userMajor = userMajorText.getText().toString();
         String userYear = userYearText.getText().toString();
-        database.child("StudentList").child(auth.getCurrentUser().getUid()).setValue( new Student(userName,userEmail,userMajor,userYear));
+        database.child("students").child(auth.getCurrentUser().getUid()).setValue( new Student(userName,userEmail,userMajor,userYear));
 
 
         Fragment fragment = null;

@@ -91,7 +91,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
             user = FirebaseAuth.getInstance().getCurrentUser();
-            rootRef.child("StudentList").addValueEventListener(new ValueEventListener() {
+            rootRef.child("students").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChild(user.getUid())){
