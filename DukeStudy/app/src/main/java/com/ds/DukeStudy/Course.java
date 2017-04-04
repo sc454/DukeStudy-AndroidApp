@@ -1,11 +1,9 @@
 package com.ds.DukeStudy;
 
-import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Course {
 
@@ -25,21 +23,21 @@ public class Course {
 
 //	Constructors
 
-    public Course(String title, String department, String code) {
+    public Course(String title, String department, String code, String instructor) {
         this.title = title;
         this.department = department;
         this.code = code;
-        this.instructor = "";
+        this.instructor = instructor;
         this.startTime = "";
         this.endTime = "";
         this.location = "";
         this.studentIds = new ArrayList<String>();
         this.groupIds = new ArrayList<String>();
         this.postIds = new ArrayList<String>();
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        db.child("CourseList").setValue(this);
-//        DatabaseReference pushedPostRef
+        id = Util.writeToDatabase(this, Arrays.asList("courses"));
     }
+
+    public Course() {this("NoTitle","NoDepartment","NoCode","NoInstructor");}
 
 //	Getters
 
@@ -63,13 +61,15 @@ public class Course {
     public void setStartTime(String startTime) {this.startTime = startTime;}
     public void setEndTime(String endTime) {this.endTime = endTime;}
     public void setLocation(String location) {this.location = location;}
+    public void setStudentIds(ArrayList<String> ids) {studentIds = ids;}
+    public void setGroupIds(ArrayList<String> ids) {groupIds = ids;}
+    public void setPostIds(ArrayList<String> ids) {postIds = ids;}
 
 //  Mutators
 
     public void addStudent(String id) {
         if (!studentIds.contains(id)) {
             studentIds.add(id);
-//            FirebaseDatabase.getInstance().getReference().child("CourseList").;
         }
     }
 
@@ -88,4 +88,10 @@ public class Course {
     public void removeStudent(String id) {studentIds.remove(id);}
     public void removeGroup(String id) {groupIds.remove(id);}
     public void removePost(String id) {postIds.remove(id);}
+
+//  Database
+
+    public void updateDatabase() {
+        Util.writeToDatabase(id, this, Arrays.asList("courses"));
+    }
 }

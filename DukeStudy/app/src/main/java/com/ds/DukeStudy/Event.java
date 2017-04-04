@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Event {
 
@@ -19,21 +20,16 @@ public class Event {
 //	Constructors
 
     public Event(String date, String time, String location) {
-        this.id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.date = date;
         this.time = time;
         this.location = location;
         this.studentIds = new ArrayList<String>();
-        updateDatabase();
+        id = Util.writeToDatabase(this, Arrays.asList("events"));
     }
 
-    public Event(String date) {
-        this(date, "NoTime", "NoLocation");
-    }
+    public Event(String date) {this(date, "NoTime", "NoLocation");}
 
-    public Event() {
-        this("NoDate", "NoTime", "NoLocation");
-    }
+    public Event() {this("NoDate", "NoTime", "NoLocation");}
 
 //	Getters
 
@@ -64,12 +60,6 @@ public class Event {
 //  Database
 
     public void updateDatabase() {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-//        DataSnapshot dbData = FirebaseDatabase.getInstance().getReference();
-//        if (dbData.child("students").hasChild(id)) {
-//        if (db.child("students").child(id) != null) {
-//            System.out.println("Student exists!");
-//        }
-        db.child("events").child(id).setValue(this);
+        Util.writeToDatabase(id, this, Arrays.asList("courses"));
     }
 }
