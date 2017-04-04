@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -33,9 +34,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-
-    Button submitProfileButton;
+    private FirebaseAuth auth;
     View EditProfileView;
     Button SubmitProfileButton;
     EditText userNameText;
@@ -114,12 +113,13 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        auth=FirebaseAuth.getInstance();
         //database.child("note").push().setValue(usernameEdit.getText().toString());
         String userName = userNameText.getText().toString();
         String userEmail = userEmailText.getText().toString();
         String userMajor = userMajorText.getText().toString();
         String userYear = userYearText.getText().toString();
-        database.child("StudentList").push().setValue(new Student(userName,userEmail,userMajor,userYear));
+        database.child("StudentList").child(auth.getCurrentUser().getUid()).setValue( new Student(userName,userEmail,userMajor,userYear));
 
 
         Fragment fragment = null;
