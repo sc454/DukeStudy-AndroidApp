@@ -60,6 +60,6 @@ public class Event {
 //  Database
 
     public void updateDatabase() {
-        Util.writeToDatabase(id, this, Arrays.asList("courses"));
+        Util.writeToDatabase(id, this, Arrays.asList("events"));
     }
 }
