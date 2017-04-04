@@ -35,8 +35,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private FirebaseAuth auth;
-
-    Button submitProfileButton;
     View EditProfileView;
     Button SubmitProfileButton;
     EditText userNameText;

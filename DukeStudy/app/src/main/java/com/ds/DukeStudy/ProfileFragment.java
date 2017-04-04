@@ -97,10 +97,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     if (dataSnapshot.hasChild(user.getUid())){
                       //  Toast.makeText(getActivity(), "UID exists!",
                       //          Toast.LENGTH_SHORT).show();
-                        userNameView.setText(dataSnapshot.child(user.getUid()).child("name").getValue().toString());
-                        emailView.setText(dataSnapshot.child(user.getUid()).child("email").getValue().toString());
-                        majorView.setText(dataSnapshot.child(user.getUid()).child("major").getValue().toString());
-                        yearView.setText(dataSnapshot.child(user.getUid()).child("gradYear").getValue().toString());
+                        userNameView.setText("Name : "+dataSnapshot.child(user.getUid()).child("name").getValue().toString());
+                        emailView.setText("Email : "+dataSnapshot.child(user.getUid()).child("email").getValue().toString());
+                        majorView.setText("Major : "+dataSnapshot.child(user.getUid()).child("major").getValue().toString());
+                        yearView.setText("Graduation Year : "+dataSnapshot.child(user.getUid()).child("gradYear").getValue().toString());
                     }
                     else{
                     //    Toast.makeText(getActivity(), "UID doesn't exist!",
