@@ -1,33 +1,5 @@
 package com.ds.DukeStudy;
 
-// import android.os.Bundle;
-// import android.support.design.widget.FloatingActionButton;
-// import android.support.design.widget.Snackbar;
-// import android.support.v7.app.AppCompatActivity;
-// import android.support.v7.widget.Toolbar;
-// import android.view.View;
-//
-// public class ResetPasswordActivity extends AppCompatActivity {
-//
-//     @Override
-//     protected void onCreate(Bundle savedInstanceState) {
-//         super.onCreate(savedInstanceState);
-//         setContentView(R.layout.activity_reset_password);
-//         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//         setSupportActionBar(toolbar);
-//
-//         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//         fab.setOnClickListener(new View.OnClickListener() {
-//             @Override
-//             public void onClick(View view) {
-//                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                         .setAction("Action", null).show();
-//             }
-//         });
-//     }
-//
-// }
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -44,22 +16,27 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
+//  Fields
+
+    private FirebaseAuth auth;
     private EditText inputEmail;
     private Button btnReset, btnBack;
-    private FirebaseAuth auth;
     private ProgressBar progressBar;
+
+//  Methods
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
+        auth = FirebaseAuth.getInstance();
         inputEmail = (EditText) findViewById(R.id.email);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
         btnBack = (Button) findViewById(R.id.btn_back);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        auth = FirebaseAuth.getInstance();
+    //  Back button
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,16 +45,22 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
         });
 
+    //  Reset button
+
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String email = inputEmail.getText().toString().trim();
 
+            //  Check for empty email
+
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplication(), "Enter your registered email", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+            //  Send password reset email
 
                 progressBar.setVisibility(View.VISIBLE);
                 auth.sendPasswordResetEmail(email)
@@ -89,7 +72,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(ResetPasswordActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
                                 }
-
                                 progressBar.setVisibility(View.GONE);
                             }
                         });

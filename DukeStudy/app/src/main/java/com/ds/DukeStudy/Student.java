@@ -7,6 +7,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+// TODO: mimic ondatachange method in ProfileFragment ln 92
+
 public class Student {
 
 //  Fields
@@ -32,7 +34,7 @@ public class Student {
         this.courseIds = new ArrayList<String>();
         this.groupIds = new ArrayList<String>();
         this.eventIds = new ArrayList<String>();
-        updateDatabase();
+//        updateDatabase();
     }
 
     public Student(String email) {

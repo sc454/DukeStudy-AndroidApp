@@ -1,9 +1,5 @@
 package com.ds.DukeStudy;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,7 +20,7 @@ public class Event {
         this.time = time;
         this.location = location;
         this.studentIds = new ArrayList<String>();
-        id = Util.writeToDatabase(this, Arrays.asList("events"));
+//        id = Util.writeToDatabase(this, Arrays.asList("events"));
     }
 
     public Event(String date) {this(date, "NoTime", "NoLocation");}
@@ -60,6 +56,6 @@ public class Event {
 //  Database
 
     public void updateDatabase() {
-        Util.writeToDatabase(id, this, Arrays.asList("courses"));
+        Util.writeToDatabase(id, this, Arrays.asList("events"));
     }
 }
