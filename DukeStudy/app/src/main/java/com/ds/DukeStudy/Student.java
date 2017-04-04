@@ -32,7 +32,7 @@ public class Student {
         this.courseIds = new ArrayList<String>();
         this.groupIds = new ArrayList<String>();
         this.eventIds = new ArrayList<String>();
-        updateDatabase();
+//        updateDatabase();
     }
 
     public Student(String email) {

@@ -1,7 +1,5 @@
 package com.ds.DukeStudy;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -34,7 +32,7 @@ public class Course {
         this.studentIds = new ArrayList<String>();
         this.groupIds = new ArrayList<String>();
         this.postIds = new ArrayList<String>();
-        id = Util.writeToDatabase(this, Arrays.asList("courses"));
+//        id = Util.writeToDatabase(this, Arrays.asList("courses"));
     }
 
     public Course() {this("NoTitle","NoDepartment","NoCode","NoInstructor");}
