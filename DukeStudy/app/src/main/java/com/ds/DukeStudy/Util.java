@@ -20,8 +20,8 @@ public class Util {
 
     //  Navigate to path
 
-        DatabaseReference child;
-        for (String p : path) {
+        DatabaseReference child = db.child(path.get(0));
+        for (String p : path.subList(1, path.size())) {
             child = db.child(p);
         }
 
@@ -38,8 +38,8 @@ public class Util {
 
     //  Navigate to path
 
-        DatabaseReference child;
-        for (String p : path) {
+        DatabaseReference child = db.child(path.get(0));
+        for (String p : path.subList(1, path.size())) {
             child = db.child(p);
         }
 

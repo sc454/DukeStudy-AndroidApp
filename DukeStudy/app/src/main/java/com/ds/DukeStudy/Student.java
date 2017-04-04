@@ -36,7 +36,7 @@ public class Student {
     }
 
     public Student(String email) {
-        this("NoName","NoEmail","NoMajor","NoGradYear");
+        this("NoName",email,"NoMajor","NoGradYear");
     }
 
     public Student() {this("NoEmail");}
