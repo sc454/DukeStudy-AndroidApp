@@ -2,16 +2,17 @@ package com.ds.DukeStudy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Event {
 
 //  Fields
 
-    private String id;
+    private String key = "";
     private String date;
     private String time;
     private String location;
-    private ArrayList<String> studentIds;
+    private ArrayList<String> studentKeys = new ArrayList<String>();
 
 //	Constructors
 
@@ -19,8 +20,6 @@ public class Event {
         this.date = date;
         this.time = time;
         this.location = location;
-        this.studentIds = new ArrayList<String>();
-//        id = Util.writeToDatabase(this, Arrays.asList("events"));
     }
 
     public Event(String date) {this(date, "NoTime", "NoLocation");}
@@ -29,33 +28,37 @@ public class Event {
 
 //	Getters
 
-    public String getId() {return id;}
+    public String getKey() {return key;}
     public String getDate() {return date;}
     public String getTime() {return time;}
     public String getLocation() {return location;}
-    public ArrayList<String> getStudentIds() {return studentIds;}
+    public ArrayList<String> getStudentKeys() {return studentKeys;}
 
 //	Setters
 
-    public void setId(String id) {this.id = id;}
+    public void setKey(String key) {this.key = key;}
     public void setDate(String date) {this.date = date;}
     public void setTime(String time) {this.time = time;}
     public void setLocation(String location) {this.location = location;}
-    public void setStudentIds(ArrayList<String> ids) {studentIds = ids;}
+    public void setStudentKeys(ArrayList<String> keys) {studentKeys = keys;}
 
-//  Mutators
+//  Other mutators
 
-    public void addStudent(String id) {
-        if (!studentIds.contains(id)) {
-            studentIds.add(id);
+    public void addStudent(String key) {
+        if (!studentKeys.contains(key)) {
+            studentKeys.add(key);
         }
     }
 
-    public void removeStudent(String id) {studentIds.remove(id);}
+    public void removeStudent(String key) {studentKeys.remove(key);}
 
 //  Database
 
-    public void updateDatabase() {
-        Util.writeToDatabase(id, this, Arrays.asList("events"));
+    public void put() {
+        List<String> path = Arrays.asList("events");
+        if (key == null || "".equals(key)) {
+            key = Database.getNewKey(path);
+        }
+        Database.put(key, this, path);
     }
 }

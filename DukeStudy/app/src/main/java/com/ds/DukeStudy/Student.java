@@ -1,11 +1,10 @@
 package com.ds.DukeStudy;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 // TODO: mimic ondatachange method in ProfileFragment ln 92
 
@@ -13,85 +12,86 @@ public class Student {
 
 //  Fields
 
-    private String id;
+    private String key = "";
     private String name;
     private String email;
     private String major;
     private String gradYear;
     private String profileUrl;
-    private ArrayList<String> courseIds;
-    private ArrayList<String> groupIds;
-    private ArrayList<String> eventIds;
+    private ArrayList<String> courseKeys = new ArrayList<String>();
+    private ArrayList<String> groupKeys = new ArrayList<String>();
+    private ArrayList<String> eventKeys = new ArrayList<String>();
 
 //	Constructors
 
     public Student(String name, String email, String major, String gradYear) {
-        this.id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.name = name;
         this.email = email;
         this.major = major;
         this.gradYear = gradYear;
-        this.courseIds = new ArrayList<String>();
-        this.groupIds = new ArrayList<String>();
-        this.eventIds = new ArrayList<String>();
-//        updateDatabase();
+        this.profileUrl = "NoUrl";
     }
 
-    public Student(String email) {
-        this("NoName",email,"NoMajor","NoGradYear");
-    }
+    public Student(String email) {this("NoName", email, "NoMajor", "NoGradYear");}
 
     public Student() {this("NoEmail");}
 
 //	Getters
 
+    public String getKey() {return key;}
     public String getName() {return name;}
     public String getEmail() {return email;}
     public String getMajor() {return major;}
     public String getGradYear() {return gradYear;}
     public String getProfileUrl() {return profileUrl;}
-    public ArrayList<String> getCourseIds() {return courseIds;}
-    public ArrayList<String> getGroupIds() {return groupIds;}
-    public ArrayList<String> getEventIds() {return eventIds;}
+    public ArrayList<String> getCourseKeys() {return courseKeys;}
+    public ArrayList<String> getGroupKeys() {return groupKeys;}
+    public ArrayList<String> getEventKeys() {return eventKeys;}
 
 //	Setters
 
+    public void setKey(String key) {this.key = key;}
     public void setName(String name) {this.name = name;}
     public void setEmail(String email) {this.email = email;}
     public void setMajor(String major) {this.major = major;}
     public void setGradYear(String year) {gradYear = year;}
     public void setProfileUrl(String url){profileUrl = url;}
-    public void setCourseIds(ArrayList<String> ids) {courseIds = ids;}
-    public void setGroupIds(ArrayList<String> ids) {groupIds = ids;}
-    public void setEventIds(ArrayList<String> ids) {eventIds = ids;}
+    public void setCourseKeys(ArrayList<String> keys) {courseKeys = keys;}
+    public void setGroupKeys(ArrayList<String> keys) {groupKeys = keys;}
+    public void setEventKeys(ArrayList<String> keys) {eventKeys = keys;}
 
-//  Mutators
+//  Other mutators
 
-    public void addCourse(String id) {
-        if (!courseIds.contains(id)) {
-            courseIds.add(id);
+    public void addCourseKey(String key) {
+        if (!courseKeys.contains(key)) {
+            courseKeys.add(key);
         }
     }
 
-    public void addGroup(String id) {
-        if (!groupIds.contains(id)) {
-            groupIds.add(id);
+    public void addGroupKey(String key) {
+        if (!groupKeys.contains(key)) {
+            groupKeys.add(key);
         }
     }
 
-    public void addEvent(String id) {
-        if (!eventIds.contains(id)) {
-            eventIds.add(id);
+    public void addEventKey(String key) {
+        if (!eventKeys.contains(key)) {
+            eventKeys.add(key);
         }
     }
 
-    public void removeCourse(String id) {courseIds.remove(id);}
-    public void removeGroup(String id) {groupIds.remove(id);}
-    public void removeEvent(String id) {eventIds.remove(id);}
+    public void removeCourseKey(String key) {courseKeys.remove(key);}
+    public void removeGroupKey(String key) {groupKeys.remove(key);}
+    public void removeEventKey(String key) {eventKeys.remove(key);}
 
 //  Database
 
-    public void updateDatabase() {
-        Util.writeToDatabase(id, this, Arrays.asList("students"));
+    public void put() {
+        List<String> path = Arrays.asList("students");
+        if (key == null || "".equals(key)) {
+            key = Database.getNewKey(path);
+        }
+        Database.put(key, this, path);
     }
 }

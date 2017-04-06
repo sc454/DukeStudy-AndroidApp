@@ -2,12 +2,13 @@ package com.ds.DukeStudy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Course {
 
 //  Fields
 
-    private String id;
+    private String key = "";
     private String title;
     private String department;
     private String code;
@@ -15,9 +16,9 @@ public class Course {
     private String startTime;
     private String endTime;
     private String location;
-    private ArrayList<String> studentIds;
-    private ArrayList<String> groupIds;
-    private ArrayList<String> postIds;
+    private ArrayList<String> studentKeys = new ArrayList<String>();
+    private ArrayList<String> groupKeys = new ArrayList<String>();
+    private ArrayList<String> postKeys = new ArrayList<String>();
 
 //	Constructors
 
@@ -29,16 +30,13 @@ public class Course {
         this.startTime = "";
         this.endTime = "";
         this.location = "";
-        this.studentIds = new ArrayList<String>();
-        this.groupIds = new ArrayList<String>();
-        this.postIds = new ArrayList<String>();
-//        id = Util.writeToDatabase(this, Arrays.asList("courses"));
     }
 
     public Course() {this("NoTitle","NoDepartment","NoCode","NoInstructor");}
 
 //	Getters
 
+    public String getKey() {return key;}
     public String getTitle() {return title;}
     public String getDepartment() {return department;}
     public String getCode() {return code;}
@@ -46,12 +44,13 @@ public class Course {
     public String getStartTime() {return startTime;}
     public String getEndTime() {return endTime;}
     public String getLocation() {return location;}
-    public ArrayList<String> getStudentIds() {return studentIds;}
-    public ArrayList<String> getGroupIds() {return groupIds;}
-    public ArrayList<String> getPostIds() {return postIds;}
+    public ArrayList<String> getStudentKeys() {return studentKeys;}
+    public ArrayList<String> getGroupKeys() {return groupKeys;}
+    public ArrayList<String> getPostKeys() {return postKeys;}
 
 //	Setters
 
+    public void setKey(String key) {this.key = key;}
     public void setTitle(String title) {this.title = title;}
     public void setDepartment(String department) {this.department = department;}
     public void setCode(String code) {this.code = code;}
@@ -59,37 +58,41 @@ public class Course {
     public void setStartTime(String startTime) {this.startTime = startTime;}
     public void setEndTime(String endTime) {this.endTime = endTime;}
     public void setLocation(String location) {this.location = location;}
-    public void setStudentIds(ArrayList<String> ids) {studentIds = ids;}
-    public void setGroupIds(ArrayList<String> ids) {groupIds = ids;}
-    public void setPostIds(ArrayList<String> ids) {postIds = ids;}
+    public void setStudentKeys(ArrayList<String> keys) {studentKeys = keys;}
+    public void setGroupKeys(ArrayList<String> keys) {groupKeys = keys;}
+    public void setPostKeys(ArrayList<String> keys) {postKeys = keys;}
 
-//  Mutators
+//  Other mutators
 
-    public void addStudent(String id) {
-        if (!studentIds.contains(id)) {
-            studentIds.add(id);
+    public void addStudent(String key) {
+        if (!studentKeys.contains(key)) {
+            studentKeys.add(key);
         }
     }
 
-    public void addGroup(String id) {
-        if (!groupIds.contains(id)) {
-            groupIds.add(id);
+    public void addGroup(String key) {
+        if (!groupKeys.contains(key)) {
+            groupKeys.add(key);
         }
     }
 
-    public void addPost(String id) {
-        if (!postIds.contains(id)) {
-            postIds.add(id);
+    public void addPost(String key) {
+        if (!postKeys.contains(key)) {
+            postKeys.add(key);
         }
     }
 
-    public void removeStudent(String id) {studentIds.remove(id);}
-    public void removeGroup(String id) {groupIds.remove(id);}
-    public void removePost(String id) {postIds.remove(id);}
+    public void removeStudent(String key) {studentKeys.remove(key);}
+    public void removeGroup(String key) {groupKeys.remove(key);}
+    public void removePost(String key) {postKeys.remove(key);}
 
 //  Database
 
-    public void updateDatabase() {
-        Util.writeToDatabase(id, this, Arrays.asList("courses"));
+    public void put() {
+        List<String> path = Arrays.asList("courses");
+        if (key == null || "".equals(key)) {
+            key = Database.getNewKey(path);
+        }
+        Database.put(key, this, path);
     }
 }
