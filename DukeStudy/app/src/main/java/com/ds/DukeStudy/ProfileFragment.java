@@ -37,11 +37,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 import static com.ds.DukeStudy.R.drawable.ic_menu_profile;
@@ -72,7 +76,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     ImageView pictureView;
     String encodedImage;
     private static final int SELECT_PICTURE = 100;
-FirebaseAuth auth;
+    FirebaseAuth auth;
     // creating an instance of Firebase Storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
     //creating a storage reference,below URL is the Firebase storage URL.
@@ -99,25 +103,47 @@ FirebaseAuth auth;
 
         View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
-      //  ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
+        //  ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
         emailView = (TextView) initalProfileView.findViewById(R.id.emailView);
         majorView = (TextView)initalProfileView.findViewById(R.id.majorView);
         yearView = (TextView)initalProfileView.findViewById(R.id.classView);
         uploadImageButton = (Button)initalProfileView.findViewById(R.id.editImageButton);
         pictureView = (ImageView)initalProfileView.findViewById(R.id.profileImageView);
-      //  profilePictureView = (ImageButton) initalProfileView.findViewById(R.id.profileImageButton);
+        //  profilePictureView = (ImageButton) initalProfileView.findViewById(R.id.profileImageButton);
         // Get a reference to the UID and retrieve profile details to show up on the layout
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
             user = FirebaseAuth.getInstance().getCurrentUser();
+            StorageReference myfileRef1 = storageRef.child(user.getUid());
+
+            File localFile = null;
+            try {
+                localFile = File.createTempFile("images", "jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            final File myfile=localFile;
+            final StorageTask<FileDownloadTask.TaskSnapshot> taskSnapshotStorageTask = myfileRef1.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot1) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(myfile.getAbsolutePath());
+                    pictureView.setImageBitmap(myBitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                }
+            });
             rootRef.child("students").addValueEventListener(new ValueEventListener() {
                 // Update the profile view with new data each time something changes
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChild(user.getUid())){
-                      //  Toast.makeText(getActivity(), "UID exists!",
-                      //          Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(getActivity(), "UID exists!",
+                        //          Toast.LENGTH_SHORT).show();
                         userNameView.setText("Name : "+dataSnapshot.child(user.getUid()).child("name").getValue().toString());
                         emailView.setText("Email : "+dataSnapshot.child(user.getUid()).child("email").getValue().toString());
                         majorView.setText("Major : "+dataSnapshot.child(user.getUid()).child("major").getValue().toString());
@@ -129,8 +155,8 @@ FirebaseAuth auth;
                         }
 */                    }
                     else{
-                    //    Toast.makeText(getActivity(), "UID doesn't exist!",
-                      //          Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(getActivity(), "UID doesn't exist!",
+                        //          Toast.LENGTH_SHORT).show();
                         userNameView.setText("Name");
                         emailView.setText("Email");
                         majorView.setText("Major");
@@ -172,8 +198,8 @@ FirebaseAuth auth;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
-             //   encodedImage = Base64.encodeToString(data, Base64.NO_WRAP);
-               // DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                //   encodedImage = Base64.encodeToString(data, Base64.NO_WRAP);
+                // DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                /* auth=FirebaseAuth.getInstance();
                 if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
                     user = FirebaseAuth.getInstance().getCurrentUser();
@@ -193,20 +219,20 @@ FirebaseAuth auth;
                     });
                 }
                 */
-                UploadTask uploadTask = myfileRef.putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
+                UploadTask uploadTask1 = myfileRef.putBytes(data);
+                final StorageTask<UploadTask.TaskSnapshot> taskSnapshotStorageTask1 = uploadTask1.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         Toast.makeText(getContext().getApplicationContext(), "TASK FAILED", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot1) {
                         Toast.makeText(getContext().getApplicationContext(), "TASK SUCCEEDED", Toast.LENGTH_SHORT).show();
-                        Uri downloadUrl =taskSnapshot.getDownloadUrl();
-                        String DOWNLOAD_URL = downloadUrl.getPath();
-                        Log.v("DOWNLOAD URL", DOWNLOAD_URL);
-                        Toast.makeText(getContext().getApplicationContext(), DOWNLOAD_URL, Toast.LENGTH_SHORT).show();
+                        //Uri downloadUrl = taskSnapshot1.getDownloadUrl();
+                        //String DOWNLOAD_URL = downloadUrl.getPath();
+                        //Log.v("DOWNLOAD URL", DOWNLOAD_URL);
+                        //Toast.makeText(getContext().getApplicationContext(), DOWNLOAD_URL, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -236,7 +262,7 @@ FirebaseAuth auth;
     @Override
     public void onClick(View v) {
         int viewID = v.getId();
-            onButtonPressed(mListener, 0, viewID);
+        onButtonPressed(mListener, 0, viewID);
     }
 
     private void onButtonPressed(OnFragmentInteractionListener mListener, int tag, int viewID) {

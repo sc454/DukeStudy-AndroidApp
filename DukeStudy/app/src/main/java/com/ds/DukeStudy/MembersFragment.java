@@ -29,6 +29,7 @@ public class MembersFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle curBundle=getArguments();
         View view=inflater.inflate(R.layout.members_layout,null);
         membersListView=(ListView) view.findViewById(R.id.membersListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();

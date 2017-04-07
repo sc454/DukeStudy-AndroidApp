@@ -35,6 +35,7 @@ public class PostsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle curBundle=getArguments();
         View view=inflater.inflate(R.layout.posts_layout,null);
          postMessageButton= (Button) view.findViewById(R.id.submitPost);
         //readBut = (Button) view.findViewById(R.id.readButton);
