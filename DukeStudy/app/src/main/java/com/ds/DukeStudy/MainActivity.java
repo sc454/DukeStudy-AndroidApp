@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser user;
 
     FirebaseUser getUser() {return user;}
+    private boolean isCourse;
+    private String identificationKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
