@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Course {
 
-//  Fields
+    // Fields
 
     private String key = "";
     private String title;
@@ -20,7 +20,7 @@ public class Course {
     private ArrayList<String> groupKeys = new ArrayList<String>();
     private ArrayList<String> postKeys = new ArrayList<String>();
 
-//	Constructors
+    // Constructors
 
     public Course(String title, String department, String code, String instructor) {
         this.title = title;
@@ -34,7 +34,7 @@ public class Course {
 
     public Course() {this("NoTitle","NoDepartment","NoCode","NoInstructor");}
 
-//	Getters
+    // Getters
 
     public String getKey() {return key;}
     public String getTitle() {return title;}
@@ -48,7 +48,7 @@ public class Course {
     public ArrayList<String> getGroupKeys() {return groupKeys;}
     public ArrayList<String> getPostKeys() {return postKeys;}
 
-//	Setters
+    // Setters
 
     public void setKey(String key) {this.key = key;}
     public void setTitle(String title) {this.title = title;}
@@ -62,7 +62,7 @@ public class Course {
     public void setGroupKeys(ArrayList<String> keys) {groupKeys = keys;}
     public void setPostKeys(ArrayList<String> keys) {postKeys = keys;}
 
-//  Other mutators
+    // Other mutators
 
     public void addStudentKey(String key) {
         if (!studentKeys.contains(key)) {
@@ -86,13 +86,13 @@ public class Course {
     public void removeGroupKey(String key) {groupKeys.remove(key);}
     public void removePostKey(String key) {postKeys.remove(key);}
 
-//  Database
+    // Database
 
     public void put() {
-        List<String> path = Arrays.asList("courses");
+        String path = "courses";
         if (key == null || "".equals(key)) {
             key = Database.getNewKey(path);
         }
-        Database.put(key, this, path);
+        Database.put(path, key, this);
     }
 }

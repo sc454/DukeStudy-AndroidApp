@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Event {
 
-//  Fields
+    // Fields
 
     private String key = "";
     private String date;
@@ -14,7 +14,7 @@ public class Event {
     private String location;
     private ArrayList<String> studentKeys = new ArrayList<String>();
 
-//	Constructors
+    // Constructors
 
     public Event(String date, String time, String location) {
         this.date = date;
@@ -26,7 +26,7 @@ public class Event {
 
     public Event() {this("NoDate", "NoTime", "NoLocation");}
 
-//	Getters
+    // Getters
 
     public String getKey() {return key;}
     public String getDate() {return date;}
@@ -34,7 +34,7 @@ public class Event {
     public String getLocation() {return location;}
     public ArrayList<String> getStudentKeys() {return studentKeys;}
 
-//	Setters
+    // Setters
 
     public void setKey(String key) {this.key = key;}
     public void setDate(String date) {this.date = date;}
@@ -42,7 +42,7 @@ public class Event {
     public void setLocation(String location) {this.location = location;}
     public void setStudentKeys(ArrayList<String> keys) {studentKeys = keys;}
 
-//  Other mutators
+    // Other mutators
 
     public void addStudent(String key) {
         if (!studentKeys.contains(key)) {
@@ -52,13 +52,13 @@ public class Event {
 
     public void removeStudent(String key) {studentKeys.remove(key);}
 
-//  Database
+    // Database
 
     public void put() {
-        List<String> path = Arrays.asList("events");
+        String path = "events";
         if (key == null || "".equals(key)) {
             key = Database.getNewKey(path);
         }
-        Database.put(key, this, path);
+        Database.put(path, key, this);
     }
 }

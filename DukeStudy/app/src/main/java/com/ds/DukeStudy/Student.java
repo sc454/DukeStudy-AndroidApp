@@ -88,10 +88,10 @@ public class Student {
 //  Database
 
     public void put() {
-        List<String> path = Arrays.asList("students");
+        String path = "students";
         if (key == null || "".equals(key)) {
             key = Database.getNewKey(path);
         }
-        Database.put(key, this, path);
+        Database.put(path, key, this);
     }
 }

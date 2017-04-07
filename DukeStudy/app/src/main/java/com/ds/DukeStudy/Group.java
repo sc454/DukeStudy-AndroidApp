@@ -68,10 +68,10 @@ public class Group {
 //  Database
 
     public void put() {
-        List<String> path = Arrays.asList("groups");
+        String path = "groups";
         if (key == null || "".equals(key)) {
             key = Database.getNewKey(path);
         }
-        Database.put(key, this, path);
+        Database.put(path, key, this);
     }
 }

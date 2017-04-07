@@ -39,10 +39,10 @@ public class Post {
 //  Database
 
     public void put() {
-        List<String> path = Arrays.asList("posts");
+        String path = "posts";
         if (key == null || "".equals(key)) {
             key = Database.getNewKey(path);
         }
-        Database.put(key, this, path);
+        Database.put(path, key, this);
     }
 }
