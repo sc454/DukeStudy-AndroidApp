@@ -1,4 +1,5 @@
 package com.ds.DukeStudy;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,14 +18,14 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupActivity extends AppCompatActivity {
 
-//  Fields
+    // Fields
 
     private FirebaseAuth auth;
     private EditText inputEmail, inputPassword;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
 
-//  Methods
+    // Methods
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class SignupActivity extends AppCompatActivity {
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-    //  Reset password button
+        // Reset password button
 
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +49,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-    //  Sign in button
+        // Sign in button
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +58,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-    //  Sign up button
+        // Sign up button
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +67,7 @@ public class SignupActivity extends AppCompatActivity {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
-            //  Check email and password
+                // Check email and password
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -85,7 +86,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-            //  Create user
+                // Create user
 
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {

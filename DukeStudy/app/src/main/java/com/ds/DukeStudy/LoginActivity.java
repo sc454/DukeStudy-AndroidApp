@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    //  If user is logged in, take to main activity
+        // If user is logged in, take to main activity
 
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-    //  Otherwise, continue with login
+        // Otherwise, continue with login
 
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         btnReset = (Button) findViewById(R.id.btn_reset_password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-    //  Sign up button
+        // Sign up
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-    //  Password reset button
+        // Reset password
 
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-    //  Login button
+        // Login
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email = inputEmail.getText().toString();
                 final String password = inputPassword.getText().toString();
 
-            //  Check email and password is not empty
+                // Check email and password is not empty
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-            //  Authenticate user
+                // Authenticate user
 
                 auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {

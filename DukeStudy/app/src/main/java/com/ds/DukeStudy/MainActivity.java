@@ -1,8 +1,5 @@
 package com.ds.DukeStudy;
-/**
- * Main Activity which defaults to Profile page of the user
- * This activity handles navigation drawer clicks
-* */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -24,19 +22,41 @@ import com.ds.DukeStudy.fragments.EditProfileFragment;
 import com.ds.DukeStudy.fragments.FirebaseExFragment;
 import com.ds.DukeStudy.fragments.GroupsFragment;
 import com.ds.DukeStudy.fragments.ProfileFragment;
+import com.ds.DukeStudy.objects.Database;
+import com.ds.DukeStudy.objects.Post;
+import com.ds.DukeStudy.objects.Student;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+// Main Activity which defaults to Profile page of the user
+// This activity handles navigation drawer clicks
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
 
-    private FirebaseAuth.AuthStateListener authListener;
-    private FirebaseAuth auth;
+    // Fields
+
+    public Student student;
     private FirebaseUser user;
+    private FirebaseAuth auth;
+
+    private String TAG = "MAIN";
+    private ValueEventListener userListener;
+    private DatabaseReference userReference;
+    private FirebaseAuth.AuthStateListener authListener;
+
+//    private boolean isCourse;
+//    private String identificationKey;
+
+    // Getters
 
     public FirebaseUser getUser() {return user;}
-    private boolean isCourse;
-    private String identificationKey;
+//    public String getIDkey() {return identificationKey;}
 
+    // Android methods
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +65,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Create database listener
+
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                student = dataSnapshot.getValue(Student.class);
+                Log.i(TAG, "loadUser:onDataChange");
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
+            }
+        };
+
+        // Initialize user
+
         auth = FirebaseAuth.getInstance();
         authListener = new FirebaseAuth.AuthStateListener() {
-
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                Log.i(TAG, "onCreate:onAuthStateChanged");
+                user = firebaseAuth.getCurrentUser();
                 if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                 } else {
-                    user = auth.getCurrentUser();
+                    userReference = Database.ref.child("students").child(user.getUid());
+                    userReference.addValueEventListener(userListener);
                 }
             }
         };
 
-        /* Add fragments to navigate between items in the navigation bar. Set profile page as default*/
+        // Add fragments to navigate between items in the navigation bar
+        // Set profile page as default
+
         Fragment fragment = null;
         Class fragmentClass = null;
         fragmentClass = ProfileFragment.class;
@@ -79,9 +117,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
-        Menu menu = navigationView.getMenu();
-        MenuItem item = menu.getItem(1);
-        SubMenu subMenu = item.getSubMenu();
+
+//        Menu menu = navigationView.getMenu();
+//        MenuItem item = menu.getItem(1);
+//        SubMenu subMenu = item.getSubMenu();
 //        subMenu.add("Test");
 //        subMenu.add(0, R.id.sampleClass1, 0, "Tester").setIcon(R.drawable.ic_menu_class);
 //        subMenu.add(0, R.id.sampleClass2, 0, "New Item").setIcon(R.drawable.ic_menu_class);
@@ -102,17 +141,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //  @Override
-    /*
-    public void onStop(){
-        super.onStop();
-        if (authListener != null) {
-            auth.removeAuthStateListener(authListener);
-            FirebaseAuth.getInstance().signOut();
-        }
-
-    }
-*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -126,12 +154,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId()) {
-
             case R.id.action_logout:
                 if (authListener != null) {
-
                     auth.removeAuthStateListener(authListener);
                     auth.signOut();
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -139,36 +164,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(intent);
                     finish();
                 }
-
             default:
                 return super.onOptionsItemSelected(item);
         }
-        //noinspection SimplifiableIfStatement
-
     }
 
 //    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
         Fragment fragment = null;
         Class fragmentClass = null;
         getSupportActionBar().setTitle(item.getTitle());
-        if (id == R.id.nav_profile) {
-            fragmentClass = ProfileFragment.class;
-        } else if (id == R.id.nav_groups1) {
-            fragmentClass = GroupsFragment.class;
-        } else if (id == R.id.nav_groups2) {
-            fragmentClass = GroupsFragment.class;
-        } else if (id == R.id.firebase_ex) {
-            fragmentClass = FirebaseExFragment.class;
-        } else if (id == R.id.nav_addClass) {
-            fragmentClass = CourseListFragment.class;
-        } else if (id == R.id.sampleClass1 || id == R.id.sampleClass2 || id == R.id.sampleClass3) {
-            //Going to need to figure out how to pass information to the fragment for individual courses
-            fragmentClass = CoursesFragment.class;
+
+        // Handle navigation clicks
+
+        switch (item.getItemId()) {
+            case R.id.nav_profile:
+                fragmentClass = ProfileFragment.class; break;
+            case R.id.firebase_ex:
+                fragmentClass = FirebaseExFragment.class; break;
+            case R.id.nav_addClass:
+                fragmentClass = CourseListFragment.class; break;
+            case R.id.sampleClass1:
+            case R.id.sampleClass2:
+            case R.id.sampleClass3:
+                fragmentClass = CoursesFragment.class; break;
+            case R.id.nav_groups1:
+            case R.id.nav_groups2:
+                fragmentClass = GroupsFragment.class; break;
         }
+
+        // Begin fragment
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -177,6 +203,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        // Close drawer
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -228,7 +256,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
-    public String getIDkey() {
-        return this.identificationKey;
-    };
+    @Override
+    public void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
+        }
+        if (userListener != null) {
+            userReference.removeEventListener(userListener);
+        }
+        //FirebaseAuth.getInstance().signOut();
+    }
 }

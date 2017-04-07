@@ -16,14 +16,14 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
-//  Fields
+    // Fields
 
     private FirebaseAuth auth;
     private EditText inputEmail;
     private Button btnReset, btnBack;
     private ProgressBar progressBar;
 
-//  Methods
+    // Methods
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         btnBack = (Button) findViewById(R.id.btn_back);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-    //  Back button
+        // Back button
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +45,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
         });
 
-    //  Reset button
+        // Reset button
 
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,14 +53,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
                 String email = inputEmail.getText().toString().trim();
 
-            //  Check for empty email
+                // Check for empty email
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplication(), "Enter your registered email", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-            //  Send password reset email
+                // Send password reset email
 
                 progressBar.setVisibility(View.VISIBLE);
                 auth.sendPasswordResetEmail(email)

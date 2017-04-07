@@ -54,10 +54,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
     FirebaseUser user;
-    TextView userNameView;
-    TextView emailView;
-    TextView majorView;
-    TextView yearView;
+    TextView userNameView, emailView, majorView, yearView;
     Button uploadImageButton;
     ImageView pictureView;
     String encodedImage;
@@ -68,9 +65,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     //creating a storage reference,below URL is the Firebase storage URL.
     StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    public ProfileFragment() {} // required
 
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
