@@ -27,6 +27,7 @@ public class GroupsListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            Bundle curBundle=getArguments();
         View view=inflater.inflate(R.layout.groupslist_layout,null);
         membersListView=(ListView) view.findViewById(R.id.groupsListListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
