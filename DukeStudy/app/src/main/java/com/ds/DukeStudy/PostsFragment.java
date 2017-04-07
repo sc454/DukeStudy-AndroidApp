@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,6 +30,8 @@ public class PostsFragment extends Fragment {
     private ListView postsListView;
     private Button postMessageButton;
     private EditText postMessage;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +41,7 @@ public class PostsFragment extends Fragment {
         postMessage = (EditText) view.findViewById(R.id.postMessage);
         postsListView=(ListView) view.findViewById(R.id.postsListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference postsRef=databaseRef.child("postNote").child("class3");
+        DatabaseReference postsRef=databaseRef.child("posts");
         adapter1= new FirebaseListAdapter<Post>(getActivity(),Post.class,android.R.layout.two_line_list_item,postsRef) {
             @Override
             public void populateView(View v, Post model, final int position) {
@@ -66,7 +70,9 @@ public class PostsFragment extends Fragment {
                 //Creating firebase object
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                 //database.child("note").push().setValue(usernameEdit.getText().toString());
-                // database.child("postNote").child("class3").push().setValue(new Post("John",postMessage.getText().toString()));
+                Post post = new Post (postMessage.getText().toString(), "Author", "Time");
+                post.put();
+                //atabase.child("postNote").child("class3").push().setValue(new Post(postMessage.getText().toString()),user.getUid(),"1234");
             }
         });
         return view;

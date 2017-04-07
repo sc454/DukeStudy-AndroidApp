@@ -19,7 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 //This fragment loads groups lists for a particular course from the database and displays in listview.
 public class GroupsListFragment extends Fragment {
     private DatabaseReference databaseRef;
-    private FirebaseListAdapter<String> adapter1;
+    private FirebaseListAdapter<Group> adapter1;
     private ListView membersListView;
     private String myid;
     @Nullable
@@ -28,12 +28,14 @@ public class GroupsListFragment extends Fragment {
         View view=inflater.inflate(R.layout.groupslist_layout,null);
         membersListView=(ListView) view.findViewById(R.id.groupsListListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference postsRef=databaseRef.child("Groups");//This needs to be changed dynamically
-        adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.simple_expandable_list_item_1,postsRef) {
+        DatabaseReference postsRef=databaseRef.child("groups");//This needs to be changed dynamically
+        adapter1=new FirebaseListAdapter<Group>(getActivity(),Group.class,android.R.layout.two_line_list_item,postsRef) {
             @Override
-            protected void populateView(View v, String model, int position) {
+            protected void populateView(View v, Group model, int position) {
                 TextView mytext=(TextView) v.findViewById(android.R.id.text1);
-                mytext.setText(model);
+                TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
+                mytext.setText(model.getName());
+                mytext1.setText("Member Count: "+Integer.toString(model.getStudentKeys().size()));
             }
 
         };
