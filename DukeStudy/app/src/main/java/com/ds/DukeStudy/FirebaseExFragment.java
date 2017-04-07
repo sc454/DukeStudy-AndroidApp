@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -98,6 +99,9 @@ public class FirebaseExFragment extends Fragment {
         usernameEdit = (EditText) view.findViewById(R.id.userNameInput);
         databaseAns = (ListView) view.findViewById(R.id.databaseListView);
 //        fillDatabase();
+        Activity main = (MainActivity)this.getActivity();
+        FirebaseUser u = ((MainActivity)this.getActivity()).getUser();
+
         //Make the array adapter
         //adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, mynames);
 //        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
@@ -247,9 +251,11 @@ public class FirebaseExFragment extends Fragment {
 
         for (Student s : students) {
             // Courses
-            Course c = courses.get(r.nextInt(courses.size()));
-            s.addCourseKey(c.getKey());
-            c.addStudentKey(s.getKey());
+            for (int i = 0; i < 4; i++) {
+                Course c = courses.get(r.nextInt(courses.size()));
+                s.addCourseKey(c.getKey());
+                c.addStudentKey(s.getKey());
+            }
 
             // Groups
             Group g = groups.get(r.nextInt(groups.size()));

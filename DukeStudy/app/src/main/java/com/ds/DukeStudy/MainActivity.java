@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,8 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth auth;
     private FirebaseUser user;
 
-
-    FirebaseUser getUser() {return user;}
+    public FirebaseUser getUser() {return user;}
     private boolean isCourse;
     private String identificationKey;
 
@@ -82,6 +82,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
+        Menu menu = navigationView.getMenu();
+        MenuItem item = menu.getItem(1);
+        SubMenu subMenu = item.getSubMenu();
+//        subMenu.add("Test");
+//        subMenu.add(0, R.id.sampleClass1, 0, "Tester").setIcon(R.drawable.ic_menu_class);
+//        subMenu.add(0, R.id.sampleClass2, 0, "New Item").setIcon(R.drawable.ic_menu_class);
+//        subMenu.add(R.id.course_submenu, R.id.sampleClass1, 0, "Tester");
+//        menudd()
+//        menu.add(R.id.course_submenu, R.id.sampleClass1, 0, "Tester");
+//        menu.add(0, 0, 0, "Playerzz");//.setIcon(R.drawable.music_audio);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -109,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+//        menu.add(R.id.sampleClass1, 1, 1, "Test");
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -139,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+//    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -161,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Going to need to figure out how to pass information to the fragment for individual courses
             fragmentClass = CoursesFragment.class;
         }
-
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -200,22 +210,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onFragmentInteraction(int tag, String userName) {
         //Allow interaction between fragments.
         // Change tags for different fragments
-        Fragment fragment = null;
-        Class fragmentClass = null;
-        if (tag == 1) {
-            fragmentClass = ProfileFragment.class;
-        }
-        Bundle bundle = new Bundle();
-        bundle.putString("UserName", userName);
+//        Fragment fragment = null;
+//        Class fragmentClass = null;
+//        if (tag == 1) {
+////            Log.d("MyApp","I am here");
+//            fragmentClass = ProfileFragment.class;
+//        }
+//        Bundle bundle = new Bundle();
+//        bundle.putString("UserName",userName);
         // bundle.putString("Email",profileEmail);
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        fragment.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//            try {
+//                fragment = (Fragment) fragmentClass.newInstance();
+//            }
+//
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            fragment.setArguments(bundle);
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
     public String getIDkey() {
