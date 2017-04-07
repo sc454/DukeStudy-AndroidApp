@@ -24,10 +24,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
+
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
     private FirebaseUser user;
+
+    FirebaseUser getUser() {return user;}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 else{
                     user = auth.getCurrentUser();
                 }
-
             }
         };
 
@@ -199,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fragment = null;
         Class fragmentClass = null;
         if (tag == 1) {
-         //   Log.d("MyApp","I am here");
+//            Log.d("MyApp","I am here");
             fragmentClass = ProfileFragment.class;
         }
         Bundle bundle = new Bundle();
