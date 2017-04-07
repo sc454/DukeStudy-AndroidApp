@@ -1,10 +1,12 @@
 package com.ds.DukeStudy;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ListViewAutoScrollHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,11 +97,12 @@ public class FirebaseExFragment extends Fragment {
         //readBut = (Button) view.findViewById(R.id.readButton);
         usernameEdit = (EditText) view.findViewById(R.id.userNameInput);
         databaseAns = (ListView) view.findViewById(R.id.databaseListView);
+//        fillDatabase();
         //Make the array adapter
         //adapter=new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, mynames);
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference notesRef=databaseRef.child("StudentList");
-//        adapter1=new FirebaseListAdapter<Student>(getActivity(),Student.class,android.R.layout.two_line_list_item,notesRef) {
+//        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+//        DatabaseReference notesRef=databaseRef.child("StudentList");
+//        adapter1=new FirebaseListAdapter<Student>(getActivity(), Student.class,android.R.layout.two_line_list_item, notesRef) {
 //            @Override
 //            protected void populateView(View v, Student model, int position) {
 //                TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
@@ -110,7 +115,7 @@ public class FirebaseExFragment extends Fragment {
 
 
 
-//        databaseRef.child("note").addValueEventListener(new ValueEventListener() {
+//        databaseRef.child("courses").addValueEventListener(new ValueEventListener() {
 //            @Override //Gets data initially and whenever things change
 //            public void onDataChange(DataSnapshot dataSnapshot) {
 //                Iterable<DataSnapshot> mychildren = dataSnapshot.getChildren();
@@ -139,7 +144,10 @@ public class FirebaseExFragment extends Fragment {
                 //database.child("note").push().setValue(usernameEdit.getText().toString());
                 String customField = usernameEdit.getText().toString();
 //                Student s = new Student(customField,"blank@duke.edu","music","2016");
-                Student s = new Student(customField);
+                Course c = new Course();
+                c.put();
+//                Database.put("key", "124", Arrays.asList("p1", "p2", "p3"));
+//                Database.put("", "", Arrays.asList("test"));
 //                database.child("StudentList").push().setValue(new Student(customField,"blank@duke.edu","music","2016"));
             }
         });
@@ -188,5 +196,87 @@ public class FirebaseExFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(int tag,int view);
+    }
+
+    public void fillDatabase() {
+
+        Log.i("main", "FILL!");
+
+        //  Posts
+
+        ArrayList<Post> posts = new ArrayList<Post>();
+        posts.add(new Post("Hello, I am a post", "Justin", "12"));
+        posts.add(new Post("Hello, I am another post", "Emily", "12"));
+        posts.add(new Post("I am confused?", "Kyle", "12"));
+        posts.add(new Post("I am dragon3823878", "Sara", "12"));
+        for (Post p : posts) p.put();
+
+        //  Events
+
+        ArrayList<Event> events = new ArrayList<Event>();
+        events.add(new Event("4/4/17", "6:30", "Library"));
+        for (Event e : events) e.put();
+
+        //  Courses
+
+        ArrayList<Course> courses = new ArrayList<Course>();
+        courses.add(new Course("Software Engineering", "ECE", "651", "Ric Telford"));
+        courses.add(new Course("Mobile App Development", "ECE", "590", "Ric Telford"));
+        courses.add(new Course("Intro to C++", "ECE", "551", "Andrew Hilton"));
+        for (Course c : courses) c.put();
+
+        //  Groups
+
+        ArrayList<Group> groups = new ArrayList<Group>();
+        groups.add(new Group("Ballers"));
+        groups.add(new Group("Shot Callers"));
+        for (Group g : groups) g.put();
+
+        //  Student
+
+        ArrayList<Student> students = new ArrayList<Student>();
+        students.add(new Student("John Bralich", "myemail@duke.edu", "ECE", "2018"));
+        students.add(new Student("Justin Bieber", "jb@duke.edu", "Music", "2019"));
+        for (Student s : students) s.put();
+
+        //  Link
+
+        Random r = new Random();
+
+//        Log.i("Here", courses.size())
+
+        for (Student s : students) {
+            // Courses
+            Course c = courses.get(r.nextInt(courses.size()));
+            s.addCourseKey(c.getKey());
+            c.addStudentKey(s.getKey());
+
+            // Groups
+            Group g = groups.get(r.nextInt(groups.size()));
+            s.addGroupKey(g.getKey());
+            g.addStudentKey(s.getKey());
+//
+            // Events
+            Event e = events.get(r.nextInt(events.size()));
+            s.addEventKey(e.getKey());
+            e.addStudent(s.getKey());
+        }
+//
+        for (Course c : courses) {
+            // s g p
+            Post p = posts.get(r.nextInt(posts.size()));
+            c.addPostKey(p.getKey());
+        }
+
+        for (Group g : groups) {
+            // s e p
+            Post p = posts.get(r.nextInt(posts.size()));
+            g.addPostKey(p.getKey());
+        }
+
+        for (Event e : events) e.put();
+        for (Course c : courses) c.put();
+        for (Group g : groups) g.put();
+        for (Student s : students) s.put();
     }
 }

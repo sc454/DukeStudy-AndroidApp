@@ -26,11 +26,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
-    // Add Firebase authentication listener
+
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
     private FirebaseUser user;
+
+
+    FirebaseUser getUser() {return user;}
+    private boolean isCourse;
+    private String identificationKey;
 
 
     @Override
@@ -51,11 +59,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     // launch login activity
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
-                }
-                else{
+                } else {
                     user = auth.getCurrentUser();
                 }
-
             }
         };
 
@@ -88,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-  //  @Override
+
+    //  @Override
     /*
     public void onStop(){
         super.onStop();
@@ -119,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     auth.removeAuthStateListener(authListener);
                     auth.signOut();
-                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
@@ -142,24 +149,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle(item.getTitle());
         if (id == R.id.nav_profile) {
             fragmentClass = ProfileFragment.class;
-        }
-        else if (id == R.id.nav_groups1) {
+        } else if (id == R.id.nav_groups1) {
             fragmentClass = GroupsFragment.class;
-        }
-        else if (id == R.id.nav_groups2) {
+        } else if (id == R.id.nav_groups2) {
             fragmentClass = GroupsFragment.class;
-        }
-        else if (id == R.id.firebase_ex) {
+        } else if (id == R.id.firebase_ex) {
             fragmentClass = FirebaseExFragment.class;
-        }
-        else if(id == R.id.nav_addClass) {
+        } else if (id == R.id.nav_addClass) {
             fragmentClass = CourseListFragment.class;
-        }
-        else if (id==R.id.sampleClass1||id==R.id.sampleClass2||id==R.id.sampleClass3){
+        } else if (id == R.id.sampleClass1 || id == R.id.sampleClass2 || id == R.id.sampleClass3) {
             //Going to need to figure out how to pass information to the fragment for individual courses
             fragmentClass = CoursesFragment.class;
         }
-
 
 
         try {
@@ -176,20 +177,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onFragmentInteraction(int tag,int view) {
+    public void onFragmentInteraction(int tag, int view) {
         //On clicking edit profile, start up edit profile fragment
         Fragment fragment = null;
         Class fragmentClass = null;
-       if(tag==0){
-           if(view==R.id.editProfileButton){
-            //   Log.d("MyApp","I am here");
-               fragmentClass = EditProfileFragment.class;
-           }
-       }
+        if (tag == 0) {
+            if (view == R.id.editProfileButton) {
+                //   Log.d("MyApp","I am here");
+                fragmentClass = EditProfileFragment.class;
+            }
+        }
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -197,27 +197,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onFragmentInteraction(int tag,String userName) {
+    public void onFragmentInteraction(int tag, String userName) {
         //Allow interaction between fragments.
         // Change tags for different fragments
         Fragment fragment = null;
         Class fragmentClass = null;
         if (tag == 1) {
-         //   Log.d("MyApp","I am here");
             fragmentClass = ProfileFragment.class;
         }
         Bundle bundle = new Bundle();
-        bundle.putString("UserName",userName);
+        bundle.putString("UserName", userName);
         // bundle.putString("Email",profileEmail);
-            try {
-                fragment = (Fragment) fragmentClass.newInstance();
-            }
-
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            fragment.setArguments(bundle);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
+
+    public String getIDkey() {
+        return this.identificationKey;
+    };
 }
