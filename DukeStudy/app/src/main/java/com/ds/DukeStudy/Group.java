@@ -43,27 +43,27 @@ public class Group {
 
 //  Other mutators
 
-    public void addStudent(String key) {
+    public void addStudentKey(String key) {
         if (!studentKeys.contains(key)) {
             studentKeys.add(key);
         }
     }
 
-    public void addEvent(String key) {
+    public void addEventKey(String key) {
         if (!eventKeys.contains(key)) {
             eventKeys.add(key);
         }
     }
 
-    public void addPost(String key) {
+    public void addPostKey(String key) {
         if (!postKeys.contains(key)) {
             postKeys.add(key);
         }
     }
 
-    public void removeStudent(String key) {studentKeys.remove(key);}
-    public void removeEvent(String key) {eventKeys.remove(key);}
-    public void removePost(String key) {postKeys.remove(key);}
+    public void removeStudentKey(String key) {studentKeys.remove(key);}
+    public void removeEventKey(String key) {eventKeys.remove(key);}
+    public void removePostKey(String key) {postKeys.remove(key);}
 
 //  Database
 

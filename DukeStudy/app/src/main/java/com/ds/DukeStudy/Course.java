@@ -64,27 +64,27 @@ public class Course {
 
 //  Other mutators
 
-    public void addStudent(String key) {
+    public void addStudentKey(String key) {
         if (!studentKeys.contains(key)) {
             studentKeys.add(key);
         }
     }
 
-    public void addGroup(String key) {
+    public void addGroupKey(String key) {
         if (!groupKeys.contains(key)) {
             groupKeys.add(key);
         }
     }
 
-    public void addPost(String key) {
+    public void addPostKey(String key) {
         if (!postKeys.contains(key)) {
             postKeys.add(key);
         }
     }
 
-    public void removeStudent(String key) {studentKeys.remove(key);}
-    public void removeGroup(String key) {groupKeys.remove(key);}
-    public void removePost(String key) {postKeys.remove(key);}
+    public void removeStudentKey(String key) {studentKeys.remove(key);}
+    public void removeGroupKey(String key) {groupKeys.remove(key);}
+    public void removePostKey(String key) {postKeys.remove(key);}
 
 //  Database
 
