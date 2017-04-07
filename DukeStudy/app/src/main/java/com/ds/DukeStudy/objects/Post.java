@@ -1,7 +1,6 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.objects;
 
-import java.util.Arrays;
-import java.util.List;
+import com.ds.DukeStudy.objects.Database;
 
 public class Post {
 

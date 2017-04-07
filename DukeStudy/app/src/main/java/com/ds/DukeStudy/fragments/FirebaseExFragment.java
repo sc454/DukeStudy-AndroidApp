@@ -1,11 +1,9 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +12,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.ds.DukeStudy.MainActivity;
+import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Course;
+import com.ds.DukeStudy.objects.Event;
+import com.ds.DukeStudy.objects.Group;
+import com.ds.DukeStudy.objects.Post;
+import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -150,7 +149,7 @@ public class FirebaseExFragment extends Fragment {
 //                Student s = new Student(customField,"blank@duke.edu","music","2016");
                 Course c = new Course();
                 c.put();
-//                Database.put("key", "124", Arrays.asList("p1", "p2", "p3"));
+//                Database.put("p1/p2/p3", "key", "124");
 //                Database.put("", "", Arrays.asList("test"));
 //                database.child("StudentList").push().setValue(new Student(customField,"blank@duke.edu","music","2016"));
             }

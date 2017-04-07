@@ -1,8 +1,8 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.objects;
+
+import com.ds.DukeStudy.objects.Database;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Event {
 

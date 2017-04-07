@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    tools:context="com.ds.DukeStudy.ProfileFragment"
+    tools:context="com.ds.DukeStudy.fragments.ProfileFragment"
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->

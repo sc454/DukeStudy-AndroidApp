@@ -1,4 +1,4 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.fragments;
 
 import android.app.DatePickerDialog;
 import android.icu.text.SimpleDateFormat;
@@ -15,22 +15,26 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Event;
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Locale;
 
-/**
- * Created by cheli on 3/5/2017.
- */
-//This is an events fragment that retrieves events listed and displays them in a list for a given
-    //course
+// This is an events fragment that retrieves events listed and displays them in a list for a given course
+
 public class EventsFragment extends Fragment {
+
+    // Fields
+
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<Event> adapter1;
     private ListView eventsListView;
+
+    // Methods
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,15 +82,13 @@ public class EventsFragment extends Fragment {
             }
         });
 
+        return view;
+    }
 
-
-
-        return view;}
-        private void updateLabel(EditText myeditText, Calendar myCal) {
-
-            String myFormat = "MM/dd/yy"; //In which you need put here
-            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-            myeditText.setText(sdf.format(myCal.getTime()));
-        }
+    private void updateLabel(EditText myeditText, Calendar myCal) {
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        myeditText.setText(sdf.format(myCal.getTime()));
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.objects;
 
 //  Utility fields and methods
 

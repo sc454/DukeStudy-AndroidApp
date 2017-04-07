@@ -1,4 +1,4 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,27 +7,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.ds.DukeStudy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,12 +40,6 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static com.ds.DukeStudy.R.drawable.ic_menu_profile;
-import static com.ds.DukeStudy.R.id.editProfileButton;
-import static com.ds.DukeStudy.R.id.emailView;
-import static com.ds.DukeStudy.R.id.profileImageView;
-import static com.ds.DukeStudy.R.id.snap;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.

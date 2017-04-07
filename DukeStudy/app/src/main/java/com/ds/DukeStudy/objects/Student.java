@@ -1,10 +1,9 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.objects;
 
+import com.ds.DukeStudy.objects.Database;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 // TODO: mimic ondatachange method in ProfileFragment ln 92
 

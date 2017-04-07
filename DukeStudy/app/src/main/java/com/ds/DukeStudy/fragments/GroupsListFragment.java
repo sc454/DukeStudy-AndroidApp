@@ -1,4 +1,4 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Group;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

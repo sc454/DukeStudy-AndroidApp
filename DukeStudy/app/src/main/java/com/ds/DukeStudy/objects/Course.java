@@ -1,8 +1,6 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.objects;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Course {
 

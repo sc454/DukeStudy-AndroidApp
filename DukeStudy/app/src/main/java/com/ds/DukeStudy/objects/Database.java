@@ -1,4 +1,4 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.objects;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
