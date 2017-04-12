@@ -50,14 +50,14 @@
             <!--android:icon="@drawable/ic_menu_groups"-->
             <!--android:title="Groups" />-->
         <!--</group>-->
-    <item android:id="@+id/database_submenu" android:title="Database Test">
-        <menu>
-            <item
-                android:id="@+id/firebase_ex"
-                android:icon="@drawable/ic_menu_groups"
-                android:title="Database" />
-        </menu>
-    </item>
+    <!--<item android:id="@+id/database_submenu" android:title="Database Test">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/firebase_ex"-->
+                <!--android:icon="@drawable/ic_menu_groups"-->
+                <!--android:title="Database" />-->
+        <!--</menu>-->
+    <!--</item>-->
     <!--<group android:checkableBehavior="single">-->
     <!--<item-->
         <!--android:id="@+id/firebase_ex"-->

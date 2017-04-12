@@ -23,6 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by cheli on 3/5/2017.
  */
+
 //This fragment loads groups lists for a particular course from the database and displays in listview.
 public class GroupsListFragment extends Fragment {
     private DatabaseReference databaseRef;

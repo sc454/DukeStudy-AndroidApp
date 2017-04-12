@@ -304,8 +304,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 fragmentClass = ProfileFragment.class; break;
-            case R.id.firebase_ex:
-                fragmentClass = FirebaseExFragment.class; break;
+//            case R.id.firebase_ex:
+//                fragmentClass = FirebaseExFragment.class; break;
 //            case R.id.nav_addClass:
             case ADD_CLASS:
                 fragmentClass = CourseListFragment.class; break;

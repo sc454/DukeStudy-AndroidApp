@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Student;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,10 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 //Displays and retrieves profile information saved in database.
 public class EditProfileFragment extends Fragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private FirebaseAuth auth;
     View EditProfileView;
     Button SubmitProfileButton;
@@ -54,8 +52,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     public static EditProfileFragment newInstance(String param1, String param2) {
         EditProfileFragment fragment = new EditProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,6 +76,12 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         userMajorText = (EditText)EditProfileView.findViewById(R.id.userMajorEdit);
         userYearText = (EditText)EditProfileView.findViewById(R.id.userYearEdit);
 
+        Student student = ((MainActivity)this.getActivity()).getStudent();
+        userNameText.setText(student.getName());
+        userEmailText.setText(student.getEmail());
+        userMajorText.setText(student.getMajor());
+        userYearText.setText(student.getGradYear());
+        
         SubmitProfileButton.setOnClickListener(this);
         return EditProfileView;
     }
