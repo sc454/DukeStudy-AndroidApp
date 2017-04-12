@@ -16,7 +16,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.53"
+        android:layout_weight="0.64"
         android:padding="@dimen/base_padding"
         android:background="@color/light">
 
@@ -34,14 +34,15 @@
         android:text="Upload Image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editImageButton"
-        android:layout_weight="0.03" />
+        android:id="@+id/editImageButton" />
 
     <TextView
         android:text="Name : "
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/userNameView"
+        android:textStyle="bold"
+        android:textSize="26sp"
         android:layout_weight="0.08"/>
 
     <TextView
@@ -49,6 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/emailView"
+        android:textStyle="bold"
+        android:textSize="26sp"
         android:layout_weight="0.08" />
 
     <TextView
@@ -56,13 +59,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/majorView"
-        android:layout_weight="0.07"/>
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:layout_weight="0.08"/>
 
     <TextView
         android:text="Year : "
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/classView"
+        android:textStyle="bold"
+        android:textSize="26sp"
         android:layout_weight="0.08" />
 
     <Button
