@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fragment = null;
         Class fragmentClass = null;
         String curID="";
+        Boolean isCourse=Boolean.FALSE;
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 fragmentClass = ProfileFragment.class; break;
@@ -310,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (courseMenuIds.containsKey(item.getItemId())) {
                     fragmentClass = CoursesFragment.class;
                     curID = courseMenuIds.get(item.getItemId());
+                    isCourse=Boolean.TRUE;
                 } else if (groupMenuIds.containsKey(item.getItemId())){
                     fragmentClass = GroupsFragment.class;
                     curID = groupMenuIds.get(item.getItemId());
@@ -327,6 +329,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         Bundle mybundle=new Bundle();
         mybundle.putString("myid",curID);
+        mybundle.putBoolean("isCourse", isCourse);
         fragment.setArguments(mybundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();

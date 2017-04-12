@@ -15,12 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Course;
+import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Post;
+import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * This is a generic posts Fragment. This will be expanded to work for classes and groups.
@@ -28,40 +34,48 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class PostsFragment extends Fragment {
     private DatabaseReference databaseRef;
-    private FirebaseListAdapter<Post> adapter1;
+    private FirebaseListAdapter<String> adapter1;
     private ListView postsListView;
     private Button postMessageButton;
     private EditText postMessage;
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private String myid;
+    private Boolean isCourse;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle curBundle=getArguments();
+        this.myid=curBundle.getString("myid");
+        this.isCourse=curBundle.getBoolean("isCourse");
         View view=inflater.inflate(R.layout.posts_layout,null);
-         postMessageButton= (Button) view.findViewById(R.id.submitPost);
+        postMessageButton= (Button) view.findViewById(R.id.submitPost);
         //readBut = (Button) view.findViewById(R.id.readButton);
         postMessage = (EditText) view.findViewById(R.id.postMessage);
         postsListView=(ListView) view.findViewById(R.id.postsListView);
-        databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference postsRef=databaseRef.child("posts");
-        adapter1= new FirebaseListAdapter<Post>(getActivity(),Post.class,android.R.layout.two_line_list_item,postsRef) {
+        final DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference postsRef;
+        if (this.isCourse){
+            postsRef=databaseRef.child("courses").child(myid).child("postKeys");}else{
+            postsRef=databaseRef.child("groups");
+        }
+        adapter1= new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.two_line_list_item,postsRef) {
             @Override
-            public void populateView(View v, Post model, final int position) {
-                System.out.println("Populated View");
-                TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
-                TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
-                mytext1.setText(model.getMessage());
-                mytext2.setText(model.getAuthor());
-                v.setOnClickListener(new View.OnClickListener(){
+            public void populateView(View v, String model, final int position) {
+                DatabaseReference curStudentRef=databaseRef.child("posts").child(model.toString());
+                final TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
+                final TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
+                curStudentRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onClick(View view) {
-                        Context context = getActivity().getApplicationContext();
-                        CharSequence text = getRef(position).getKey();
-                        int duration = Toast.LENGTH_SHORT;
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final Post curPost= dataSnapshot.getValue(Post.class);
+                        mytext1.setText(curPost.getMessage());
+                        mytext2.setText(curPost.getAuthor());
+                    }
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
             }
@@ -75,6 +89,33 @@ public class PostsFragment extends Fragment {
                 //database.child("note").push().setValue(usernameEdit.getText().toString());
                 Post post = new Post (postMessage.getText().toString(), "Author", "Time");
                 post.put();
+                final String postKey=post.getKey();
+                final DatabaseReference classRef;
+                if(isCourse){
+                    classRef=databaseRef.child("courses").child(myid);}else{
+                    classRef=databaseRef.child("groups").child(myid);
+                }
+                classRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (isCourse){
+                            final Course curObj= dataSnapshot.getValue(Course.class);
+                            curObj.addPostKey(postKey);
+                            classRef.setValue(curObj);
+                        }else{
+                            final Group curObj= dataSnapshot.getValue(Group.class);
+                            curObj.addPostKey(postKey);
+                            classRef.setValue(curObj);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                //Add key to
                 //atabase.child("postNote").child("class3").push().setValue(new Post(postMessage.getText().toString()),user.getUid(),"1234");
             }
         });
