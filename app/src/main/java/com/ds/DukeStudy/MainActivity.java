@@ -248,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Group g = data.child("groups").child(groupKey).getValue(Group.class);
             groupSubMenu.add(0, itemId, 0, g.getName()).setIcon(R.drawable.ic_menu_groups);
             groupMenuIds.put(itemId, g.getKey());
+            itemId++;
         }
     }
 
