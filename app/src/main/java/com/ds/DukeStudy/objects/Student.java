@@ -1,6 +1,5 @@
 package com.ds.DukeStudy.objects;
 
-import com.ds.DukeStudy.objects.Database;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;

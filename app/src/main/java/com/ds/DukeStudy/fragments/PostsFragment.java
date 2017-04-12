@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,7 +48,7 @@ public class PostsFragment extends Fragment {
         adapter1= new FirebaseListAdapter<Post>(getActivity(),Post.class,android.R.layout.two_line_list_item,postsRef) {
             @Override
             public void populateView(View v, Post model, final int position) {
-//                System.out.println("Populated View");
+                System.out.println("Populated View");
                 TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
                 TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
                 mytext1.setText(model.getMessage());

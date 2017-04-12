@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -23,17 +24,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Locale;
 
-// This is an events fragment that retrieves events listed and displays them in a list for a given course
-
+/**
+ * Created by cheli on 3/5/2017.
+ */
+//This is an events fragment that retrieves events listed and displays them in a list for a given
+    //course
 public class EventsFragment extends Fragment {
-
-    // Fields
-
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<Event> adapter1;
     private ListView eventsListView;
-
-    // Methods
+    private String sourceID;
 
     @Nullable
     @Override
@@ -73,7 +73,7 @@ public class EventsFragment extends Fragment {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     new DatePickerDialog(view.getContext(), date, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                             myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -81,14 +81,30 @@ public class EventsFragment extends Fragment {
                 return true;
             }
         });
-
+        final EditText locationText=(EditText) view.findViewById(R.id.locationEntry);
+        final EditText timeText=(EditText) view.findViewById(R.id.timeEntry);
+        //Set the onClick to add a new event
+        Button addEventButton=(Button) view.findViewById(R.id.addeventbutton);
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating firebase object
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                //database.child("note").push().setValue(usernameEdit.getText().toString());
+                Event event = new Event(dateTimeText.getText().toString(), timeText.getText().toString(),locationText.getText().toString());
+                event.put();
+                //atabase.child("postNote").child("class3").push().setValue(new Post(postMessage.getText().toString()),user.getUid(),"1234");
+            }
+        });
         return view;
     }
 
     private void updateLabel(EditText myeditText, Calendar myCal) {
+
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         myeditText.setText(sdf.format(myCal.getTime()));
     }
+
 
 }

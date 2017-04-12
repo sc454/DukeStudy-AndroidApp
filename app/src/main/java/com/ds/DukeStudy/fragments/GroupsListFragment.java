@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Group;
@@ -34,7 +33,7 @@ public class GroupsListFragment extends Fragment {
         membersListView=(ListView) view.findViewById(R.id.groupsListListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference postsRef=databaseRef.child("groups");//This needs to be changed dynamically
-        adapter1=new FirebaseListAdapter<Group>(getActivity(),Group.class,android.R.layout.two_line_list_item,postsRef) {
+        adapter1= new FirebaseListAdapter<Group>(getActivity(),Group.class,android.R.layout.two_line_list_item,postsRef) {
             @Override
             protected void populateView(View v, final Group model, int position) {
                 TextView mytext=(TextView) v.findViewById(android.R.id.text1);
@@ -45,11 +44,19 @@ public class GroupsListFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Context context = getActivity().getApplicationContext();
-                        CharSequence text = model.getKey();
-                        int duration = Toast.LENGTH_SHORT;
+                        CharSequence myid = model.getKey();
+                        //int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                        //Toast toast = Toast.makeText(context, myid, duration);
+                        //toast.show();
+                        GroupsFragment nextFrag= new GroupsFragment();
+                        Bundle mybundle=new Bundle();
+                        mybundle.putString("myid",myid.toString());
+                        nextFrag.setArguments(mybundle);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.flContent, nextFrag, null)
+                                .addToBackStack(null)
+                                .commit();
                     }
                 });
             }

@@ -1,7 +1,5 @@
 package com.ds.DukeStudy.objects;
 
-import com.ds.DukeStudy.objects.Database;
-
 public class Post {
 
 //  Fields

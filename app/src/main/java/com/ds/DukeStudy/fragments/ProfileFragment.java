@@ -7,14 +7,23 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -40,6 +49,12 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
+import static com.ds.DukeStudy.R.drawable.ic_menu_profile;
+import static com.ds.DukeStudy.R.id.editProfileButton;
+import static com.ds.DukeStudy.R.id.emailView;
+import static com.ds.DukeStudy.R.id.profileImageView;
+import static com.ds.DukeStudy.R.id.snap;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,7 +69,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
     FirebaseUser user;
-    TextView userNameView, emailView, majorView, yearView;
+    TextView userNameView;
+    TextView emailView;
+    TextView majorView;
+    TextView yearView;
     Button uploadImageButton;
     ImageView pictureView;
     String encodedImage;
@@ -65,7 +83,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     //creating a storage reference,below URL is the Firebase storage URL.
     StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
 
-    public ProfileFragment() {} // required
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
 
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
@@ -82,8 +102,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
-       // View initalProfileView = inflater.inflate(R.layout.profile_layout, container, false);
+        final View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
         //  ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
@@ -112,6 +131,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot1) {
                     Bitmap myBitmap = BitmapFactory.decodeFile(myfile.getAbsolutePath());
                     pictureView.setImageBitmap(myBitmap);
+                    //Set the navBar image as well
+                    ImageView navPic = (ImageView) initalProfileView.findViewById(R.id.navProfileIcon);
+                    //navPic.setImageBitmap(myBitmap);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override

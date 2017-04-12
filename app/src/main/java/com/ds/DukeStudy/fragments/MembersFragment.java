@@ -2,6 +2,7 @@ package com.ds.DukeStudy.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class MembersFragment extends Fragment {
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<String> adapter1;
     private ListView membersListView;
+    public Boolean isCourse=Boolean.TRUE;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,12 +37,17 @@ public class MembersFragment extends Fragment {
         View view=inflater.inflate(R.layout.members_layout,null);
         membersListView=(ListView) view.findViewById(R.id.membersListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
-        String currentCourse="-Kh4qZcA_Ot9aGIxlCG7";
-        DatabaseReference currentCourseStudentsRef=databaseRef.child("courses").child(currentCourse).child("studentKeys");
+        String sourceID="-Kh4qZcA_Ot9aGIxlCG7";
+        DatabaseReference currentSourceStudentsRef;
+        if(isCourse){
+            currentSourceStudentsRef=databaseRef.child("courses").child(sourceID).child("studentKeys");}
+        else{
+            currentSourceStudentsRef=databaseRef.child("groups").child(sourceID).child("studentKeys");
+        };
         final DatabaseReference studentsRef=databaseRef.child("students");
-        adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.two_line_list_item,currentCourseStudentsRef) {
+        adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.two_line_list_item,currentSourceStudentsRef) {
             @Override
-            protected void populateView(final View v, String model,final int position) {
+            protected void populateView(final View v, final String model,final int position) {
                 //Get reference to particular student in database
                 DatabaseReference curStudentRef=studentsRef.child(model);
                 final TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
@@ -55,11 +62,14 @@ public class MembersFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 Context context = getActivity().getApplicationContext();
-                                CharSequence text = curStudent.getKey();
-                                int duration = Toast.LENGTH_SHORT;
-
-                                Toast toast = Toast.makeText(context, text, duration);
-                                toast.show();
+                                ViewProfileFragment nextFrag= new ViewProfileFragment();
+                                Bundle mybundle=new Bundle();
+                                mybundle.putString("myid",model.toString());
+                                nextFrag.setArguments(mybundle);
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.flContent, nextFrag, null)
+                                        .addToBackStack(null)
+                                        .commit();
                             }
                         });
                     }

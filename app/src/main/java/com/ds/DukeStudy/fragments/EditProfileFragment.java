@@ -1,14 +1,19 @@
 package com.ds.DukeStudy.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Student;
@@ -16,16 +21,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-// Displays and retrieves profile information saved in database.
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link EditProfileFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link EditProfileFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+//Displays and retrieves profile information saved in database.
 public class EditProfileFragment extends Fragment implements View.OnClickListener {
-
-    // Fields
-
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     private FirebaseAuth auth;
-    private OnFragmentInteractionListener mListener;
     View EditProfileView;
     Button SubmitProfileButton;
     EditText userNameText;
@@ -33,17 +44,19 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     EditText userMajorText;
     EditText userYearText;
 
-    // Methods
+    private OnFragmentInteractionListener mListener;
 
-    public EditProfileFragment() {} // Required
+    public EditProfileFragment() {
+        // Required empty public constructor
+    }
 
     // TODO: Rename and change types and number of parameters
     public static EditProfileFragment newInstance(String param1, String param2) {
         EditProfileFragment fragment = new EditProfileFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -60,7 +73,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         EditProfileView =  inflater.inflate(R.layout.fragment_edit_profile, container, false);
         SubmitProfileButton = (Button)EditProfileView.findViewById(R.id.submitProfileButton);
         userNameText =  (EditText)EditProfileView.findViewById(R.id.userNameEdit);
-        // userName = userNameText.getText().toString();
+       // userName = userNameText.getText().toString();
         userEmailText = (EditText)EditProfileView.findViewById(R.id.userEmailEdit);
         userMajorText = (EditText)EditProfileView.findViewById(R.id.userMajorEdit);
         userYearText = (EditText)EditProfileView.findViewById(R.id.userYearEdit);
@@ -77,7 +90,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -98,6 +112,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         String userMajor = userMajorText.getText().toString();
         String userYear = userYearText.getText().toString();
         database.child("students").child(auth.getCurrentUser().getUid()).setValue( new Student(userName,userEmail,userMajor,userYear));
+
 
         Fragment fragment = null;
         Class fragmentClass = null;

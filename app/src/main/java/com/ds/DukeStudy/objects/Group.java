@@ -1,7 +1,5 @@
 package com.ds.DukeStudy.objects;
 
-import com.ds.DukeStudy.objects.Database;
-
 import java.util.ArrayList;
 
 public class Group {

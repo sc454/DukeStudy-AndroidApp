@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 
 import com.ds.DukeStudy.fragments.CourseListFragment;
 import com.ds.DukeStudy.fragments.CoursesFragment;
@@ -23,7 +22,6 @@ import com.ds.DukeStudy.fragments.FirebaseExFragment;
 import com.ds.DukeStudy.fragments.GroupsFragment;
 import com.ds.DukeStudy.fragments.ProfileFragment;
 import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Post;
 import com.ds.DukeStudy.objects.Student;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -172,12 +170,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Fragment fragment = null;
-        Class fragmentClass = null;
         getSupportActionBar().setTitle(item.getTitle());
 
         // Handle navigation clicks
-
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        String curID="";
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 fragmentClass = ProfileFragment.class; break;
@@ -186,11 +184,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_addClass:
                 fragmentClass = CourseListFragment.class; break;
             case R.id.sampleClass1:
+                curID="-Kh4qZc80E4vt0rkHciV";
+                fragmentClass = CoursesFragment.class; break;
             case R.id.sampleClass2:
+                curID="-Kh4qZc9icD7lGX3u194";
+                fragmentClass = CoursesFragment.class; break;
             case R.id.sampleClass3:
+                curID="-Kh4qZcA_Ot9aGIxlCG7";
                 fragmentClass = CoursesFragment.class; break;
             case R.id.nav_groups1:
+                curID="-Kh4qZcCHEnuxosghVDJ";
+                fragmentClass = GroupsFragment.class; break;
             case R.id.nav_groups2:
+                curID="-Kh4qZcDG40N0OL3pBjo";
                 fragmentClass = GroupsFragment.class; break;
         }
 
@@ -201,6 +207,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Bundle mybundle=new Bundle();
+        mybundle.putString("myid",curID);
+        fragment.setArguments(mybundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
