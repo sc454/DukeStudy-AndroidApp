@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Getters
 
     public FirebaseUser getUser() {return user;}
-//    public String getIDkey() {return identificationKey;}
+    public Student getStudent() {return student;}
+    //    public String getIDkey() {return identificationKey;}
     FirebaseStorage storage = FirebaseStorage.getInstance();
     //creating a storage reference,below URL is the Firebase storage URL.
     StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
@@ -232,10 +233,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (String courseKey : courseKeys) {
             // Add course
             Course c = data.child("courses").child(courseKey).getValue(Course.class);
-            classSubMenu.add(0, itemId, 0, c.getTitle()).setIcon(R.drawable.ic_menu_class);
+            classSubMenu.add(0, itemId, Menu.NONE, c.getTitle()).setIcon(R.drawable.ic_menu_class);
             // Map menu id to course key
             courseMenuIds.put(itemId, c.getKey());
-            Log.i(TAG, "Submenu size " + classSubMenu.size());
+            Log.i(TAG, "Submenu size " + Menu.NONE);
             Log.i(TAG, "Mapping item " + itemId + " to " + c.getKey() + " course");
             itemId++;
         }
@@ -246,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Fill groups
         for (String groupKey : groupKeys) {
             Group g = data.child("groups").child(groupKey).getValue(Group.class);
-            groupSubMenu.add(0, itemId, 0, g.getName()).setIcon(R.drawable.ic_menu_groups);
+            groupSubMenu.add(0, itemId, Menu.NONE, g.getName()).setIcon(R.drawable.ic_menu_groups);
             groupMenuIds.put(itemId, g.getKey());
             itemId++;
         }
@@ -294,6 +295,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         getSupportActionBar().setTitle(item.getTitle());
         Log.i(TAG, "Item " + item.getItemId() + " selected");
+
         // Handle navigation clicks
         Fragment fragment = null;
         Class fragmentClass = null;

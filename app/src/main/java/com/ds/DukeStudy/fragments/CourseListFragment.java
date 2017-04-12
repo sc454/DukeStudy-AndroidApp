@@ -1,5 +1,6 @@
 package com.ds.DukeStudy.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +12,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Course;
+import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 /**
  * Created by cheli on 3/5/2017.
@@ -42,12 +48,14 @@ public class CourseListFragment extends Fragment {
                 v.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
+                        // Show key
                         Context context = getActivity().getApplicationContext();
                         CharSequence text = getRef(position).getKey();
-                        int duration = Toast.LENGTH_SHORT;
-
-                        Toast toast = Toast.makeText(context, text, duration);
+                        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                         toast.show();
+
+                        //Toggle course
+                        toggleCourse(text.toString());
                     }
                 });
             }
@@ -55,5 +63,28 @@ public class CourseListFragment extends Fragment {
         courseListView.setAdapter(adapter1);
         return view;
 
+    }
+
+    public void toggleCourse(String key) {
+        Student student = ((MainActivity)this.getActivity()).getStudent();
+        ArrayList<String> courseKeys = student.getCourseKeys();
+        if (courseKeys.contains(key)) {
+            removeCourse(key);
+        } else {
+            addCourse(key);
+        }
+    }
+
+
+    public void addCourse(String key) {
+        Student student = ((MainActivity)this.getActivity()).getStudent();
+        student.addCourseKey(key);
+        student.put();
+    }
+
+    public void removeCourse(String key) {
+        Student student = ((MainActivity)this.getActivity()).getStudent();
+        student.removeCourseKey(key);
+        student.put();
     }
 }
