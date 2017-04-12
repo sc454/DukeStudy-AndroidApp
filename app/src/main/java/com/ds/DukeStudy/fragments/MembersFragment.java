@@ -37,7 +37,7 @@ public class MembersFragment extends Fragment {
         View view=inflater.inflate(R.layout.members_layout,null);
         membersListView=(ListView) view.findViewById(R.id.membersListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
-        String sourceID="-Kh4qZcA_Ot9aGIxlCG7";
+        String sourceID=curBundle.getString("myid");
         DatabaseReference currentSourceStudentsRef;
         if(isCourse){
             currentSourceStudentsRef=databaseRef.child("courses").child(sourceID).child("studentKeys");}

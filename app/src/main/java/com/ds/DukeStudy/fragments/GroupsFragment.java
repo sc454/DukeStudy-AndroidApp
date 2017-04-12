@@ -81,7 +81,7 @@ public class GroupsFragment extends Fragment {
         /**
          *Set an Adapter for the View Pager
          */
-        viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
+        viewPager.setAdapter(new MyAdapter(getChildFragmentManager(), this.groupID));
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -108,7 +108,7 @@ public class GroupsFragment extends Fragment {
     }
     class MyAdapter extends FragmentPagerAdapter {
 
-        public MyAdapter(FragmentManager fm) {
+        public MyAdapter(FragmentManager fm, String groupID) {
             super(fm);
         }
 
@@ -118,15 +118,26 @@ public class GroupsFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+            Bundle myBundle=new Bundle();
             switch (position) {
                 case 0:
-                    return new PostsFragment();
+                    PostsFragment pf=new PostsFragment();
+                    myBundle.putString("myid", groupID);
+                    myBundle.putBoolean("isCourse", Boolean.FALSE);
+                    pf.setArguments(myBundle);
+                    return pf;
                 case 1:
-                    return new EventsFragment();
+                    EventsFragment ef=new EventsFragment();
+                    myBundle.putString("myid", groupID);
+                    myBundle.putBoolean("isCourse", Boolean.FALSE);
+                    ef.setArguments(myBundle);
+                    return ef;
                 case 2:
-                    MembersFragment myfrag=new MembersFragment();
-                    myfrag.isCourse=Boolean.FALSE;
-                    return myfrag;
+                    MembersFragment mf=new MembersFragment();
+                    myBundle.putString("myid", groupID);
+                    myBundle.putBoolean("isCourse", Boolean.FALSE);
+                    mf.setArguments(myBundle);
+                    return mf;
             }
             return null;
         }

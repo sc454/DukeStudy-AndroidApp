@@ -39,6 +39,7 @@ public class CoursesFragment extends Fragment {
     private FirebaseListAdapter<String> adapterMember;
     private OnFragmentInteractionListener mListener;
     private String courseID;
+    private Boolean isCourse=Boolean.TRUE;
 //  Methods
 
     public CoursesFragment() {} // required
@@ -64,7 +65,7 @@ public class CoursesFragment extends Fragment {
         tabLayout = (TabLayout) x.findViewById(R.id.tabs);
         viewPager = (ViewPager) x.findViewById(R.id.viewpager);
     //  Set adapter for view pager
-        viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
+        viewPager.setAdapter(new MyAdapter(getChildFragmentManager(), this.courseID,this.isCourse));
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -90,23 +91,43 @@ public class CoursesFragment extends Fragment {
         return x;
     }
 
+
     class MyAdapter extends FragmentPagerAdapter {
-
-        public MyAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-    //  Return fragment with respect to Position
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0: return new PostsFragment();
-                case 1: return new GroupsListFragment();
-                case 2: return new MembersFragment();
+            String myid;
+            Boolean isCourse;
+            public MyAdapter(FragmentManager fm, String myid, Boolean isCourse) {
+                super(fm);
+                this.myid=myid;
+                this.isCourse=isCourse;
             }
-            return null;
-        }
+
+            //  Return fragment with respect to Position
+
+            @Override
+            public Fragment getItem(int position) {
+                Bundle myBundle=new Bundle();
+                switch (position) {
+                    case 0:
+                        PostsFragment pf=new PostsFragment();
+                        myBundle.putString("myid", myid);
+                        myBundle.putBoolean("isCourse", this.isCourse);
+                        pf.setArguments(myBundle);
+                        return pf;
+                    case 1:
+                        GroupsListFragment gf=new GroupsListFragment();
+                        myBundle.putString("myid", myid);
+                        myBundle.putBoolean("isCourse", this.isCourse);
+                        gf.setArguments(myBundle);
+                        return gf;
+                    case 2:
+                        MembersFragment mf=new MembersFragment();
+                        myBundle.putString("myid", myid);
+                        myBundle.putBoolean("isCourse", this.isCourse);
+                        mf.setArguments(myBundle);
+                        return mf;
+                }
+                return null;
+            }
 
         @Override
         public int getCount() {

@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.objects.Group;
@@ -57,7 +58,7 @@ public class PostsFragment extends Fragment {
         final DatabaseReference postsRef;
         if (this.isCourse){
             postsRef=databaseRef.child("courses").child(myid).child("postKeys");}else{
-            postsRef=databaseRef.child("groups");
+            postsRef=databaseRef.child("groups").child(myid).child("postKeys");
         }
         adapter1= new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.two_line_list_item,postsRef) {
             @Override
@@ -86,8 +87,9 @@ public class PostsFragment extends Fragment {
             public void onClick(View v) {
                 //Creating firebase object
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                MainActivity main = (MainActivity)PostsFragment.this.getActivity();
                 //database.child("note").push().setValue(usernameEdit.getText().toString());
-                Post post = new Post (postMessage.getText().toString(), "Author", "Time");
+                Post post = new Post (postMessage.getText().toString(), main.student.getName(), "Time");
                 post.put();
                 final String postKey=post.getKey();
                 final DatabaseReference classRef;
@@ -95,7 +97,7 @@ public class PostsFragment extends Fragment {
                     classRef=databaseRef.child("courses").child(myid);}else{
                     classRef=databaseRef.child("groups").child(myid);
                 }
-                classRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                classRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (isCourse){
