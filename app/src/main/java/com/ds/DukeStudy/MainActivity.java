@@ -1,6 +1,8 @@
 package com.ds.DukeStudy;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ds.DukeStudy.fragments.CourseListFragment;
 import com.ds.DukeStudy.fragments.CoursesFragment;
@@ -23,12 +28,22 @@ import com.ds.DukeStudy.fragments.GroupsFragment;
 import com.ds.DukeStudy.fragments.ProfileFragment;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Student;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+
+import java.io.File;
+import java.io.IOException;
 
 // Main Activity which defaults to Profile page of the user
 // This activity handles navigation drawer clicks
@@ -40,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Student student;
     private FirebaseUser user;
     private FirebaseAuth auth;
+
 
     private String TAG = "MAIN";
     private ValueEventListener userListener;
@@ -53,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public FirebaseUser getUser() {return user;}
 //    public String getIDkey() {return identificationKey;}
-
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    //creating a storage reference,below URL is the Firebase storage URL.
+    StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
     // Android methods
 
     @Override
@@ -127,6 +145,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        menu.add(R.id.course_submenu, R.id.sampleClass1, 0, "Tester");
 //        menu.add(0, 0, 0, "Playerzz");//.setIcon(R.drawable.music_audio);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+       // final ImageView user_iv = (ImageView) headerView.findViewById(R.id.navProfileIcon);
+        final TextView fullName_tv = (TextView) headerView.findViewById(R.id.navUserName);
+        final TextView userEmail_tv = (TextView) headerView.findViewById(R.id.navUserEmail);
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+
+            rootRef.child("students").addValueEventListener(new ValueEventListener() {
+                // Update the profile view with new data each time something changes
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(user.getUid())){
+                        //  Toast.makeText(getActivity(), "UID exists!",
+                        //          Toast.LENGTH_SHORT).show();
+                        fullName_tv.setText(dataSnapshot.child(user.getUid()).child("name").getValue().toString());
+                        userEmail_tv.setText(dataSnapshot.child(user.getUid()).child("email").getValue().toString());
+                    }
+                    else{
+                        //    Toast.makeText(getActivity(), "UID doesn't exist!",
+                        //          Toast.LENGTH_SHORT).show();
+                        fullName_tv.setText("Name");
+                        userEmail_tv.setText("Email");
+
+                        //pictureView.setImageResource(R.drawable.ic_menu_profile);;
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
     }
 
     @Override

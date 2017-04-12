@@ -9,18 +9,8 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <ImageView
-        android:id="@+id/navProfileIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:cropToPadding="false"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        app:srcCompat="@mipmap/ic_sample_profile_pic" />
 
     <TextView
         android:id="@+id/navUserName"
@@ -28,10 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/navUserEmail"
         android:layout_alignStart="@+id/navUserEmail"
-        android:layout_alignTop="@+id/navProfileIcon"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Justin Bieber"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textColor="@color/white"
+        android:text="Justin Bieber"/>
 
     <TextView
         android:id="@+id/navUserEmail"
@@ -40,8 +29,7 @@
         android:layout_below="@+id/navUserName"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
-        android:layout_toEndOf="@+id/navProfileIcon"
-        android:layout_toRightOf="@+id/navProfileIcon"
+        android:textColor="@color/white"
         android:text="jb@duke.edu" />
 
 </RelativeLayout>

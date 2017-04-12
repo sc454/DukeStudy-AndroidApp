@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     Bitmap myBitmap = BitmapFactory.decodeFile(myfile.getAbsolutePath());
                     pictureView.setImageBitmap(myBitmap);
                     //Set the navBar image as well
-                    ImageView navPic = (ImageView) initalProfileView.findViewById(R.id.navProfileIcon);
+                   // ImageView navPic = (ImageView) initalProfileView.findViewById(R.id.navProfileIcon);
                     //navPic.setImageBitmap(myBitmap);
                 }
             }).addOnFailureListener(new OnFailureListener() {
