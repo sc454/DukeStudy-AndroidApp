@@ -13,35 +13,35 @@
                 <!--android:id="@+id/nav_viewClasses"-->
                 <!--android:icon="@drawable/ic_menu_viewclasses"-->
                 <!--android:title="View Classes" />-->
-            <item
-                android:id="@+id/sampleClass1"
-                android:icon="@drawable/ic_menu_class"
-                android:title="ECE 651" />
-            <item
-                android:id="@+id/sampleClass2"
-                android:icon="@drawable/ic_menu_class"
-                android:title="ECE 590" />
-            <item
-                android:id="@+id/sampleClass3"
-                android:icon="@drawable/ic_menu_class"
-                android:title="ECE 551" />
-            <item
-                android:id="@+id/nav_addClass"
-                android:icon="@drawable/ic_menu_addclass"
-                android:title="Add Class" />
+            <!--<item-->
+                <!--android:id="@+id/sampleClass1"-->
+                <!--android:icon="@drawable/ic_menu_class"-->
+                <!--android:title="ECE 651" />-->
+            <!--<item-->
+                <!--android:id="@+id/sampleClass2"-->
+                <!--android:icon="@drawable/ic_menu_class"-->
+                <!--android:title="ECE 590" />-->
+            <!--<item-->
+                <!--android:id="@+id/sampleClass3"-->
+                <!--android:icon="@drawable/ic_menu_class"-->
+                <!--android:title="ECE 551" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_addClass"-->
+                <!--android:icon="@drawable/ic_menu_addclass"-->
+                <!--android:title="Add Class" />-->
         </menu>
     </item>
 
     <item android:id="@+id/group_submenu" android:title="Groups">
         <menu>
-        <item
-            android:id="@+id/nav_groups1"
-            android:icon="@drawable/ic_menu_groups"
-            android:title="JBiebs" />
-            <item
-                android:id="@+id/nav_groups2"
-                android:icon="@drawable/ic_menu_groups"
-                android:title="Never Say Never" />
+            <!--<item-->
+                <!--android:id="@+id/nav_groups1"-->
+                <!--android:icon="@drawable/ic_menu_groups"-->
+                <!--android:title="JBiebs" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_groups2"-->
+                <!--android:icon="@drawable/ic_menu_groups"-->
+                <!--android:title="Never Say Never" />-->
         </menu>
     </item>
     <!--<group android:checkableBehavior="single">-->

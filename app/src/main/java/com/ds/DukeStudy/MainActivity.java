@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 
 import com.ds.DukeStudy.fragments.CourseListFragment;
 import com.ds.DukeStudy.fragments.CoursesFragment;
@@ -21,7 +22,9 @@ import com.ds.DukeStudy.fragments.EditProfileFragment;
 import com.ds.DukeStudy.fragments.FirebaseExFragment;
 import com.ds.DukeStudy.fragments.GroupsFragment;
 import com.ds.DukeStudy.fragments.ProfileFragment;
+import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.objects.Database;
+import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +32,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 // Main Activity which defaults to Profile page of the user
 // This activity handles navigation drawer clicks
@@ -40,11 +47,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Student student;
     private FirebaseUser user;
     private FirebaseAuth auth;
+    private DataSnapshot data;
 
     private String TAG = "MAIN";
+    private ValueEventListener dbListener;
     private ValueEventListener userListener;
     private DatabaseReference userReference;
+    private DatabaseReference dbReference;
     private FirebaseAuth.AuthStateListener authListener;
+    private HashMap<Integer,String> courseMenuIds = new HashMap<Integer,String>();
+    private HashMap<Integer,String> groupMenuIds = new HashMap<Integer,String>();
+    private static final int ADD_CLASS = 101; //random number
 
 //    private boolean isCourse;
 //    private String identificationKey;
@@ -77,6 +90,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
             }
         };
+
+        dbListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                data = dataSnapshot;
+                updateMenuList();
+                Log.i(TAG, "loadDb:onDataChange");
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadDb:onCancelled", databaseError.toException());
+            }
+        };
+
+        dbReference = Database.ref;
+        dbReference.addValueEventListener(dbListener);
 
         // Initialize user
 
@@ -115,18 +144,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
-
-//        Menu menu = navigationView.getMenu();
-//        MenuItem item = menu.getItem(1);
-//        SubMenu subMenu = item.getSubMenu();
-//        subMenu.add("Test");
-//        subMenu.add(0, R.id.sampleClass1, 0, "Tester").setIcon(R.drawable.ic_menu_class);
-//        subMenu.add(0, R.id.sampleClass2, 0, "New Item").setIcon(R.drawable.ic_menu_class);
-//        subMenu.add(R.id.course_submenu, R.id.sampleClass1, 0, "Tester");
-//        menudd()
-//        menu.add(R.id.course_submenu, R.id.sampleClass1, 0, "Tester");
-//        menu.add(0, 0, 0, "Playerzz");//.setIcon(R.drawable.music_audio);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void updateMenuList() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Log.i(TAG, "Updating menu list");
+
+        // Fill navigation drawer
+        Menu menu = navigationView.getMenu();
+        MenuItem classItems = menu.getItem(1);
+        MenuItem groupItems = menu.getItem(2);
+
+        SubMenu classSubMenu = classItems.getSubMenu();
+        SubMenu groupSubMenu = groupItems.getSubMenu();
+        classSubMenu.clear();
+        groupSubMenu.clear();
+
+        // Find keys
+        ArrayList<String> courseKeys = new ArrayList<>();
+        ArrayList<String> groupKeys = new ArrayList<>();
+
+        if (student != null) {
+            courseKeys = student.getCourseKeys();
+            groupKeys = student.getGroupKeys();
+        }
+
+        // Fill courses
+        Log.i(TAG, "Found " + courseKeys.size() + " courses");
+        Integer itemId = 0;
+
+        for (String courseKey : courseKeys) {
+            // Add course
+            Course c = data.child("courses").child(courseKey).getValue(Course.class);
+            classSubMenu.add(0, itemId, 0, c.getTitle()).setIcon(R.drawable.ic_menu_class);
+            // Map menu id to course key
+            courseMenuIds.put(itemId, c.getKey());
+            Log.i(TAG, "Submenu size " + classSubMenu.size());
+            Log.i(TAG, "Mapping item " + itemId + " to " + c.getKey() + " course");
+            itemId++;
+        }
+
+        //Add course
+        classSubMenu.add(0, ADD_CLASS, 0, "Add Class").setIcon(R.drawable.ic_menu_addclass);
+
+        //Fill groups
+        for (String groupKey : groupKeys) {
+            Group g = data.child("groups").child(groupKey).getValue(Group.class);
+            groupSubMenu.add(0, itemId, 0, g.getName()).setIcon(R.drawable.ic_menu_groups);
+            groupMenuIds.put(itemId, g.getKey());
+        }
     }
 
     @Override
@@ -142,7 +209,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        menu.add(R.id.sampleClass1, 1, 1, "Test");
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -171,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         getSupportActionBar().setTitle(item.getTitle());
-
+        Log.i(TAG, "Item " + item.getItemId() + " selected");
         // Handle navigation clicks
         Fragment fragment = null;
         Class fragmentClass = null;
@@ -181,23 +247,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentClass = ProfileFragment.class; break;
             case R.id.firebase_ex:
                 fragmentClass = FirebaseExFragment.class; break;
-            case R.id.nav_addClass:
+//            case R.id.nav_addClass:
+            case ADD_CLASS:
                 fragmentClass = CourseListFragment.class; break;
-            case R.id.sampleClass1:
-                curID="-Kh4qZc80E4vt0rkHciV";
-                fragmentClass = CoursesFragment.class; break;
-            case R.id.sampleClass2:
-                curID="-Kh4qZc9icD7lGX3u194";
-                fragmentClass = CoursesFragment.class; break;
-            case R.id.sampleClass3:
-                curID="-Kh4qZcA_Ot9aGIxlCG7";
-                fragmentClass = CoursesFragment.class; break;
-            case R.id.nav_groups1:
-                curID="-Kh4qZcCHEnuxosghVDJ";
-                fragmentClass = GroupsFragment.class; break;
-            case R.id.nav_groups2:
-                curID="-Kh4qZcDG40N0OL3pBjo";
-                fragmentClass = GroupsFragment.class; break;
+            default:
+                if (courseMenuIds.containsKey(item.getItemId())) {
+                    fragmentClass = CoursesFragment.class;
+                    curID = courseMenuIds.get(item.getItemId());
+                } else if (groupMenuIds.containsKey(item.getItemId())){
+                    fragmentClass = GroupsFragment.class;
+                    curID = groupMenuIds.get(item.getItemId());
+                } else {
+                    Log.i(TAG, "Menu id not found");
+                }
         }
 
         // Begin fragment
@@ -279,6 +341,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (userListener != null) {
             userReference.removeEventListener(userListener);
+        }
+        if (dbListener != null) {
+            dbReference.removeEventListener(dbListener);
         }
         //FirebaseAuth.getInstance().signOut();
     }

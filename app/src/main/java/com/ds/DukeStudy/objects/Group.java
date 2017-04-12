@@ -15,9 +15,7 @@ public class Group {
 
 //	Constructors
 
-    public Group(String name) {
-        this.name = name;
-    }
+    public Group(String name) {this.name = name;}
 
     public Group() {this("NoName");}
 
