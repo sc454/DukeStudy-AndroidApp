@@ -219,7 +219,7 @@
                                  public void onComplete(@NonNull Task<Void> task) {
                                      if (task.isSuccessful()) {
                                          Toast.makeText(MainActivityOld.this, "Your profile is deleted:( Create a account now!", Toast.LENGTH_SHORT).show();
-                                         startActivity(new Intent(MainActivityOld.this, SignupActivity.class));
+                                         startActivity(new Intent(MainActivityOld.this, SignUpActivity.class));
                                          finish();
                                          progressBar.setVisibility(View.GONE);
                                      } else {
