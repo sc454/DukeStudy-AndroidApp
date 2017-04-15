@@ -38,6 +38,7 @@ public class MembersFragment extends Fragment {
         membersListView=(ListView) view.findViewById(R.id.membersListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
         String sourceID=curBundle.getString("myid");
+        isCourse=curBundle.getBoolean("isCourse");
         DatabaseReference currentSourceStudentsRef;
         if(isCourse){
             currentSourceStudentsRef=databaseRef.child("courses").child(sourceID).child("studentKeys");}
@@ -52,7 +53,7 @@ public class MembersFragment extends Fragment {
                 DatabaseReference curStudentRef=studentsRef.child(model);
                 final TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
                 final TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
-                curStudentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                curStudentRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         final Student curStudent= dataSnapshot.getValue(Student.class);
