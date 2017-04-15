@@ -1,12 +1,10 @@
 package com.ds.DukeStudy.misc;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.ds.DukeStudy.fragments.EventsFragment;
-import com.ds.DukeStudy.fragments.GroupsListFragment;
+import com.ds.DukeStudy.fragments.EventsListFragment;
 import com.ds.DukeStudy.fragments.MembersFragment;
 import com.ds.DukeStudy.fragments.PostsFragment;
 
@@ -30,7 +28,7 @@ public class GroupAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: return new PostsFragment().newInstance("groups", groupKey);
-            case 1: return new EventsFragment().newInstance(groupKey);
+            case 1: return new EventsListFragment().newInstance(groupKey);
             case 2: return new MembersFragment().newInstance("groups", groupKey);
         }
         return null;

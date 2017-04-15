@@ -4,10 +4,6 @@ import android.app.DatePickerDialog;
 
 import android.app.TimePickerDialog;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -27,13 +23,11 @@ import android.widget.TimePicker;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,7 +42,7 @@ import java.util.Locale;
  */
 //This is an events fragment that retrieves events listed and displays them in a list for a given
     //course
-public class EventsFragment extends Fragment {
+public class EventsListFragment extends Fragment {
 
     public static final String GROUP_KEY_ARG = "groupKey";
 
@@ -60,10 +54,10 @@ public class EventsFragment extends Fragment {
     private String groupKey;
     private Student student;
 
-    public EventsFragment() {}
+    public EventsListFragment() {}
 
-    public static EventsFragment newInstance(String groupKey) {
-        EventsFragment fragment = new EventsFragment();
+    public static EventsListFragment newInstance(String groupKey) {
+        EventsListFragment fragment = new EventsListFragment();
         Bundle args = new Bundle();
         args.putString(GROUP_KEY_ARG, groupKey);
         fragment.setArguments(args);
@@ -80,7 +74,7 @@ public class EventsFragment extends Fragment {
             throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
         }
 
-        student = ((MainActivity)EventsFragment.this.getActivity()).getStudent();
+        student = ((MainActivity)EventsListFragment.this.getActivity()).getStudent();
 
         final View view = inflater.inflate(R.layout.events_layout, container, false);
 
