@@ -16,7 +16,7 @@
         android:layout_weight="0.09"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Add Time and Location" />
+        android:text="Date" />
 
     <EditText
         android:id="@+id/timeEntry"
