@@ -25,6 +25,7 @@ import com.ds.DukeStudy.fragments.GroupFragment;
 import com.ds.DukeStudy.fragments.ProfileFragment;
 import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.objects.Database;
+import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.google.firebase.auth.FirebaseAuth;

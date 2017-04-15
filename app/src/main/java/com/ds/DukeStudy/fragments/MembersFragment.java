@@ -83,12 +83,8 @@ public class MembersFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 Context context = getActivity().getApplicationContext();
-                                ViewProfileFragment nextFrag = new ViewProfileFragment();
-                                Bundle mybundle=new Bundle();
-                                mybundle.putString("myid",model.toString());
-                                nextFrag.setArguments(mybundle);
                                 getActivity().getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.flContent, nextFrag, null)
+                                        .replace(R.id.flContent, new ViewProfileFragment().newInstance(model.toString()), null)
                                         .addToBackStack(null)
                                         .commit();
                             }
