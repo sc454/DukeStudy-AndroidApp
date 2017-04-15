@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
@@ -26,30 +28,49 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-/**
- * Created by cheli on 3/5/2017.
- */
-
 //This fragment loads groups lists for a particular course from the database and displays in listview.
 public class GroupsListFragment extends Fragment {
-    private DatabaseReference databaseRef;
+
+    private static final String COURSE_KEY_ARG = "courseId";
+
     private FirebaseListAdapter<String> adapter1;
     private ListView groupsListView;
-    private String myid;
     private DatabaseReference curGroupsRef;
     private ValueEventListener curGroupValueEventListener;
+    private ListView membersListView;
+    private String courseKey;
+    private Student student;
+
+    public GroupsListFragment() {}
+
+    public static GroupsListFragment newInstance(String key) {
+        GroupsListFragment fragment = new GroupsListFragment();
+        Bundle args = new Bundle();
+        args.putString(COURSE_KEY_ARG, key);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle curBundle=getArguments();
-        myid=curBundle.getString("myid");
+
+        // Get arguments
+        courseKey = getArguments().getString(COURSE_KEY_ARG);
+        if (courseKey == null) {
+            throw new IllegalArgumentException("Must pass " + COURSE_KEY_ARG);
+        }
+
+
         final View view=inflater.inflate(R.layout.groupslist_layout,null);
-        databaseRef = FirebaseDatabase.getInstance().getReference();
-        final MainActivity main = (MainActivity)GroupsListFragment.this.getActivity();
+
+        student = ((MainActivity)GroupsListFragment.this.getActivity()).getStudent();
+
         groupsListView = (ListView) view.findViewById(R.id.groupsListListView);
-        databaseRef = FirebaseDatabase.getInstance().getReference();
-        curGroupsRef = databaseRef.child("courses").child(myid).child("groupKeys");
-        final DatabaseReference groupsRef=databaseRef.child("groups");
+        curGroupsRef = Database.ref.child("courses").child(courseKey).child("groupKeys");
+
+        final DatabaseReference groupsRef=Database.ref.child("groups");
+
         adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,R.layout.cutom_row_view_layout,curGroupsRef) {
             protected void populateView(final View v, final String model,final int position) {
                 //Get reference to particular student in database
@@ -64,38 +85,40 @@ public class GroupsListFragment extends Fragment {
                         final Group curGroup = dataSnapshot.getValue(Group.class);
                         mytext1.setText("Name: " + curGroup.getName());
                         mytext2.setText("# Members: "+Integer.toString(curGroup.getStudentKeys().size()));
-                        if (curGroup.getStudentKeys().contains(main.student.getKey())) {
-                            mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
+                        if (curGroup.getStudentKeys().contains(student.getKey())) {
+                            if (isAdded()) {
+                                mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
+                            }
                             v.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     //If the event is clicked on either add or remove your student key from it
-                                    curGroup.removeStudentKey(main.student.getKey());
+                                    curGroup.removeStudentKey(student.getKey());
                                     groupsRef.child(curGroup.getKey()).setValue(curGroup);
-                                    main.student.removeGroupKey(curGroup.getKey());
-                                    main.student.put();
+                                    student.removeGroupKey(curGroup.getKey());
+                                    student.put();
                                 }
                             });
                             mybutton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     //If the event is clicked on either add or remove your student key from it
-                                    curGroup.removeStudentKey(main.student.getKey());
+                                    curGroup.removeStudentKey(student.getKey());
                                     groupsRef.child(curGroup.getKey()).setValue(curGroup);
-                                    main.student.removeGroupKey(curGroup.getKey());
-                                    main.student.put();
+                                    student.removeGroupKey(curGroup.getKey());
+                                    student.put();
                                 }
                             });
                         }else{
-                            mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));
+                            if (isAdded()) mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));
                             v.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     //If the event is clicked on either add or remove your student key from it
-                                    curGroup.addStudentKey(main.student.getKey());
+                                    curGroup.addStudentKey(student.getKey());
                                     groupsRef.child(curGroup.getKey()).setValue(curGroup);
-                                    main.student.addGroupKey(curGroup.getKey());
-                                    main.student.put();
+                                    student.addGroupKey(curGroup.getKey());
+                                    student.put();
 
                                 }
                             });
@@ -103,10 +126,10 @@ public class GroupsListFragment extends Fragment {
                                 @Override
                                 public void onClick(View view) {
                                     //If the event is clicked on either add or remove your student key from it
-                                    curGroup.addStudentKey(main.student.getKey());
+                                    curGroup.addStudentKey(student.getKey());
                                     groupsRef.child(curGroup.getKey()).setValue(curGroup);
-                                    main.student.addGroupKey(curGroup.getKey());
-                                    main.student.put();
+                                    student.addGroupKey(curGroup.getKey());
+                                    student.put();
 
                                 }
                             });
@@ -115,28 +138,21 @@ public class GroupsListFragment extends Fragment {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 };
-                //curGroupRef.addValueEventListener(curGroupValueEventListener);
-                }};
-
-
-
+                curGroupRef.addValueEventListener(curGroupValueEventListener);
+            }};
 
         groupsListView.setAdapter(adapter1);
         return view;
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
         //curGroupsRef.removeEventListener(curGroupValueEventListener);
-
-
     }
+
     public void toggleGroup(String key) {
         Student student = ((MainActivity)this.getActivity()).getStudent();
         ArrayList<String> groupKeys = student.getGroupKeys();
@@ -159,3 +175,51 @@ public class GroupsListFragment extends Fragment {
         student.put();
     }
 }
+
+
+//    private FirebaseListAdapter<Group> adapter1;
+//    private ListView membersListView;
+//    private String courseKey;
+//
+//    public GroupsListFragment() {}
+//
+//    public static GroupsListFragment newInstance(String key) {
+//        GroupsListFragment fragment = new GroupsListFragment();
+//        Bundle args = new Bundle();
+//        args.putString(COURSE_KEY_ARG, key);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+//
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//
+//        // Get arguments
+//        courseKey = getArguments().getString(COURSE_KEY_ARG);
+//        if (courseKey == null) {
+//            throw new IllegalArgumentException("Must pass " + COURSE_KEY_ARG);
+//        }
+//
+//        View view = inflater.inflate(R.layout.groupslist_layout,null);
+//        membersListView = (ListView) view.findViewById(R.id.groupsListListView);
+//        DatabaseReference postsRef = Database.ref.child("groups");
+//
+//        adapter1= new FirebaseListAdapter<Group>(getActivity(),Group.class,android.R.layout.two_line_list_item,postsRef) {
+//            @Override
+//            protected void populateView(View v, final Group model, int position) {
+//                TextView mytext=(TextView) v.findViewById(android.R.id.text1);
+//                TextView mytext1=(TextView) v.findViewById(android.R.id.text2);
+//                mytext.setText(model.getName());
+//                mytext1.setText("Member Count: "+Integer.toString(model.getStudentKeys().size()));
+//                v.setOnClickListener(new View.OnClickListener(){
+//                    @Override
+//                    public void onClick(View view) {
+//                        String groupKey = model.getKey();
+//                        Context context = getActivity().getApplicationContext();
+//                        GroupFragment groupFragment = new GroupFragment().newInstance(groupKey);
+//                        getActivity().getSupportFragmentManager().beginTransaction()
+//                                .replace(R.id.flContent, groupFragment, null)
+//                                .addToBackStack(null)
+//                                .commit();
+//                        toggleGroup(groupKey);

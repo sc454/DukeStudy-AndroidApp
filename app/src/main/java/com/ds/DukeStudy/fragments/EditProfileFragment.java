@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,76 +18,48 @@ import android.widget.Toast;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Student;
+import com.ds.DukeStudy.objects.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EditProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EditProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-//Displays and retrieves profile information saved in database.
 public class EditProfileFragment extends Fragment implements View.OnClickListener {
 
-    private FirebaseAuth auth;
-    View EditProfileView;
-    Button SubmitProfileButton;
-    EditText userNameText;
-    EditText userEmailText;
-    EditText userMajorText;
-    EditText userYearText;
+    private static final String REQUIRED = "Required";
+    private static final String DUKE_EMAIL = "Must be @duke.edu";
 
+    private Student student;
+    private View EditProfileView;
+    private Button SubmitProfileButton;
+    private EditText nameField, emailField, majorField, yearField;
     private OnFragmentInteractionListener mListener;
 
-    public EditProfileFragment() {
-        // Required empty public constructor
-    }
-
-    // TODO: Rename and change types and number of parameters
-    public static EditProfileFragment newInstance(String param1, String param2) {
-        EditProfileFragment fragment = new EditProfileFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public EditProfileFragment() {}
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
 
     @Override
-    //Displays profile information and set listeners for edit button
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Get fields
         EditProfileView =  inflater.inflate(R.layout.fragment_edit_profile, container, false);
         SubmitProfileButton = (Button)EditProfileView.findViewById(R.id.submitProfileButton);
-        userNameText =  (EditText)EditProfileView.findViewById(R.id.userNameEdit);
-       // userName = userNameText.getText().toString();
-        userEmailText = (EditText)EditProfileView.findViewById(R.id.userEmailEdit);
-        userMajorText = (EditText)EditProfileView.findViewById(R.id.userMajorEdit);
-        userYearText = (EditText)EditProfileView.findViewById(R.id.userYearEdit);
+        nameField = (EditText)EditProfileView.findViewById(R.id.userNameEdit);
+        emailField = (EditText)EditProfileView.findViewById(R.id.userEmailEdit);
+        majorField = (EditText)EditProfileView.findViewById(R.id.userMajorEdit);
+        yearField = (EditText)EditProfileView.findViewById(R.id.userYearEdit);
 
-        Student student = ((MainActivity)this.getActivity()).getStudent();
-        userNameText.setText(student.getName());
-        userEmailText.setText(student.getEmail());
-        userMajorText.setText(student.getMajor());
-        userYearText.setText(student.getGradYear());
-        
+        // Fill fields
+        student = ((MainActivity)this.getActivity()).getStudent();
+        nameField.setText(student.getName());
+        emailField.setText(student.getEmail());
+        majorField.setText(student.getMajor());
+        yearField.setText(student.getGradYear());
         SubmitProfileButton.setOnClickListener(this);
         return EditProfileView;
     }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -94,8 +67,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -105,34 +77,31 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mListener = null;
     }
 
-    // Upon clicking the submit button, new details are updated in the database, for the user UID
     @Override
     public void onClick(View v) {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        auth=FirebaseAuth.getInstance();
-        //database.child("note").push().setValue(usernameEdit.getText().toString());
-        String userName = userNameText.getText().toString();
-        String userEmail = userEmailText.getText().toString();
-        String userMajor = userMajorText.getText().toString();
-        String userYear = userYearText.getText().toString();
-        database.child("students").child(auth.getCurrentUser().getUid()).setValue( new Student(userName,userEmail,userMajor,userYear));
+        // Read input
+        String name = nameField.getText().toString();
+        String email = emailField.getText().toString();
+        String major = majorField.getText().toString();
+        String year = yearField.getText().toString();
 
+        // Require all fields
+        if (!Util.validateString(name, nameField)) return;
+        if (!Util.validateEmail(email, emailField)) return;
+        if (!Util.validateString(major, majorField)) return;
+        if (!Util.validateNumber(year, yearField)) return;
 
-        Fragment fragment = null;
-        Class fragmentClass = null;
-        fragmentClass = ProfileFragment.class;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        // Update fields
+        student.setName(name);
+        student.setEmail(email);
+        student.setMajor(major);
+        student.setGradYear(year);
+        student.put();
+
+        getFragmentManager().beginTransaction().replace(R.id.flContent, new ProfileFragment()).commit();
     }
 
-
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(int tag,String userName);
     }
 }

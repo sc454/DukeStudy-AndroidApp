@@ -93,4 +93,23 @@ public class Course {
         }
         Database.put(path, key, this);
     }
+
+    public void put(Student student) {
+        String thereKey = student.getKey();
+        boolean here = studentKeys.contains(thereKey);
+        boolean there = student.getCourseKeys().contains(key);
+
+        if ((here && there) || !(here && there)) {
+            // Information up to date
+        } else if (!here) {
+            // Not here, add
+            studentKeys.add(thereKey);
+            put();
+        }
+        else if (!there) {
+            // Not there, remove
+            studentKeys.remove(thereKey);
+            put();
+        }
+    }
 }

@@ -36,9 +36,13 @@
             android:isScrollContainer="true">
         </activity>
 
+        <!-- Post Details -->
+        <activity android:name=".PostDetailActivity"/>
+        <activity android:name=".NewPostActivity"/>
+
         <!-- Sign up -->
         <activity
-            android:name=".SignupActivity"
+            android:name=".SignUpActivity"
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

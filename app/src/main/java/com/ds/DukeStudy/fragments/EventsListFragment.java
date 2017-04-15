@@ -4,10 +4,6 @@ import android.app.DatePickerDialog;
 
 import android.app.TimePickerDialog;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -27,12 +23,11 @@ import android.widget.TimePicker;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Course;
+import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,23 +42,47 @@ import java.util.Locale;
  */
 //This is an events fragment that retrieves events listed and displays them in a list for a given
     //course
-public class EventsFragment extends Fragment {
+public class EventsListFragment extends Fragment {
+
+    public static final String GROUP_KEY_ARG = "groupKey";
+
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<String> adapter1;
     private ListView eventsListView;
-    private String sourceID;
+//    private String sourceID;
     private FirebaseUser user;
+    private String groupKey;
+    private Student student;
+
+    public EventsListFragment() {}
+
+    public static EventsListFragment newInstance(String groupKey) {
+        EventsListFragment fragment = new EventsListFragment();
+        Bundle args = new Bundle();
+        args.putString(GROUP_KEY_ARG, groupKey);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle mybundle=getArguments();
-        sourceID=mybundle.getString("myid");
-        final MainActivity main = (MainActivity)EventsFragment.this.getActivity();
+
+        // Get arguments
+        groupKey = getArguments().getString(GROUP_KEY_ARG);
+        if (groupKey == null) {
+            throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
+        }
+
+        student = ((MainActivity)EventsListFragment.this.getActivity()).getStudent();
+
         final View view = inflater.inflate(R.layout.events_layout, container, false);
+
         eventsListView = (ListView) view.findViewById(R.id.eventsListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference curGroupsRef = databaseRef.child("groups").child(sourceID).child("eventKeys");
-        final DatabaseReference eventsRef=databaseRef.child("events");
+        DatabaseReference curGroupsRef = Database.ref.child("groups").child(groupKey).child("eventKeys");
+        final DatabaseReference eventsRef = Database.ref.child("events");
+
         adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,R.layout.cutom_row_view_layout,curGroupsRef) {
         protected void populateView(final View v, final String model,final int position) {
             //Get reference to particular student in database
@@ -78,48 +97,51 @@ public class EventsFragment extends Fragment {
                     mytext1.setText("Date: " + curEvent.getDate() + "  Time: " + curEvent.getTime()+"");
                     mytext2.setText("@: "+curEvent.getLocation()+"  #Going: "+Integer.toString(curEvent.getStudentKeys().size()));
 
-                    if (curEvent.getStudentKeys().contains(main.student.getKey())) {
-                        mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
+                    if (curEvent.getStudentKeys().contains(student.getKey())) {
+                        if (isAdded()) {
+                            mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
+                        }
+
                         v.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 //If the event is clicked on either add or remove your student key from it
-                                curEvent.removeStudent(main.student.getKey());
+                                curEvent.removeStudent(student.getKey());
                                 eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                main.student.removeEventKey(curEvent.getKey());
-                                main.student.put();
+                                student.removeEventKey(curEvent.getKey());
+                                student.put();
                             }
                         });
                         mybutton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 //If the event is clicked on either add or remove your student key from it
-                                curEvent.removeStudent(main.student.getKey());
+                                curEvent.removeStudent(student.getKey());
                                 eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                main.student.removeEventKey(curEvent.getKey());
-                                main.student.put();
+                                student.removeEventKey(curEvent.getKey());
+                                student.put();
                             }
                         });
                     }else{
-                        mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));
+                        if (isAdded()) mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));
                         v.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 //If the event is clicked on either add or remove your student key from it
-                                curEvent.addStudent(main.student.getKey());
+                                curEvent.addStudent(student.getKey());
                                 eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                main.student.addEventKey(curEvent.getKey());
-                                main.student.put();
+                                student.addEventKey(curEvent.getKey());
+                                student.put();
                             }
                         });
                         mybutton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 //If the event is clicked on either add or remove your student key from it
-                                curEvent.removeStudent(main.student.getKey());
+                                curEvent.removeStudent(student.getKey());
                                 eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                main.student.removeEventKey(curEvent.getKey());
-                                main.student.put();
+                                student.removeEventKey(curEvent.getKey());
+                                student.put();
                             }
                         });
                     }
@@ -193,10 +215,10 @@ public class EventsFragment extends Fragment {
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                 //database.child("note").push().setValue(usernameEdit.getText().toString());
                 final Event event = new Event(dateTimeText.getText().toString(), timeText.getText().toString(),locationText.getText().toString());
-                event.addStudent(main.student.getKey());
+                event.addStudent(student.getKey());
                 event.put();
                 //Need to add the event key to eventKeys for the group
-                final DatabaseReference curGroupsRef=databaseRef.child("groups").child(sourceID);
+                final DatabaseReference curGroupsRef=databaseRef.child("groups").child(groupKey);
                 curGroupsRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
