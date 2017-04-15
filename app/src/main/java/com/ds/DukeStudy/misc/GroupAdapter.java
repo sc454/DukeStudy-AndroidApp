@@ -1,8 +1,50 @@
 package com.ds.DukeStudy.misc;
 
-/**
- * Created by Branch on 4/14/17.
- */
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 
-public class GroupAdapter {
+import com.ds.DukeStudy.fragments.EventsFragment;
+import com.ds.DukeStudy.fragments.GroupsListFragment;
+import com.ds.DukeStudy.fragments.MembersFragment;
+import com.ds.DukeStudy.fragments.PostsFragment;
+
+public class GroupAdapter extends FragmentPagerAdapter {
+
+    // Fields
+    private String groupKey;
+    private static final int numTabs = 3;
+
+    // Methods
+
+    public GroupAdapter(FragmentManager fm, String groupKey) {
+        super(fm);
+        this.groupKey = groupKey;
+    }
+
+    @Override
+    public int getCount() {return numTabs;}
+
+    @Override
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0: return new PostsFragment().newInstance("groups", groupKey);
+            case 1: return new EventsFragment();
+            case 2: return new MembersFragment().newInstance("groups", groupKey);
+        }
+        return null;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case 0: return "Posts";
+            case 1: return "Events";
+            case 2: return "Members";
+        }
+        return null;
+    }
+
+
 }
