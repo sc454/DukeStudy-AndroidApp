@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.ds.DukeStudy.fragments.CourseListFragment;
 import com.ds.DukeStudy.fragments.CoursesFragment;
 import com.ds.DukeStudy.fragments.EditProfileFragment;
-import com.ds.DukeStudy.fragments.FirebaseExFragment;
+//import com.ds.DukeStudy.fragments.FirebaseExFragment;
 import com.ds.DukeStudy.fragments.GroupsFragment;
 import com.ds.DukeStudy.fragments.ProfileFragment;
 import com.ds.DukeStudy.objects.Course;
@@ -55,7 +55,7 @@ import java.util.Map;
 // Main Activity which defaults to Profile page of the user
 // This activity handles navigation drawer clicks
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,FirebaseExFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CoursesFragment.OnFragmentInteractionListener {
 
     // Fields
 

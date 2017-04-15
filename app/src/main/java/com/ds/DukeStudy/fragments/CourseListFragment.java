@@ -1,5 +1,4 @@
 package com.ds.DukeStudy.fragments;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Course;
@@ -20,9 +18,7 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
-
 /**
  * Created by cheli on 3/5/2017.
  */
@@ -53,7 +49,6 @@ public class CourseListFragment extends Fragment {
                         CharSequence text = getRef(position).getKey();
                         Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                         toast.show();
-
                         //Toggle course
                         toggleCourse(text.toString());
                     }
@@ -62,9 +57,7 @@ public class CourseListFragment extends Fragment {
         };
         courseListView.setAdapter(adapter1);
         return view;
-
     }
-
     public void toggleCourse(String key) {
         Student student = ((MainActivity)this.getActivity()).getStudent();
         ArrayList<String> courseKeys = student.getCourseKeys();
@@ -74,14 +67,11 @@ public class CourseListFragment extends Fragment {
             addCourse(key);
         }
     }
-
-
     public void addCourse(String key) {
         Student student = ((MainActivity)this.getActivity()).getStudent();
         student.addCourseKey(key);
         student.put();
     }
-
     public void removeCourse(String key) {
         Student student = ((MainActivity)this.getActivity()).getStudent();
         student.removeCourseKey(key);

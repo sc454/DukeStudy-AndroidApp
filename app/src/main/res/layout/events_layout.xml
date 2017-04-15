@@ -13,7 +13,6 @@
         android:id="@+id/eventDateTimeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.09"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Date" />
