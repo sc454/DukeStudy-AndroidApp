@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -20,24 +22,40 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-/**
- * Created by cheli on 3/5/2017.
- */
-
 //This fragment loads groups lists for a particular course from the database and displays in listview.
 public class GroupsListFragment extends Fragment {
+
+    private static final String COURSE_KEY_ARG = "courseId";
+
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<Group> adapter1;
     private ListView membersListView;
-    private String myid;
+    private String courseKey;
+
+    public GroupsListFragment() {}
+
+    public static GroupsListFragment newInstance(String key) {
+        GroupsListFragment fragment = new GroupsListFragment();
+        Bundle args = new Bundle();
+        args.putString(COURSE_KEY_ARG, key);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            Bundle curBundle=getArguments();
-        View view=inflater.inflate(R.layout.groupslist_layout,null);
-        membersListView=(ListView) view.findViewById(R.id.groupsListListView);
-        databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference postsRef=databaseRef.child("groups");//This needs to be changed dynamically
+
+        // Get arguments
+        courseKey = getArguments().getString(COURSE_KEY_ARG);
+        if (courseKey == null) {
+            throw new IllegalArgumentException("Must pass " + COURSE_KEY_ARG);
+        }
+
+        View view = inflater.inflate(R.layout.groupslist_layout,null);
+        membersListView = (ListView) view.findViewById(R.id.groupsListListView);
+        DatabaseReference postsRef = Database.ref.child("groups");
+
         adapter1= new FirebaseListAdapter<Group>(getActivity(),Group.class,android.R.layout.two_line_list_item,postsRef) {
             @Override
             protected void populateView(View v, final Group model, int position) {
@@ -48,23 +66,14 @@ public class GroupsListFragment extends Fragment {
                 v.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
+                        String groupKey = model.getKey();
                         Context context = getActivity().getApplicationContext();
-                        CharSequence myid = model.getKey();
-                        //int duration = Toast.LENGTH_SHORT;
-
-                        //Toast toast = Toast.makeText(context, myid, duration);
-                        //toast.show();
-                        GroupsFragment nextFrag= new GroupsFragment();
-                        Bundle mybundle=new Bundle();
-                        mybundle.putString("myid",myid.toString());
-                        nextFrag.setArguments(mybundle);
+                        GroupFragment groupFragment = new GroupFragment().newInstance(groupKey);
                         getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.flContent, nextFrag, null)
+                                .replace(R.id.flContent, groupFragment, null)
                                 .addToBackStack(null)
                                 .commit();
-
-                        //Toggle group
-                        toggleGroup(myid.toString());
+                        toggleGroup(groupKey);
                     }
                 });
             }

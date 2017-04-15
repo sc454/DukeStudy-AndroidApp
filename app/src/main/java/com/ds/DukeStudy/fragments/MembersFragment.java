@@ -2,6 +2,7 @@ package com.ds.DukeStudy.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -21,48 +23,67 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-/**
- * This is a generic Members Fragment. This will be expanded to work for classes and groups.
- */
-
 public class MembersFragment extends Fragment {
+
+    private static final String PREFIX_ARG = "dbPrefix";
+    private static final String KEY_ARG = "key";
+
+    private String dbPrefix;
+    private String dbKey;
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<String> adapter1;
     private ListView membersListView;
     public Boolean isCourse=Boolean.TRUE;
+
+    public MembersFragment() {}
+
+    public static MembersFragment newInstance(String dpPath, String key) {
+        MembersFragment fragment = new MembersFragment();
+        Bundle args = new Bundle();
+        args.putString(PREFIX_ARG, dpPath);
+        args.putString(KEY_ARG, key);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle curBundle=getArguments();
-        View view=inflater.inflate(R.layout.members_layout,null);
-        membersListView=(ListView) view.findViewById(R.id.membersListView);
-        databaseRef = FirebaseDatabase.getInstance().getReference();
-        String sourceID=curBundle.getString("myid");
-        DatabaseReference currentSourceStudentsRef;
-        if(isCourse){
-            currentSourceStudentsRef=databaseRef.child("courses").child(sourceID).child("studentKeys");}
-        else{
-            currentSourceStudentsRef=databaseRef.child("groups").child(sourceID).child("studentKeys");
-        };
-        final DatabaseReference studentsRef=databaseRef.child("students");
-        adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,android.R.layout.two_line_list_item,currentSourceStudentsRef) {
+
+        // Get arguments
+        dbPrefix = getArguments().getString(PREFIX_ARG);
+        if (dbPrefix == null) {
+            throw new IllegalArgumentException("Must pass " + PREFIX_ARG);
+        }
+
+        dbKey = getArguments().getString(KEY_ARG);
+        if (dbKey == null) {
+            throw new IllegalArgumentException("Must pass " + KEY_ARG);
+        }
+
+        // Create view
+        View view = inflater.inflate(R.layout.members_layout,null);
+        membersListView = (ListView) view.findViewById(R.id.membersListView);
+
+        // Create database listener
+        DatabaseReference studentKeysRef = Database.ref.child(dbPrefix).child(dbKey).child("studentKeys");
+        adapter1 = new FirebaseListAdapter<String>(getActivity(), String.class, android.R.layout.two_line_list_item, studentKeysRef) {
             @Override
             protected void populateView(final View v, final String model,final int position) {
                 //Get reference to particular student in database
-                DatabaseReference curStudentRef=studentsRef.child(model);
                 final TextView mytext1=(TextView) v.findViewById(android.R.id.text1);
                 final TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
-                curStudentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                Database.ref.child("students").child(model).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        final Student curStudent= dataSnapshot.getValue(Student.class);
+                        final Student curStudent = dataSnapshot.getValue(Student.class);
                         mytext1.setText(curStudent.getName());
                         mytext2.setText(curStudent.getEmail());
                         v.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View view) {
                                 Context context = getActivity().getApplicationContext();
-                                ViewProfileFragment nextFrag= new ViewProfileFragment();
+                                ViewProfileFragment nextFrag = new ViewProfileFragment();
                                 Bundle mybundle=new Bundle();
                                 mybundle.putString("myid",model.toString());
                                 nextFrag.setArguments(mybundle);
@@ -75,15 +96,11 @@ public class MembersFragment extends Fragment {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
-
             }
         };
         membersListView.setAdapter(adapter1);
         return view;
-
     }
 }
