@@ -18,14 +18,6 @@
                 <!--android:icon="@drawable/ic_menu_class"-->
                 <!--android:title="ECE 651" />-->
             <!--<item-->
-                <!--android:id="@+id/sampleClass2"-->
-                <!--android:icon="@drawable/ic_menu_class"-->
-                <!--android:title="ECE 590" />-->
-            <!--<item-->
-                <!--android:id="@+id/sampleClass3"-->
-                <!--android:icon="@drawable/ic_menu_class"-->
-                <!--android:title="ECE 551" />-->
-            <!--<item-->
                 <!--android:id="@+id/nav_addClass"-->
                 <!--android:icon="@drawable/ic_menu_addclass"-->
                 <!--android:title="Add Class" />-->
@@ -50,18 +42,5 @@
             <!--android:icon="@drawable/ic_menu_groups"-->
             <!--android:title="Groups" />-->
         <!--</group>-->
-    <!--<item android:id="@+id/database_submenu" android:title="Database Test">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/firebase_ex"-->
-                <!--android:icon="@drawable/ic_menu_groups"-->
-                <!--android:title="Database" />-->
-        <!--</menu>-->
-    <!--</item>-->
     <!--<group android:checkableBehavior="single">-->
-    <!--<item-->
-        <!--android:id="@+id/firebase_ex"-->
-        <!--android:icon="@drawable/ic_menu_groups"-->
-        <!--android:title="Database Test" />-->
-    <!--</group>-->
 </menu>

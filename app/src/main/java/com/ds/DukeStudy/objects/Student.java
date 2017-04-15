@@ -2,6 +2,7 @@ package com.ds.DukeStudy.objects;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 // TODO: mimic ondatachange method in ProfileFragment ln 92
@@ -91,5 +92,62 @@ public class Student {
             key = Database.getNewKey(path);
         }
         Database.put(path, key, this);
+    }
+
+    public void put(Course course) {
+        String thereKey = course.getKey();
+        boolean here = courseKeys.contains(thereKey);
+        boolean there = course.getStudentKeys().contains(key);
+
+        if ((here && there) || !(here && there)) {
+            // Information up to date
+        } else if (!here) {
+            // Not here, add
+            courseKeys.add(thereKey);
+            put();
+        }
+        else if (!there) {
+            // Not there, remove
+            courseKeys.remove(thereKey);
+            put();
+        }
+    }
+
+    public void put(Group group) {
+        String thereKey = group.getKey();
+        boolean here = groupKeys.contains(thereKey);
+        boolean there = group.getStudentKeys().contains(key);
+
+        if ((here && there) || !(here && there)) {
+            // Information up to date
+        } else if (!here) {
+            // Not here, add
+            groupKeys.add(thereKey);
+            put();
+        }
+        else if (!there) {
+            // Not there, remove
+            groupKeys.remove(thereKey);
+            put();
+        }
+    }
+
+    public void put(Event event) {
+        String thereKey = event.getKey();
+        boolean here = eventKeys.contains(thereKey);
+        boolean there = event.getStudentKeys().contains(key);
+
+        if ((here && there) || !(here && there)) {
+            // Information up to date
+        } else if (!here) {
+            // Not here, add
+            eventKeys.add(thereKey);
+            put();
+        }
+        else if (!there) {
+            // Not there, remove
+            eventKeys.remove(thereKey);
+            put();
+        }
     }
 }
