@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.misc.GroupAdapter;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Group;
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -36,37 +37,40 @@ import com.google.firebase.database.ValueEventListener;
 //This is the groups fragment that loads group specific data from the database and displays in
     //3 tab view
 public class GroupsFragment extends Fragment {
-    //Use tab_layout.xml to show three tabs in Groups
+
+    // Fields
+
+    public static final String COURSE_ID_ARG = "groupId";
+
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
-    public static int int_items = 3 ;
     private FirebaseListAdapter<String> adapterPost;
     private FirebaseListAdapter<String> adapterGroup;
     private FirebaseListAdapter<String> adapterMember;
     private OnFragmentInteractionListener mListener;
     private String groupID="";
     private DatabaseReference databaseRef;
-    public GroupsFragment() {
-        // Required empty public constructor
-    }
 
+    // Methods
 
-    public static GroupsFragment newInstance(String param1, String param2) {
+    public GroupsFragment() {}
+
+    public static GroupsFragment newInstance(String groupId) {
         GroupsFragment fragment = new GroupsFragment();
         Bundle args = new Bundle();
+        args.putString(COURSE_ID_ARG, groupId);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
     @Nullable
     @Override
     //Sets database listeners and populates listviews.
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Get stuff from bundle
         Bundle mybundle=getArguments();
         this.groupID=mybundle.getString("myid");
@@ -81,7 +85,7 @@ public class GroupsFragment extends Fragment {
         /**
          *Set an Adapter for the View Pager
          */
-        viewPager.setAdapter(new MyAdapter(getChildFragmentManager(), this.groupID));
+        viewPager.setAdapter(new GroupAdapter(getChildFragmentManager(), this.groupID));
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -106,69 +110,6 @@ public class GroupsFragment extends Fragment {
 
         return x;
     }
-    class MyAdapter extends FragmentPagerAdapter {
-
-        public MyAdapter(FragmentManager fm, String groupID) {
-            super(fm);
-        }
-
-        /**
-         * Return fragment with respect to Position .
-         */
-
-        @Override
-        public Fragment getItem(int position) {
-            Bundle myBundle=new Bundle();
-            switch (position) {
-                case 0:
-                    PostsFragment pf=new PostsFragment();
-                    myBundle.putString("myid", groupID);
-                    myBundle.putBoolean("isCourse", Boolean.FALSE);
-                    pf.setArguments(myBundle);
-                    return pf;
-                case 1:
-                    EventsFragment ef=new EventsFragment();
-                    myBundle.putString("myid", groupID);
-                    myBundle.putBoolean("isCourse", Boolean.FALSE);
-                    ef.setArguments(myBundle);
-                    return ef;
-                case 2:
-                    MembersFragment mf=new MembersFragment();
-                    myBundle.putString("myid", groupID);
-                    myBundle.putBoolean("isCourse", Boolean.FALSE);
-                    mf.setArguments(myBundle);
-                    return mf;
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-
-            return int_items;
-
-        }
-
-        /**
-         * This method returns the title of the tab according to the position.
-         */
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-
-            switch (position) {
-                case 0:
-                    return "Posts";
-                case 1:
-                    return "Events";
-                case 2:
-                    return "Members";
-            }
-            return null;
-        }
-    }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -176,8 +117,7 @@ public class GroupsFragment extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -187,18 +127,7 @@ public class GroupsFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(int tag,int view);
     }
 }
