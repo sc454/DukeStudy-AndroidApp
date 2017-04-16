@@ -1,5 +1,7 @@
 package com.ds.DukeStudy;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -29,16 +31,31 @@ public class NewPostActivity extends AppCompatActivity {
     // Fields
 
     private static final String TAG = "NewPostActivity";
-    private static final String REQUIRED = "Required";
+    private static final String DB_PATH = "dbPath";
 
+    private String path;
     private EditText titleField, bodyField;
     private FloatingActionButton submitBtn;
 
     // Methods
 
+    public static void start(Context context, String path) {
+        Intent intent = new Intent(context, NewPostActivity.class);
+        intent.putExtra(DB_PATH, path);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get arguments
+        path = getIntent().getStringExtra(DB_PATH);
+        if (path == null) {
+            throw new IllegalArgumentException("Must pass " + DB_PATH);
+        }
+
+        // Set view
         setContentView(R.layout.activity_new_post);
         titleField = (EditText) findViewById(R.id.field_title);
         bodyField = (EditText) findViewById(R.id.field_body);
@@ -64,31 +81,27 @@ public class NewPostActivity extends AppCompatActivity {
         Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
 
         //
-        final String userId = getUid();
-        Database.ref.child("students").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Student user = dataSnapshot.getValue(Student.class);
-
-                    if (user == null) {
-                        Log.e(TAG, "User " + userId + " is unexpectedly null");
-                        Toast.makeText(NewPostActivity.this, "Error: Could not fetch user.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Post post = new Post(title, body, user.getName());
-//                        post.put("post/courses/");
-                        post.put();
-                    }
-
-                    setEditingEnabled(true);
-                    finish();
+        final String uid = Database.getUser().getUid();
+        Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Student user = dataSnapshot.getValue(Student.class);
+                if (user == null) {
+                    Log.e(TAG, "User " + uid + " is unexpectedly null");
+                    Toast.makeText(NewPostActivity.this, "Error: Could not fetch user.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Post post = new Post(title, body, user.getName());
+                    post.put(path);
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                    setEditingEnabled(true);
-                }
-            });
+                setEditingEnabled(true);
+                finish();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                setEditingEnabled(true);
+            }
+        });
     }
 
     private void setEditingEnabled(boolean enabled) {
@@ -99,9 +112,5 @@ public class NewPostActivity extends AppCompatActivity {
         } else {
             submitBtn.setVisibility(View.GONE);
         }
-    }
-
-    public String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 }

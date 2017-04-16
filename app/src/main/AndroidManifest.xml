@@ -30,30 +30,30 @@
         <!-- Main -->
         <activity
             android:name=".MainActivity"
+            android:isScrollContainer="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            android:isScrollContainer="true">
-        </activity>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- Post Details -->
-        <activity android:name=".PostDetailActivity"/>
-        <activity android:name=".NewPostActivity"/>
+        <activity android:name=".PostDetailActivity" />
+        <activity android:name=".NewPostActivity" />
+        <activity android:name=".NewGroupActivity" />
+        <activity android:name=".NewEventActivity" />
 
         <!-- Sign up -->
         <activity
             android:name=".SignUpActivity"
             android:label="@string/title_activity_signup"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Reset password -->
         <activity
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".NewGroup" />
+        <activity android:name=".NewEventActivity"></activity>
     </application>
 
 </manifest>

@@ -51,14 +51,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Student student;
     private FirebaseUser user;
     private FirebaseAuth auth;
+    private DataSnapshot courses, groups;
     private DataSnapshot data;
 
     private static final String TAG = "MainActivity";
+    private ValueEventListener userListener, coursesListener, groupsListener;
+    private DatabaseReference userRef, coursesRef, groupsRef;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+
     private ValueEventListener dbListener;
-    private ValueEventListener userListener;
-    private DatabaseReference userReference;
     private DatabaseReference dbReference;
     private FirebaseAuth.AuthStateListener authListener;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
+
+    private NavigationView navView;
+    private TextView userName, userEmail;
+
     private HashMap<Integer,String> courseMenuIds = new HashMap<Integer,String>();
     private HashMap<Integer,String> groupMenuIds = new HashMap<Integer,String>();
     private static final int ADD_CLASS = 101; //TODO: random number
@@ -67,134 +78,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public FirebaseUser getUser() {return user;}
     public Student getStudent() {return student;}
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    //creating a storage reference,below URL is the Firebase storage URL.
-    StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
+    public DataSnapshot getGroupData() {return groups;}
+    public DataSnapshot getCourseData() {return courses;}
+
 
     // Android methods
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Create view
         setContentView(R.layout.activity_main);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Create database listener
+        // Load text
+        navView = (NavigationView) findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener(this);
+        View headerView = navView.inflateHeaderView(R.layout.nav_header_main);
+        userName = (TextView) headerView.findViewById(R.id.navUserName);
+        userEmail = (TextView) headerView.findViewById(R.id.navUserEmail);
 
-        userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                student = dataSnapshot.getValue(Student.class);
-                Log.i(TAG, "loadUser:onDataChange");
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
-            }
-        };
-
-        dbListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                data = dataSnapshot;
-                updateMenuList();
-                Log.i(TAG, "loadDb:onDataChange");
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadDb:onCancelled", databaseError.toException());
-            }
-        };
-
-        dbReference = Database.ref;
-        dbReference.addValueEventListener(dbListener);
-
-        // Initialize user
-
+        // Set references
+        user = Database.getUser();
         auth = FirebaseAuth.getInstance();
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                Log.i(TAG, "onCreate:onAuthStateChanged");
-                user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                } else {
-                    userReference = Database.ref.child("students").child(user.getUid());
-                    userReference.addValueEventListener(userListener);
-                }
-            }
-        };
+        coursesRef = Database.ref.child("courses");
+        groupsRef = Database.ref.child("groups");
+        userRef = Database.ref.child("students").child(user.getUid());
+        createListeners();
 
-        // Add fragments to navigate between items in the navigation bar
-        // Set profile page as default
+        // Set drawer layout
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(drawerToggle);
 
-        Fragment fragment = null;
-        Class fragmentClass = null;
-        fragmentClass = ProfileFragment.class;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        assert navigationView != null;
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
-       // final ImageView user_iv = (ImageView) headerView.findViewById(R.id.navProfileIcon);
-        final TextView fullName_tv = (TextView) headerView.findViewById(R.id.navUserName);
-        final TextView userEmail_tv = (TextView) headerView.findViewById(R.id.navUserEmail);
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        // Send to profile
+        getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new ProfileFragment()).commit();
+    }
 
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-            user = FirebaseAuth.getInstance().getCurrentUser();
-
-            rootRef.child("students").addValueEventListener(new ValueEventListener() {
-                // Update the profile view with new data each time something changes
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.hasChild(user.getUid())){
-                        fullName_tv.setText(dataSnapshot.child(user.getUid()).child("name").getValue().toString());
-                        userEmail_tv.setText(dataSnapshot.child(user.getUid()).child("email").getValue().toString());
-                    }
-                    else{
-                        fullName_tv.setText("Name");
-                        userEmail_tv.setText("Email");
-                        //pictureView.setImageResource(R.drawable.ic_menu_profile);;
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
     }
 
     public void updateMenuList() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Log.i(TAG, "Updating menu list");
 
-        // Fill navigation drawer
-        Menu menu = navigationView.getMenu();
-        MenuItem classItems = menu.getItem(1);
-        MenuItem groupItems = menu.getItem(2);
+        // Set user name and email
+        if (student != null) {
+            userName.setText(student.getName());
+            userEmail.setText(student.getEmail());
+        }
 
-        SubMenu classSubMenu = classItems.getSubMenu();
-        SubMenu groupSubMenu = groupItems.getSubMenu();
+        // Clear navigation drawer options
+        Menu menu = navView.getMenu();
+        SubMenu classSubMenu = menu.getItem(1).getSubMenu();
+        SubMenu groupSubMenu = menu.getItem(2).getSubMenu();
         classSubMenu.clear();
         groupSubMenu.clear();
+
+//        courseMenuIds.clear();
+//        groupMenuIds.clear();
 
         // Find keys
         ArrayList<String> courseKeys = new ArrayList<>();
@@ -212,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (String courseKey : courseKeys) {
             // Add course
             Course c = data.child("courses").child(courseKey).getValue(Course.class);
+//            Course c = courses.child(courseKey).getValue(Course.class);
             classSubMenu.add(0, itemId, Menu.NONE, c.getTitle()).setIcon(R.drawable.ic_menu_class);
             // Map menu id to course key
             courseMenuIds.put(itemId, c.getKey());
@@ -226,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Fill groups
         for (String groupKey : groupKeys) {
             Group g = data.child("groups").child(groupKey).getValue(Group.class);
+//            Group g = groups.child(groupKey).getValue(Group.class);
             groupSubMenu.add(0, itemId, Menu.NONE, g.getName()).setIcon(R.drawable.ic_menu_groups);
             groupMenuIds.put(itemId, g.getKey());
             itemId++;
@@ -293,10 +241,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.i(TAG, "Menu id not found");
                 }
         }
+
         // Close drawer
         getSupportFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        item.setChecked(false);
         return true;
     }
 
@@ -323,14 +272,86 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onStop() {
         super.onStop();
         if (authListener != null) {
-            auth.removeAuthStateListener(authListener);
+//            auth.removeAuthStateListener(authListener);
         }
         if (userListener != null) {
-            userReference.removeEventListener(userListener);
+            userRef.removeEventListener(userListener);
         }
         if (dbListener != null) {
             dbReference.removeEventListener(dbListener);
         }
         //FirebaseAuth.getInstance().signOut();
+    }
+
+    void createListeners() {
+
+        // User listener
+        userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                student = dataSnapshot.getValue(Student.class);
+                Log.i(TAG, "loadUser:onDataChange");
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
+            }
+        };
+
+//         Course listener
+        dbListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                data = dataSnapshot;
+                updateMenuList();
+                Log.i(TAG, "loadDb:onDataChange");
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadDb:onCancelled", databaseError.toException());
+            }
+        };
+        dbReference = Database.ref;
+        dbReference.addValueEventListener(dbListener);
+
+        // Courses listener
+        coursesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "loadCourses:onDataChange");
+                courses = dataSnapshot;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        coursesRef.addValueEventListener(coursesListener);
+
+        // Groups listener
+        groupsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "loadGroups:onDataChange");
+                groups = dataSnapshot;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        groupsRef.addValueEventListener(groupsListener);
+
+        // Authorization listener
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                Log.i(TAG, "onCreate:onAuthStateChanged");
+                user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                } else {
+                    userRef = Database.ref.child("students").child(user.getUid());
+                    userRef.addValueEventListener(userListener);
+                }
+            }
+        };
     }
 }

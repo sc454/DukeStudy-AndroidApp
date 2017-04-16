@@ -27,7 +27,7 @@ public class GroupAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return new PostsFragment().newInstance("groups", groupKey);
+            case 0: return new PostsFragment().newInstance("posts/groups/" + groupKey);
             case 1: return new EventsListFragment().newInstance(groupKey);
             case 2: return new MembersFragment().newInstance("groups", groupKey);
         }

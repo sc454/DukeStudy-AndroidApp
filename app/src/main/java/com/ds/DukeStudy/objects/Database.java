@@ -1,5 +1,7 @@
 package com.ds.DukeStudy.objects;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -14,7 +16,11 @@ public class Database {
     public static final String url = "https://dukestudy-a11a3.firebaseio.com";
     public static final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
-    // Methods
+    // Getters
+
+    public static FirebaseUser getUser() {return FirebaseAuth.getInstance().getCurrentUser();}
+
+    // Other methods
 
     public static <T> String getNewKey(String path) {
 

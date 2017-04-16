@@ -45,8 +45,7 @@ public class Post {
 
 //  Database
 
-    public void put() {
-        String path = "posts";
+    public void put(String path) {
         if (key == null || "".equals(key)) {
             key = Database.getNewKey(path);
         }

@@ -25,7 +25,7 @@ public class CourseAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return new PostsFragment().newInstance("courses", courseKey);
+            case 0: return new PostsFragment().newInstance("posts/courses/" + courseKey);
             case 1: return new GroupsListFragment().newInstance(courseKey);
             case 2: return new MembersFragment().newInstance("courses", courseKey);
         }

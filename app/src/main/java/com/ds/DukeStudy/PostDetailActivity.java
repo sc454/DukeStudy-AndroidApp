@@ -1,6 +1,7 @@
 package com.ds.DukeStudy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.ds.DukeStudy.objects.Comment;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Post;
 import com.ds.DukeStudy.objects.Student;
+import com.ds.DukeStudy.objects.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,12 +38,12 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
         implements View.OnClickListener {
 
     private static final String TAG = "PostDetailActivity";
-    public static final String EXTRA_POST_KEY = "post_key";
+    public static final String PATH_ARG = "path";
 
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
-    private String mPostKey;
+    private String path;
     private CommentAdapter mAdapter;
 
     private TextView mAuthorView;
@@ -51,6 +53,12 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
 
+    public static void start(Context context, String path) {
+        Intent intent = new Intent(context, PostDetailActivity.class);
+        intent.putExtra(PATH_ARG, path);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,26 +66,27 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
         Log.i(TAG, "Creating post detail view");
 
         // Get post key from intent
-        mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
-        if (mPostKey == null) {
-            throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
+        path = getIntent().getStringExtra(PATH_ARG);
+        if (path == null) {
+            throw new IllegalArgumentException("Must pass " + PATH_ARG);
         }
 
         // Initialize Database
-        mPostReference = Database.ref.child("posts").child(mPostKey);
-        mCommentsReference = Database.ref.child("post-comments").child(mPostKey);
+        mPostReference = Database.ref.child(path);
+        Log.i(TAG, "Path " + path);
+        String postFix = Util.removeFromPath(path, 0);
+        Log.i(TAG, "postFix " + postFix);
+        mCommentsReference = Database.ref.child("post-comments" + postFix);
 
-        // Initialize Views
+        // Initialize text fields
         mAuthorView = (TextView) findViewById(R.id.post_author);
         mTitleView = (TextView) findViewById(R.id.post_title);
         mBodyView = (TextView) findViewById(R.id.post_body);
         mCommentField = (EditText) findViewById(R.id.field_comment_text);
         mCommentButton = (Button) findViewById(R.id.button_post_comment);
         mCommentsRecycler = (RecyclerView) findViewById(R.id.recycler_comments);
-
         mCommentButton.setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override
@@ -288,6 +297,7 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
         }
 
     }
+
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
