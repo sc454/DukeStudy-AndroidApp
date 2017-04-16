@@ -40,11 +40,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Locale;
 
-/**
- * Created by cheli on 3/5/2017.
- */
 //This is an events fragment that retrieves events listed and displays them in a list for a given
-    //course
+
 public class EventsListFragment extends Fragment {
 
     public static final String GROUP_KEY_ARG = "groupKey";
