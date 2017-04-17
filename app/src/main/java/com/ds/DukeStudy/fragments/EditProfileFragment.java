@@ -55,11 +55,16 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         // Fill fields
         student = ((MainActivity)this.getActivity()).getStudent();
-        nameField.setText(student.getName());
-        emailField.setText(student.getEmail());
-        majorField.setText(student.getMajor());
-        yearField.setText(student.getGradYear());
+        if (student != null) {
+            nameField.setText(student.getName());
+            emailField.setText(student.getEmail());
+            majorField.setText(student.getMajor());
+            yearField.setText(student.getGradYear());
+        }
+
+        // Submit button
         SubmitProfileButton.setOnClickListener(this);
+
         return EditProfileView;
     }
 
