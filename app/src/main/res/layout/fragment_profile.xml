@@ -16,13 +16,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.55"
+        android:layout_weight="0.70"
         android:padding="@dimen/base_padding"
-        android:background="@color/light">
+        android:background="@color/blue">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImageView"
             android:layout_width="160dp"
+            android:background="@color/blue"
             android:layout_height="160dp"
             android:layout_centerInParent="true"
             android:src="@drawable/ic_menu_profile"
@@ -45,12 +46,14 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:background="@drawable/back"
+            android:gravity="center"
             android:hint="Name"
             android:ems="10"
             android:id="@+id/userNameView"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_weight="0.08"/>
+            android:layout_weight="0.06"
+            />
 
 
         <TextView
@@ -60,10 +63,12 @@
             android:hint="Email"
             android:ems="10"
             android:id="@+id/emailView"
+            android:gravity="center"
             android:background="@drawable/back"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_weight="0.08"/>
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.06"/>
 
 
         <TextView
@@ -72,11 +77,13 @@
             android:inputType="textPersonName"
             android:hint="Major"
             android:background="@drawable/back"
+            android:gravity="center"
             android:ems="10"
             android:id="@+id/majorView"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_weight="0.08"/>
+            android:layout_weight="0.06"
+            android:layout_marginTop="20dp"/>
 
 
         <TextView
@@ -84,25 +91,25 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:hint="Class"
+            android:gravity="center"
             android:ems="10"
             android:id="@+id/classView"
             android:background="@drawable/back"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_weight="0.08"/>
+            android:layout_weight="0.06"
+            android:layout_marginTop="20dp"/>
 
     <Button
         android:text="Edit Profile"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignRight="@id/profileImageView"
-        android:layout_alignLeft="@id/profileImageView"
-        android:layout_below = "@id/classView"
+        android:layout_height="wrap_content"
         android:id="@+id/editProfileButton"
+        android:ems="10"
+        android:textSize="20sp"
         android:layout_centerInParent="true"
-        android:layout_weight="0.08" />
-
-
+        android:layout_weight="0.06"
+        android:layout_marginTop="20dp"/>
 
 
 </LinearLayout>
