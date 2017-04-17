@@ -1,5 +1,6 @@
 package com.ds.DukeStudy.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import com.ds.DukeStudy.NewEventActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
+import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,20 +27,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 //This is an events fragment that retrieves events listed and displays them in a list for a given
     //course
 public class EventsListFragment extends Fragment {
 
-    public static final String GROUP_KEY_ARG = "groupKey";
+    // Fields
 
-    private DatabaseReference databaseRef;
-    private FirebaseListAdapter<String> adapter1;
-    private ListView eventsListView;
-//    private String sourceID;
-    private FirebaseUser user;
+    public static final String GROUP_KEY_ARG = "groupKey";
+    private FirebaseListAdapter<String> listAdapter;
+    private ListView listView;
+    private Drawable plusIcon, minusIcon;
     private String groupKey;
     private Student student;
+    private DatabaseReference eventKeysRef;
     private FloatingActionButton newEventBtn;
+
+    // Constructors
 
     public EventsListFragment() {}
 
@@ -50,9 +56,12 @@ public class EventsListFragment extends Fragment {
         return fragment;
     }
 
+    // Other methods
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.fragment_events_list, container, false);
 
         // Get arguments
@@ -61,13 +70,103 @@ public class EventsListFragment extends Fragment {
             throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
         }
 
-        student = ((MainActivity) EventsListFragment.this.getActivity()).getStudent();
-        eventsListView = (ListView) view.findViewById(R.id.eventsListView);
-        databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference curGroupsRef = Database.ref.child("groups").child(groupKey).child("eventKeys");
-        final DatabaseReference eventsRef = Database.ref.child("events");
+        // Get view items
+        student = ((MainActivity) getActivity()).getStudent();
+        listView = (ListView) view.findViewById(R.id.eventList);
+        plusIcon = getResources().getDrawable(R.drawable.ic_menu_addclass);
+        minusIcon = getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp);
+        eventKeysRef = Database.ref.child("groups").child(groupKey).child("eventKeys");
 
-        // New post button
+        // Create adapter to list all events
+        listAdapter = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.general_row_view_btn, eventKeysRef) {
+            protected void populateView(final View v, final String eventKey, final int position) {
+
+                // Get view items
+                DatabaseReference eventRef = Database.ref.child("events").child(eventKey);
+                final TextView titleText = (TextView) v.findViewById(R.id.firstLine);
+                final TextView detailsText = (TextView) v.findViewById(R.id.secondLine);
+                final ImageButton toggleBtn = (ImageButton) v.findViewById(R.id.toggleButton);
+
+                // Get event
+                eventRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final Event event = dataSnapshot.getValue(Event.class);
+
+                        // Set title and details
+                        titleText.setText("Date: " + event.getDate() + "  Time: " + event.getTime() + "");
+                        detailsText.setText("@: " + event.getLocation() + "  #Going: " + Integer.toString(event.getStudentKeys().size()));
+
+                        // Set icon
+                        Boolean isMember = event.getStudentKeys().contains(student.getKey());
+                        toggle(toggleBtn, isMember);
+
+                        // Toggle on click
+                        toggleBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                toggle(event);
+                            }
+                        });
+                    }
+//                        if (event.getStudentKeys().contains(student.getKey())) {
+//                            if (isAdded()) {
+//                                toggleBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
+//                            }
+//                            v.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+////                                    //If the event is clicked on either add or remove your student key from it
+////                                    event.removeStudent(student.getKey());
+////                                    eventsRef.child(event.getKey()).setValue(event);
+////                                    student.removeEventKey(event.getKey());
+////                                    student.put();
+//                                }
+//                            });
+//                            toggleBtn.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    event.removeStudent(student.getKey());
+//                                    eventsRef.child(event.getKey()).setValue(event);
+//                                    student.removeEventKey(event.getKey());
+//                                    student.put();
+//                                }
+//                            });
+//                        } else {
+//                            if (isAdded())
+//                                toggleBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));
+//                            v.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+////                                    event.addStudent(student.getKey());
+////                                    eventsRef.child(event.getKey()).setValue(event);
+////                                    student.addEventKey(event.getKey());
+////                                    student.put();
+//                                }
+//                            });
+//                            toggleBtn.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    //If the event is clicked on either add or remove your student key from it
+//                                    event.removeStudent(student.getKey());
+//                                    eventsRef.child(event.getKey()).setValue(event);
+//                                    student.removeEventKey(event.getKey());
+//                                    student.put();
+//                                }
+//                            });
+//                        }
+//
+//                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
+        };
+        listView.setAdapter(listAdapter);
+
+        // New event button
         newEventBtn = (FloatingActionButton) view.findViewById(R.id.fab_new_event);
         newEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,81 +175,33 @@ public class EventsListFragment extends Fragment {
             }
         });
 
-        adapter1 = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.general_row_view, curGroupsRef) {
-            protected void populateView(final View v, final String model, final int position) {
-                //Get reference to particular student in database
-                DatabaseReference curStudentRef = eventsRef.child(model);
-                final TextView mytext1 = (TextView) v.findViewById(R.id.firstLine);
-                final TextView mytext2 = (TextView) v.findViewById(R.id.secondLine);
-                final ImageButton mybutton = (ImageButton) v.findViewById(R.id.toggleButton);
-                curStudentRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        final Event curEvent = dataSnapshot.getValue(Event.class);
-                        mytext1.setText("Date: " + curEvent.getDate() + "  Time: " + curEvent.getTime() + "");
-
-                        mytext1.setText("Date: " + curEvent.getDate() + "  Time: " + curEvent.getTime() + "");
-                        mytext2.setText("@: " + curEvent.getLocation() + "  #Going: " + Integer.toString(curEvent.getStudentKeys().size()));
-
-                        if (curEvent.getStudentKeys().contains(student.getKey())) {
-                            if (isAdded()) {
-                                mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
-                            }
-                            v.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-//                                    //If the event is clicked on either add or remove your student key from it
-//                                    curEvent.removeStudent(student.getKey());
-//                                    eventsRef.child(curEvent.getKey()).setValue(curEvent);
-//                                    student.removeEventKey(curEvent.getKey());
-//                                    student.put();
-                                }
-                            });
-                            mybutton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    curEvent.removeStudent(student.getKey());
-                                    eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                    student.removeEventKey(curEvent.getKey());
-                                    student.put();
-                                }
-                            });
-                        } else {
-                            if (isAdded())
-                                mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));
-                            v.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-//                                    curEvent.addStudent(student.getKey());
-//                                    eventsRef.child(curEvent.getKey()).setValue(curEvent);
-//                                    student.addEventKey(curEvent.getKey());
-//                                    student.put();
-                                }
-                            });
-                            mybutton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //If the event is clicked on either add or remove your student key from it
-                                    curEvent.removeStudent(student.getKey());
-                                    eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                    student.removeEventKey(curEvent.getKey());
-                                    student.put();
-                                }
-                            });
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        };
-        eventsListView.setAdapter(adapter1);
         return view;
     }
+
+    public void toggle(ImageButton button, Boolean isChecked) {
+        if (isChecked) {
+            button.setImageDrawable(minusIcon);
+        } else {
+            button.setImageDrawable(plusIcon);
+        }
+    }
+
+    public void toggle(Event event) {
+        ArrayList<String> groupKeys = student.getEventKeys();
+        String key = event.getKey();
+        if (groupKeys.contains(key)) {
+            //remove
+            student.removeGroupKey(key);
+            event.removeStudentKey(student.getKey());
+            student.put(); event.put();
+        } else {
+            //add
+            student.addGroupKey(key);
+            event.addStudentKey(student.getKey());
+            student.put(); event.put();
+        }
+    }
+
 }
 
 //    //Code from http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext

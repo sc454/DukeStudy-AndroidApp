@@ -5,6 +5,13 @@
     android:orientation="horizontal"
     android:weightSum="1">
 
+    <ImageButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="63dp"
+        android:background="@null"
+        android:padding="10dp" />
+
     <LinearLayout android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">

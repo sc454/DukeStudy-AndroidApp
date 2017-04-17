@@ -5,7 +5,7 @@
     android:weightSum="1">
 
     <ListView
-        android:id="@+id/eventsListView"
+        android:id="@+id/eventList"
         android:layout_width="match_parent"
         android:layout_height="213dp" />
 

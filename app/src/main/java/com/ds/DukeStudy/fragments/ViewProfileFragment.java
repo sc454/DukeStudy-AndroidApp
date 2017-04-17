@@ -64,6 +64,7 @@ public class ViewProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.fragment_view_profile, container, false);
 
         FirebaseStorage storage = FirebaseStorage.getInstance();

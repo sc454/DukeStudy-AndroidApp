@@ -30,7 +30,7 @@ public class NewGroupActivity extends AppCompatActivity {
     private static final String COURSE_KEY_ARG = "courseKey";
 
     private String courseKey;
-    private EditText nameField;
+    private EditText nameField, descriptionField;
     private FloatingActionButton submitBtn;
 
     // Methods
@@ -45,6 +45,7 @@ public class NewGroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group);
+        setTitle("New Group");
 
         // Get arguments
         courseKey = getIntent().getStringExtra(COURSE_KEY_ARG);
@@ -52,8 +53,9 @@ public class NewGroupActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass " + COURSE_KEY_ARG);
         }
 
-        // Set view
+        // Get fields
         nameField = (EditText) findViewById(R.id.field_title);
+        descriptionField = (EditText) findViewById(R.id.field_description);
         submitBtn = (FloatingActionButton) findViewById(R.id.fab_submit_group);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +67,7 @@ public class NewGroupActivity extends AppCompatActivity {
 
     private void submitGroup() {
         final String title = nameField.getText().toString();
+        final String description = descriptionField.getText().toString();
 
         // Require fields
         if (!Util.validateString(title, nameField)) return;
@@ -74,7 +77,7 @@ public class NewGroupActivity extends AppCompatActivity {
         Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
 
         //
-        final String userId = getUid();
+        final String userId = Database.getUser().getUid();
         Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -84,7 +87,7 @@ public class NewGroupActivity extends AppCompatActivity {
                     Toast.makeText(NewGroupActivity.this, "Error: Could not fetch user.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Create group
-                    Group group = new Group(title);
+                    Group group = new Group(title, description);
                     group.put();
                     // Add to course
                     course.addGroupKey(group.getKey());

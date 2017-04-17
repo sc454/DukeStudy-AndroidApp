@@ -29,12 +29,13 @@ public class AddCourseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View view=inflater.inflate(R.layout.fragment_course_list,null);
         courseListView=(ListView) view.findViewById(R.id.courseListListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference coursesRef=databaseRef.child("courses");
         student = ((MainActivity)AddCourseFragment.this.getActivity()).getStudent();
-        adapter1=new FirebaseListAdapter<Course>(getActivity(),Course.class,R.layout.general_row_view,coursesRef) {
+        adapter1=new FirebaseListAdapter<Course>(getActivity(),Course.class,R.layout.general_row_view_btn,coursesRef) {
             @Override
             protected void populateView(View v, final Course model, final int position) {
                 final TextView mytext1 = (TextView) v.findViewById(R.id.firstLine);

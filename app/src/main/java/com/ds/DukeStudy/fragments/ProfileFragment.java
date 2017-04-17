@@ -99,6 +99,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         final View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // Inflate the layout for this fragment

@@ -49,6 +49,7 @@ public class NewPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
+        setTitle("New Post");
 
         // Get arguments
         path = getIntent().getStringExtra(DB_PATH);

@@ -44,13 +44,13 @@ public class Event {
 
     // Other mutators
 
-    public void addStudent(String key) {
+    public void addStudentKey(String key) {
         if (!studentKeys.contains(key)) {
             studentKeys.add(key);
         }
     }
 
-    public void removeStudent(String key) {studentKeys.remove(key);}
+    public void removeStudentKey(String key) {studentKeys.remove(key);}
 
     // Database
 

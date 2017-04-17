@@ -43,6 +43,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         EditProfileView =  inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
         // Get fields

@@ -34,8 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
-        implements View.OnClickListener {
+public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "PostDetailActivity";
     public static final String PATH_ARG = "path";
@@ -63,6 +62,7 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+        setTitle("Post Details");
 
         // Get post key from intent
         path = getIntent().getStringExtra(PATH_ARG);
@@ -102,10 +102,8 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
                 mTitleView.setText(post.getTitle());
                 mBodyView.setText(post.getMessage());
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
                 Toast.makeText(PostDetailActivity.this, "Failed to load post.", Toast.LENGTH_SHORT).show();
             }
