@@ -61,7 +61,6 @@ public class GroupFragment extends Fragment {
         if (groupKey == null) {
             throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
         }
-        Toast.makeText(getContext(), groupKey, Toast.LENGTH_SHORT).show();
 
         // Create view
         View view =  inflater.inflate(R.layout.tab_layout, null);
