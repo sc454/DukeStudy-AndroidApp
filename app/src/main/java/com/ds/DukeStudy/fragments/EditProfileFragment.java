@@ -43,8 +43,10 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Get fields
+        super.onCreateView(inflater, container, savedInstanceState);
         EditProfileView =  inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
+        // Get fields
         SubmitProfileButton = (Button)EditProfileView.findViewById(R.id.submitProfileButton);
         nameField = (EditText)EditProfileView.findViewById(R.id.userNameEdit);
         emailField = (EditText)EditProfileView.findViewById(R.id.userEmailEdit);

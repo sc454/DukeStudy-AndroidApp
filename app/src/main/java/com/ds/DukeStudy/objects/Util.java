@@ -5,6 +5,10 @@ package com.ds.DukeStudy.objects;
 import android.text.TextUtils;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Util {
 
     private static final String EMPTY_FIELD = "Required!";
@@ -45,5 +49,22 @@ public class Util {
             return false;
         }
         return true;
+    }
+
+    public static ArrayList<String> splitPath(String path) {
+        return new ArrayList<String>(Arrays.asList(path.split("/")));
+    }
+
+    public static String removeFromPath(String path, int index) {
+        ArrayList<String> pathList = splitPath(path);
+        String newPath = new String();
+        if (index >= 0 && index < pathList.size()) {
+            pathList.remove(index);
+            for (String s : pathList) {
+                newPath += ("/" + s);
+            }
+            return newPath;
+        }
+        return path;
     }
 }

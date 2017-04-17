@@ -22,7 +22,10 @@ import com.google.firebase.storage.StorageReference;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
+    // Fields
+
     private static final long ONE_MEGABYTE = 500*500;
+
     public TextView titleView;
     public TextView authorView;
     public TextView bodyView;
@@ -31,6 +34,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     //creating a storage reference,below URL is the Firebase storage URL.
     StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
+
+    // Methods
 
     public PostViewHolder(View itemView) {
         super(itemView);

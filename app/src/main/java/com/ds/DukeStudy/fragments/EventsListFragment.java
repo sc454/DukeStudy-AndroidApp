@@ -1,27 +1,20 @@
 package com.ds.DukeStudy.fragments;
 
-import android.app.DatePickerDialog;
-
-import android.app.TimePickerDialog;
-
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.ds.DukeStudy.MainActivity;
+import com.ds.DukeStudy.NewEventActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
@@ -35,24 +28,25 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Locale;
+import java.util.ArrayList;
 
-/**
- * Created by cheli on 3/5/2017.
- */
 //This is an events fragment that retrieves events listed and displays them in a list for a given
     //course
 public class EventsListFragment extends Fragment {
 
-    public static final String GROUP_KEY_ARG = "groupKey";
+    // Fields
 
-    private DatabaseReference databaseRef;
-    private FirebaseListAdapter<String> adapter1;
-    private ListView eventsListView;
-//    private String sourceID;
-    private FirebaseUser user;
+    public static final String TAG = "EventsListFragment";
+    public static final String GROUP_KEY_ARG = "groupKey";
+    private FirebaseListAdapter<String> listAdapter;
+    private ListView listView;
+    private Drawable plusIcon, minusIcon;
     private String groupKey;
     private Student student;
+    private DatabaseReference eventKeysRef;
+    private FloatingActionButton newEventBtn;
+
+    // Constructors
 
     public EventsListFragment() {}
 
@@ -64,9 +58,13 @@ public class EventsListFragment extends Fragment {
         return fragment;
     }
 
+    // Other methods
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        final View view = inflater.inflate(R.layout.fragment_events_list, container, false);
 
         // Get arguments
         groupKey = getArguments().getString(GROUP_KEY_ARG);
@@ -74,180 +72,178 @@ public class EventsListFragment extends Fragment {
             throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
         }
 
-        student = ((MainActivity)EventsListFragment.this.getActivity()).getStudent();
+        // Get view items
+        student = ((MainActivity) getActivity()).getStudent();
+        listView = (ListView) view.findViewById(R.id.eventList);
+        plusIcon = getResources().getDrawable(R.drawable.ic_menu_addclass);
+        minusIcon = getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp);
+        eventKeysRef = Database.ref.child("groups").child(groupKey).child("eventKeys");
 
-        final View view = inflater.inflate(R.layout.events_layout, container, false);
+        // Create adapter to list all events
+        listAdapter = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.general_row_view_btn, eventKeysRef) {
+            protected void populateView(final View v, final String eventKey, final int position) {
 
-        eventsListView = (ListView) view.findViewById(R.id.eventsListView);
-        databaseRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference curGroupsRef = Database.ref.child("groups").child(groupKey).child("eventKeys");
-        final DatabaseReference eventsRef = Database.ref.child("events");
+                // Get view items
+                DatabaseReference eventRef = Database.ref.child("events").child(eventKey);
+                final TextView titleText = (TextView) v.findViewById(R.id.firstLine);
+                final TextView detailsText = (TextView) v.findViewById(R.id.secondLine);
+                final ImageButton toggleBtn = (ImageButton) v.findViewById(R.id.toggleButton);
 
-        adapter1=new FirebaseListAdapter<String>(getActivity(),String.class,R.layout.cutom_row_view_layout,curGroupsRef) {
-        protected void populateView(final View v, final String model,final int position) {
-            //Get reference to particular student in database
-            DatabaseReference curStudentRef = eventsRef.child(model);
-            final TextView mytext1 = (TextView) v.findViewById(R.id.firstline);
-            final TextView mytext2 = (TextView) v.findViewById(R.id.secondline);
-            final ImageButton mybutton=(ImageButton) v.findViewById(R.id.adddeletebutton);
-            curStudentRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    final Event curEvent = dataSnapshot.getValue(Event.class);
-                    mytext1.setText("Date: " + curEvent.getDate() + "  Time: " + curEvent.getTime()+"");
-                    mytext2.setText("@: "+curEvent.getLocation()+"  #Going: "+Integer.toString(curEvent.getStudentKeys().size()));
-
-                    if (curEvent.getStudentKeys().contains(student.getKey())) {
-                        if (isAdded()) {
-                            mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
-                        }
-
-                        v.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //If the event is clicked on either add or remove your student key from it
-                                curEvent.removeStudent(student.getKey());
-                                eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                student.removeEventKey(curEvent.getKey());
-                                student.put();
-                            }
-                        });
-                        mybutton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //If the event is clicked on either add or remove your student key from it
-                                curEvent.removeStudent(student.getKey());
-                                eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                student.removeEventKey(curEvent.getKey());
-                                student.put();
-                            }
-                        });
-                    }else{
-                        if (isAdded()) mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));
-                        v.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //If the event is clicked on either add or remove your student key from it
-                                curEvent.addStudent(student.getKey());
-                                eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                student.addEventKey(curEvent.getKey());
-                                student.put();
-                            }
-                        });
-                        mybutton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //If the event is clicked on either add or remove your student key from it
-                                curEvent.removeStudent(student.getKey());
-                                eventsRef.child(curEvent.getKey()).setValue(curEvent);
-                                student.removeEventKey(curEvent.getKey());
-                                student.put();
-                            }
-                        });
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }};
-        eventsListView.setAdapter(adapter1);
-
-        //Code from http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
-        final Calendar myCalendar = Calendar.getInstance();
-        final EditText dateTimeText = (EditText) view.findViewById(R.id.eventDateTimeText);
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(dateTimeText, myCalendar);
-            }
-
-        };
-        dateTimeText.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    new DatePickerDialog(view.getContext(), date, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-                }
-                return true;
-            }
-        });
-        final EditText locationText=(EditText) view.findViewById(R.id.locationEntry);
-        final EditText timeText=(EditText) view.findViewById(R.id.timeEntry);
-        timeText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    Calendar mcurrentTime = Calendar.getInstance();
-                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                    int minute = mcurrentTime.get(Calendar.MINUTE);
-                    TimePickerDialog mTimePicker;
-                    mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                            timeText.setText(selectedHour + ":" + selectedMinute);
-                        }
-                    }, hour, minute, true);//Yes 24 hour time
-                    mTimePicker.setTitle("Select Time");
-                    mTimePicker.show();
-            }
-                return true;
-            }
-        });
-
-
-
-
-        //Set the onClick to add a new event
-        Button addEventButton=(Button) view.findViewById(R.id.addeventbutton);
-        addEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Creating firebase object
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-                //database.child("note").push().setValue(usernameEdit.getText().toString());
-                final Event event = new Event(dateTimeText.getText().toString(), timeText.getText().toString(),locationText.getText().toString());
-                event.addStudent(student.getKey());
-                event.put();
-                //Need to add the event key to eventKeys for the group
-                final DatabaseReference curGroupsRef=databaseRef.child("groups").child(groupKey);
-                curGroupsRef.addValueEventListener(new ValueEventListener() {
+                // Get event
+                Log.i(TAG, "Populating view for " + eventKey);
+                eventRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                            final Group curObj= dataSnapshot.getValue(Group.class);
-                            curObj.addEventKey(event.getKey());
-                            curGroupsRef.setValue(curObj);
-                    }
+                        final Event event = dataSnapshot.getValue(Event.class);
 
+                        // Set title and details
+                        titleText.setText(event.getTitle());
+                        detailsText.setText(event.getDate() + " at " + event.getTime());
+//                        detailsText.setText("Location: " + event.getLocation() + "\tAttendees: " + event.getStudentKeys().size());
+
+                        // Set icon
+                        Boolean isMember = event.getStudentKeys().contains(student.getKey());
+                        Log.i(TAG, "Event " + event.getTitle() + ": isMember " + isMember);
+                        toggle(toggleBtn, isMember);
+
+                        // Toggle on click
+                        toggleBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                toggle(event);
+                            }
+                        });
+                    }
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
+            }
+        };
+        listView.setAdapter(listAdapter);
 
+        // New event button
+        newEventBtn = (FloatingActionButton) view.findViewById(R.id.fab_new_event);
+        newEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewEventActivity.start(getActivity(), groupKey);
             }
         });
+
         return view;
     }
 
-    private void updateLabel(EditText myeditText, Calendar myCal) {
-
-        String myFormat = "MM/dd/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        myeditText.setText(sdf.format(myCal.getTime()));
+    public void toggle(ImageButton button, Boolean isChecked) {
+        if (isChecked) {
+            button.setImageDrawable(minusIcon);
+        } else {
+            button.setImageDrawable(plusIcon);
+        }
     }
 
+    public void toggle(Event event) {
+        ArrayList<String> groupKeys = student.getEventKeys();
+        String key = event.getKey();
+        if (groupKeys.contains(key)) {
+            //remove
+            student.removeEventKey(key);
+            event.removeStudentKey(student.getKey());
+            student.put(); event.put();
+        } else {
+            //add
+            student.addEventKey(key);
+            event.addStudentKey(student.getKey());
+            student.put(); event.put();
+        }
+    }
 
 }
+
+//    //Code from http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
+//    final Calendar myCalendar = Calendar.getInstance();
+//    final EditText dateTimeText = (EditText) view.findViewById(R.id.eventDateTimeText);
+//    final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+//
+//        @Override
+//        public void onDateSet(DatePicker view, int year, int monthOfYear,
+//                              int dayOfMonth) {
+//            // TODO Auto-generated method stub
+//            myCalendar.set(Calendar.YEAR, year);
+//            myCalendar.set(Calendar.MONTH, monthOfYear);
+//            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//            updateLabel(dateTimeText, myCalendar);
+//        }
+//
+//    };
+//        dateTimeText.setOnTouchListener(new View.OnTouchListener() {
+//
+//        @Override
+//        public boolean onTouch(View v, MotionEvent event) {
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                new DatePickerDialog(view.getContext(), date, myCalendar
+//                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+//                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+//            }
+//            return true;
+//        }
+//    });
+//    final EditText locationText=(EditText) view.findViewById(R.id.locationEntry);
+//    final EditText timeText=(EditText) view.findViewById(R.id.timeEntry);
+//        timeText.setOnTouchListener(new View.OnTouchListener() {
+//
+//        @Override
+//        public boolean onTouch(View v, MotionEvent event) {
+//            Calendar mcurrentTime = Calendar.getInstance();
+//            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+//            int minute = mcurrentTime.get(Calendar.MINUTE);
+//            TimePickerDialog mTimePicker;
+//            mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+//                @Override
+//                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+//                    timeText.setText( selectedHour + ":" + selectedMinute);
+//                }
+//            }, hour, minute, true);//Yes 24 hour time
+//            mTimePicker.setTitle("Select Time");
+//            mTimePicker.show();
+//            return true;
+//        }
+//
+//    });
+//    //Set the onClick to add a new event
+//    Button addEventButton=(Button) view.findViewById(R.id.addeventbutton);
+//        addEventButton.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            //Creating firebase object
+//            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+//            //database.child("note").push().setValue(usernameEdit.getText().toString());
+//            final Event event = new Event(dateTimeText.getText().toString(), timeText.getText().toString(),locationText.getText().toString());
+//            event.addStudent(student.getKey());
+//            event.put();
+//            //Need to add the event key to eventKeys for the group
+//            final DatabaseReference curGroupsRef=databaseRef.child("groups").child(groupKey);
+//            curGroupsRef.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    final Group curObj= dataSnapshot.getValue(Group.class);
+//                    curObj.addEventKey(event.getKey());
+//                    curGroupsRef.setValue(curObj);
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//
+//        }
+//    });
+//        return view;
+//}
+//
+//    private void updateLabel(EditText myeditText, Calendar myCal) {
+//
+//        String myFormat = "MM/dd/yy"; //In which you need put here
+//        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+//        myeditText.setText(sdf.format(myCal.getTime()));
+//    }

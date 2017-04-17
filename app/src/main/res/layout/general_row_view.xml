@@ -2,33 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
-
-    <ImageButton
-        android:id="@+id/adddeletebutton"
-        android:background="@null"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:padding="5dp" />
+    android:orientation="horizontal"
+    android:weightSum="1">
 
     <LinearLayout android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/firstline"
+            android:id="@+id/firstLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:padding="2dp"
-            android:textColor="#33CC33" />
+            android:padding="5dp"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
         <TextView
-            android:id="@+id/secondline"
+            android:id="@+id/secondLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:text="TextView"
             android:layout_marginLeft="10dp"/>
     </LinearLayout>

@@ -1,6 +1,7 @@
 package com.ds.DukeStudy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -31,6 +32,7 @@ import com.ds.DukeStudy.objects.Comment;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Post;
 import com.ds.DukeStudy.objects.Student;
+import com.ds.DukeStudy.objects.Util;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -56,21 +58,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
-        implements View.OnClickListener {
+public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "PostDetailActivity";
-    public static final String EXTRA_POST_KEY = "post_key";
+    public static final String PATH_ARG = "path";
+
     final long ONE_MEGABYTE = 500 * 500;
     FirebaseAuth auth;
     // creating an instance of Firebase Storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
     //creating a storage reference,below URL is the Firebase storage URL.
     StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
+
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
-    private String mPostKey;
+    private String path;
     private CommentAdapter mAdapter;
     private StorageReference myfileRef1;
 
@@ -83,23 +86,32 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
     private ImageView mImageView;
     private ImageView mCommentImageView;
 
+    public static void start(Context context, String path) {
+        Intent intent = new Intent(context, PostDetailActivity.class);
+        intent.putExtra(PATH_ARG, path);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-        Log.i(TAG, "Creating post detail view");
+        setTitle("Post Details");
 
         // Get post key from intent
-        mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
-        if (mPostKey == null) {
-            throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
+        path = getIntent().getStringExtra(PATH_ARG);
+        if (path == null) {
+            throw new IllegalArgumentException("Must pass " + PATH_ARG);
         }
 
         // Initialize Database
-        mPostReference = Database.ref.child("posts").child(mPostKey);
-        mCommentsReference = Database.ref.child("post-comments").child(mPostKey);
+        mPostReference = Database.ref.child(path);
+        Log.i(TAG, "Path " + path);
+        String postFix = Util.removeFromPath(path, 0);
+        Log.i(TAG, "postFix " + postFix);
+        mCommentsReference = Database.ref.child("post-comments" + postFix);
 
-        // Initialize Views
+        // Initialize text fields
         mAuthorView = (TextView) findViewById(R.id.post_author);
         mTitleView = (TextView) findViewById(R.id.post_title);
         mBodyView = (TextView) findViewById(R.id.post_body);
@@ -110,7 +122,6 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
         mCommentImageView = (ImageView) findViewById(R.id.comment_photo);
         mCommentButton.setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override
@@ -134,12 +145,9 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
                         mImageView.setImageBitmap(getCircleBitmap(bitmap));
                     }
                 });
-
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
                 Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
                 Toast.makeText(PostDetailActivity.this, "Failed to load post.", Toast.LENGTH_SHORT).show();
             }
@@ -360,6 +368,7 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
         }
 
     }
+
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
