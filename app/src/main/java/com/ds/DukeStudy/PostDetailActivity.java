@@ -33,6 +33,7 @@ import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Post;
 import com.ds.DukeStudy.objects.Student;
 import com.ds.DukeStudy.objects.Util;
+import com.google.android.gms.common.data.DataBuffer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -129,7 +130,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         super.onStart();
 
         // Add value event listener to the post
-        ValueEventListener postListener = new ValueEventListener() {
+        mPostListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
@@ -152,15 +153,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(PostDetailActivity.this, "Failed to load post.", Toast.LENGTH_SHORT).show();
             }
         };
-        mPostReference.addValueEventListener(postListener);
-        mPostListener = postListener;
+        mPostReference.addValueEventListener(mPostListener);
         // Listen for comments
         mAdapter = new CommentAdapter(this, mCommentsReference);
         mCommentsRecycler.setAdapter(mAdapter);
     }
     private static Bitmap getCircleBitmap(Bitmap bitmap) {
-        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);
 
         final int color = Color.RED;
@@ -206,28 +205,27 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private void postComment() {
         final String uid = getUid();
         Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get user information
-                        Student user = dataSnapshot.getValue(Student.class);
-                        String authorName = user.getName();
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get user information
+                Student user = dataSnapshot.getValue(Student.class);
+                String authorName = user.getName();
 
-                        // Create new comment object
-                        String commentText = mCommentField.getText().toString();
-                        Comment comment = new Comment(uid, authorName, commentText);
+                // Create new comment object
+                String commentText = mCommentField.getText().toString();
+                Comment comment = new Comment(uid, authorName, commentText);
 
-                        // Push the comment, it will appear in the list
-                        mCommentsReference.push().setValue(comment);
-                        // Clear the field
-                        mCommentField.setText(null);
+                // Push the comment, it will appear in the list
+                mCommentsReference.push().setValue(comment);
+                // Clear the field
+                mCommentField.setText(null);
 
-                       // Log.d("UID",comment.getStudentKey().toString());
+               // Log.d("UID",comment.getStudentKey().toString());
+            }
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     private static class CommentViewHolder extends RecyclerView.ViewHolder {
@@ -271,6 +269,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     mCommentIds.add(dataSnapshot.getKey());
                     mComments.add(comment);
                     notifyItemInserted(mComments.size() - 1);
+
+//                    final ImageView image = (ImageView) findViewById(R.id.comment_photo);
+//                    StorageReference fileRef = Database.store_ref.child(comment.getStudentKey());
+//                    fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//                        @Override
+//                        public void onSuccess(byte[] bytes) {
+//                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                            image.setImageBitmap(getCircleBitmap(bitmap));
+//                        }
+//                    });
                 }
 
                 @Override
@@ -352,9 +360,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             holder.authorView.setText(comment.getAuthor());
             holder.bodyView.setText(comment.getText());
 
-
+            String uid = mComments.get(position).getStudentKey();
+            StorageReference fileRef = Database.store_ref.child(uid);
+            fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    holder.imageView.setImageBitmap(getCircleBitmap(bitmap));
+                }
+            });
         }
-
 
         @Override
         public int getItemCount() {
