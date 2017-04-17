@@ -9,6 +9,7 @@ public class Event {
     // Fields
 
     private String key = "";
+    private String title;
     private String date;
     private String time;
     private String location;
@@ -16,19 +17,21 @@ public class Event {
 
     // Constructors
 
-    public Event(String date, String time, String location) {
+    public Event(String title, String date, String time, String location) {
+        this.title = title;
         this.date = date;
         this.time = time;
         this.location = location;
     }
 
-    public Event(String date) {this(date, "NoTime", "NoLocation");}
+    public Event(String date) {this("NoTitle", date, "NoTime", "NoLocation");}
 
-    public Event() {this("NoDate", "NoTime", "NoLocation");}
+    public Event() {this("NoTitle", "NoDate", "NoTime", "NoLocation");}
 
     // Getters
 
     public String getKey() {return key;}
+    public String getTitle() {return title;}
     public String getDate() {return date;}
     public String getTime() {return time;}
     public String getLocation() {return location;}
@@ -37,6 +40,7 @@ public class Event {
     // Setters
 
     public void setKey(String key) {this.key = key;}
+    public void setTitle(String title) {this.title = title;}
     public void setDate(String date) {this.date = date;}
     public void setTime(String time) {this.time = time;}
     public void setLocation(String location) {this.location = location;}

@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         classSubMenu.clear();
         groupSubMenu.clear();
 
-//        courseMenuIds.clear();
-//        groupMenuIds.clear();
+        courseMenuIds.clear();
+        groupMenuIds.clear();
 
         // Find keys
         ArrayList<String> courseKeys = new ArrayList<>();

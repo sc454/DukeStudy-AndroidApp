@@ -71,12 +71,13 @@ public class NewGroupActivity extends AppCompatActivity {
 
         // Require fields
         if (!Util.validateString(title, nameField)) return;
+        if (!Util.validateString(description, descriptionField)) return;
 
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
         Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
 
-        //
+        // Add group to course
         final String userId = Database.getUser().getUid();
         Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -84,7 +85,7 @@ public class NewGroupActivity extends AppCompatActivity {
                 Course course = dataSnapshot.getValue(Course.class);
                 if (course == null) {
                     Log.e(TAG, "Course " + courseKey + " is unexpectedly null");
-                    Toast.makeText(NewGroupActivity.this, "Error: Could not fetch user.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewGroupActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Create group
                     Group group = new Group(title, description);
@@ -92,7 +93,8 @@ public class NewGroupActivity extends AppCompatActivity {
                     // Add to course
                     course.addGroupKey(group.getKey());
                     course.put();
-                    // Add student
+                    // Add student TODO
+//                    group.addStudentKey();
                 }
                 setEditingEnabled(true);
                 finish();
@@ -113,9 +115,5 @@ public class NewGroupActivity extends AppCompatActivity {
         } else {
             submitBtn.setVisibility(View.GONE);
         }
-    }
-
-    public String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 }
