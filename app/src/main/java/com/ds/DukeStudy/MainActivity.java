@@ -45,7 +45,6 @@ import java.util.HashMap;
 // Main Activity which defaults to Profile page of the user
 // This activity handles navigation drawer clicks
 
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CourseFragment.OnFragmentInteractionListener {
 
     // Fields
@@ -160,8 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.i(TAG, "Mapping item " + itemId + " to " + group.getKey() + " group");
             itemId++;
         }
-        studentGroups.clear();
-        studentCourses.clear();
+//        studentGroups.clear(); studentCourses.clear();
     }
 
     @Override
@@ -271,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(DataSnapshot dataSnapshot) {
                 student = dataSnapshot.getValue(Student.class);
                 loadStudent(student);
-                updateMenuList();
+//                updateMenuList();
                 Log.i(TAG, "loadUser:onDataChange");
             }
             @Override
@@ -329,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void loadCourses(ArrayList<String> courseKeys) {
-//        studentCourses.clear();
+        studentCourses.clear();
         for (final String courseKey : courseKeys) {
             Log.i(TAG, "Loading course " + courseKey + "...");
             Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -341,6 +339,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Toast.makeText(MainActivity.this, "Error: Could not fetch student.", Toast.LENGTH_SHORT).show();
                     } else {
                         addCourse(course);
+                        updateMenuList();
                     }
                 }
                 @Override
@@ -352,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void loadGroups(ArrayList<String> groupKeys) {
-//        studentGroups.clear();
+        studentGroups.clear();
         for (final String groupKey : groupKeys) {
             Log.i(TAG, "Loading group " + groupKey + "...");
             Database.ref.child("groups").child(groupKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -361,9 +360,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Group group = dataSnapshot.getValue(Group.class);
                     if (group == null) {
                         Log.e(TAG, "Group " + groupKey + " is unexpectedly null");
-                        Toast.makeText(MainActivity.this, "Error: Could not fetch student.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
                     } else {
                         addGroup(group);
+                        updateMenuList();
                     }
                 }
                 @Override
