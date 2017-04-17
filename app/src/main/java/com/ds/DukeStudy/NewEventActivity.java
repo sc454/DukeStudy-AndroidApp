@@ -22,6 +22,7 @@ import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
+import com.ds.DukeStudy.objects.Student;
 import com.ds.DukeStudy.objects.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +42,7 @@ public class NewEventActivity extends AppCompatActivity {
     private static final String GROUP_KEY_ARG = "groupKey";
 
     private String groupKey;
+    private Student student;
     private EditText titleField, dateField, timeField, locationField;
     private FloatingActionButton submitBtn;
     private Calendar cal;
@@ -67,6 +69,7 @@ public class NewEventActivity extends AppCompatActivity {
         }
 
         // Get view items
+        loadStudent();
         cal = Calendar.getInstance();
         titleField = (EditText) findViewById(R.id.event_title);
         dateField = (EditText) findViewById(R.id.event_date);
@@ -173,18 +176,20 @@ public class NewEventActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Group group = dataSnapshot.getValue(Group.class);
+
+                // Update group
                 if (group == null) {
                     Log.e(TAG, "Group " + groupKey + " is unexpectedly null");
                     Toast.makeText(NewEventActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Create event
                     Event event = new Event(title, date, time, location);
+                    event.addStudentKey(student.getKey());
                     event.put();
-                    // Add to group
+                    // Add to group and student
                     group.addEventKey(event.getKey());
-                    group.put();
-                    // Add student TODO
-//                    event.addStudentKey();
+                    student.addEventKey(event.getKey());
+                    group.put(); student.put();
                 }
                 setEditingEnabled(true);
                 finish();
@@ -211,6 +216,24 @@ public class NewEventActivity extends AppCompatActivity {
         String format = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         editText.setText(sdf.format(cal.getTime()));
+    }
+
+    private void loadStudent() {
+        final String uid = Database.getUser().getUid();
+        Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                student = dataSnapshot.getValue(Student.class);
+                if (student == null) {
+                    Log.e(TAG, "Student " + uid + " is unexpectedly null");
+                    Toast.makeText(NewEventActivity.this, "Error: Could not fetch student.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+            }
+        });
     }
 }
 

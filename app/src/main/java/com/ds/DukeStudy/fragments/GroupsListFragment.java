@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class GroupsListFragment extends Fragment {
 
     // Fields
 
+    private static final String TAG = "GroupsListFragment";
     private static final String COURSE_KEY_ARG = "courseKey";
     private Student student;
     private String courseKey;
@@ -88,6 +90,7 @@ public class GroupsListFragment extends Fragment {
                 final ImageButton toggleBtn = (ImageButton) view.findViewById(R.id.toggleButton);
 
                 // Get group
+                Log.i(TAG, "Populating view for " + groupKey);
                 groupListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -100,6 +103,7 @@ public class GroupsListFragment extends Fragment {
                         // Set icon
                         Boolean isMember = group.getStudentKeys().contains(student.getKey());
                         toggle(toggleBtn, isMember);
+                        Log.i(TAG, "Group " + group.getName() + ": isMember " + isMember);
 
                         // Toggle on click
                         toggleBtn.setOnClickListener(new View.OnClickListener(){

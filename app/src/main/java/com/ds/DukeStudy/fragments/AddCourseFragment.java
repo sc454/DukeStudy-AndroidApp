@@ -35,15 +35,15 @@ public class AddCourseFragment extends Fragment {
         databaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference coursesRef=databaseRef.child("courses");
         student = ((MainActivity)AddCourseFragment.this.getActivity()).getStudent();
-        adapter1=new FirebaseListAdapter<Course>(getActivity(),Course.class,R.layout.general_row_view_btn,coursesRef) {
+        adapter1=new FirebaseListAdapter<Course>(getActivity(), Course.class, R.layout.general_row_view_btn, coursesRef) {
             @Override
-            protected void populateView(View v, final Course model, final int position) {
+            protected void populateView(View v, final Course course, final int position) {
                 final TextView mytext1 = (TextView) v.findViewById(R.id.firstLine);
                 final TextView mytext2 = (TextView) v.findViewById(R.id.secondLine);
                 final ImageButton mybutton=(ImageButton) v.findViewById(R.id.toggleButton);
-                mytext1.setText(model.getDepartment()+model.getCode()+": "+model.getTitle());
-                mytext2.setText("# Students:"+Integer.toString(model.getStudentKeys().size()));
-                if (model.getStudentKeys().contains(student.getKey())){
+                mytext1.setText(course.getDepartment()+course.getCode()+": "+course.getTitle());
+                mytext2.setText("Students: " + course.getStudentKeys().size());
+                if (course.getStudentKeys().contains(student.getKey())){
                     if (isAdded()) {
                         mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
                     }
@@ -51,9 +51,9 @@ public class AddCourseFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             //If the course is clicked either add or remove your student key from it
-                            model.removeStudentKey(student.getKey());
-                            model.put();
-                            student.removeCourseKey(model.getKey());
+                            course.removeStudentKey(student.getKey());
+                            course.put();
+                            student.removeCourseKey(course.getKey());
                             student.put();
                         }
                     });
@@ -64,9 +64,9 @@ public class AddCourseFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             //If the event is clicked on either add or remove your student key from it
-                            model.addStudentKey(student.getKey());
-                            model.put();
-                            student.addCourseKey(model.getKey());
+                            course.addStudentKey(student.getKey());
+                            course.put();
+                            student.addCourseKey(course.getKey());
                             student.put();
                         }
                     });

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class EventsListFragment extends Fragment {
 
     // Fields
 
+    public static final String TAG = "EventsListFragment";
     public static final String GROUP_KEY_ARG = "groupKey";
     private FirebaseListAdapter<String> listAdapter;
     private ListView listView;
@@ -88,17 +90,20 @@ public class EventsListFragment extends Fragment {
                 final ImageButton toggleBtn = (ImageButton) v.findViewById(R.id.toggleButton);
 
                 // Get event
+                Log.i(TAG, "Populating view for " + eventKey);
                 eventRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         final Event event = dataSnapshot.getValue(Event.class);
 
                         // Set title and details
-                        titleText.setText("Date: " + event.getDate() + "  Time: " + event.getTime() + "");
-                        detailsText.setText("@: " + event.getLocation() + "  #Going: " + Integer.toString(event.getStudentKeys().size()));
+                        titleText.setText(event.getTitle());
+                        detailsText.setText(event.getDate() + " at " + event.getTime());
+//                        detailsText.setText("Location: " + event.getLocation() + "\tAttendees: " + event.getStudentKeys().size());
 
                         // Set icon
                         Boolean isMember = event.getStudentKeys().contains(student.getKey());
+                        Log.i(TAG, "Event " + event.getTitle() + ": isMember " + isMember);
                         toggle(toggleBtn, isMember);
 
                         // Toggle on click
@@ -109,58 +114,8 @@ public class EventsListFragment extends Fragment {
                             }
                         });
                     }
-//                        if (event.getStudentKeys().contains(student.getKey())) {
-//                            if (isAdded()) {
-//                                toggleBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
-//                            }
-//                            v.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-////                                    //If the event is clicked on either add or remove your student key from it
-////                                    event.removeStudent(student.getKey());
-////                                    eventsRef.child(event.getKey()).setValue(event);
-////                                    student.removeEventKey(event.getKey());
-////                                    student.put();
-//                                }
-//                            });
-//                            toggleBtn.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    event.removeStudent(student.getKey());
-//                                    eventsRef.child(event.getKey()).setValue(event);
-//                                    student.removeEventKey(event.getKey());
-//                                    student.put();
-//                                }
-//                            });
-//                        } else {
-//                            if (isAdded())
-//                                toggleBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));
-//                            v.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-////                                    event.addStudent(student.getKey());
-////                                    eventsRef.child(event.getKey()).setValue(event);
-////                                    student.addEventKey(event.getKey());
-////                                    student.put();
-//                                }
-//                            });
-//                            toggleBtn.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View view) {
-//                                    //If the event is clicked on either add or remove your student key from it
-//                                    event.removeStudent(student.getKey());
-//                                    eventsRef.child(event.getKey()).setValue(event);
-//                                    student.removeEventKey(event.getKey());
-//                                    student.put();
-//                                }
-//                            });
-//                        }
-//
-//                    }
-
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
             }
         };
@@ -191,12 +146,12 @@ public class EventsListFragment extends Fragment {
         String key = event.getKey();
         if (groupKeys.contains(key)) {
             //remove
-            student.removeGroupKey(key);
+            student.removeEventKey(key);
             event.removeStudentKey(student.getKey());
             student.put(); event.put();
         } else {
             //add
-            student.addGroupKey(key);
+            student.addEventKey(key);
             event.addStudentKey(student.getKey());
             student.put(); event.put();
         }

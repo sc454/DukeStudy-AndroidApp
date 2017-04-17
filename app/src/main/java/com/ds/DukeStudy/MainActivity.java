@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ds.DukeStudy.fragments.AddCourseFragment;
 import com.ds.DukeStudy.fragments.CourseFragment;
@@ -69,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private HashMap<Integer,String> courseMenuIds = new HashMap<Integer,String>();
     private HashMap<Integer,String> groupMenuIds = new HashMap<Integer,String>();
+    private ArrayList<Course> studentCourses = new ArrayList<>();
+    private ArrayList<Group> studentGroups = new ArrayList<>();
+
     private static final int ADD_CLASS = 101; //TODO: random number
 
     // Getters
@@ -86,17 +90,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create view
+        // Get view items
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Load text
         navView = (NavigationView) findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(this);
         View headerView = navView.inflateHeaderView(R.layout.main_nav_header);
         userName = (TextView) headerView.findViewById(R.id.navUserName);
         userEmail = (TextView) headerView.findViewById(R.id.navUserEmail);
+
+        // Set tool bar and drawer layout
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(drawerToggle);
 
         // Set references
         user = Database.getUser();
@@ -104,11 +110,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         coursesRef = Database.ref.child("courses");
         groupsRef = Database.ref.child("groups");
         userRef = Database.ref.child("students").child(user.getUid());
-        createListeners();
 
-        // Set drawer layout
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.setDrawerListener(drawerToggle);
+        // Load information
+        createListeners();
 
         // Send to profile
         getSupportFragmentManager().beginTransaction().replace(R.id.flContent, new ProfileFragment()).commit();
@@ -123,58 +127,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void updateMenuList() {
         Log.i(TAG, "Updating menu list");
 
-        // Set user name and email
-        if (student != null) {
-            userName.setText(student.getName());
-            userEmail.setText(student.getEmail());
-        }
-
         // Clear navigation drawer options
         Menu menu = navView.getMenu();
         SubMenu classSubMenu = menu.getItem(1).getSubMenu();
         SubMenu groupSubMenu = menu.getItem(2).getSubMenu();
-        classSubMenu.clear();
-        groupSubMenu.clear();
+        classSubMenu.clear(); groupSubMenu.clear();
+        courseMenuIds.clear(); groupMenuIds.clear();
 
-        courseMenuIds.clear();
-        groupMenuIds.clear();
-
-        // Find keys
-        ArrayList<String> courseKeys = new ArrayList<>();
-        ArrayList<String> groupKeys = new ArrayList<>();
-
-        if (student != null) {
-            courseKeys = student.getCourseKeys();
-            groupKeys = student.getGroupKeys();
-        }
-
-        // Fill courses
-        Log.i(TAG, "Found " + courseKeys.size() + " courses");
+        Log.i(TAG, "Found " + studentCourses.size() + " courses");
+        Log.i(TAG, "Found " + studentGroups.size() + " groups");
         Integer itemId = 0;
 
-        for (String courseKey : courseKeys) {
-            // Add course
-            Course c = data.child("courses").child(courseKey).getValue(Course.class);
-//            Course c = courses.child(courseKey).getValue(Course.class);
-            classSubMenu.add(0, itemId, Menu.NONE, c.getTitle()).setIcon(R.drawable.ic_menu_class);
-            // Map menu id to course key
-            courseMenuIds.put(itemId, c.getKey());
-            Log.i(TAG, "Submenu size " + Menu.NONE);
-            Log.i(TAG, "Mapping item " + itemId + " to " + c.getKey() + " course");
+        // Fill courses
+        for (Course course : studentCourses) {
+            classSubMenu.add(0, itemId, Menu.NONE, course.getTitle()).setIcon(R.drawable.ic_menu_class);
+            courseMenuIds.put(itemId, course.getKey());
+            Log.i(TAG, "Mapping item " + itemId + " to " + course.getKey() + " course");
             itemId++;
         }
 
-        //Add course
+        // Add course
         classSubMenu.add(0, ADD_CLASS, 0, "Add Class").setIcon(R.drawable.ic_menu_addclass);
 
         //Fill groups
-        for (String groupKey : groupKeys) {
-            Group g = data.child("groups").child(groupKey).getValue(Group.class);
-//            Group g = groups.child(groupKey).getValue(Group.class);
-            groupSubMenu.add(0, itemId, Menu.NONE, g.getName()).setIcon(R.drawable.ic_menu_groups);
-            groupMenuIds.put(itemId, g.getKey());
+        for (Group group : studentGroups) {
+            groupSubMenu.add(0, itemId, Menu.NONE, group.getName()).setIcon(R.drawable.ic_menu_groups);
+            groupMenuIds.put(itemId, group.getKey());
+            Log.i(TAG, "Mapping item " + itemId + " to " + group.getKey() + " group");
             itemId++;
         }
+        studentGroups.clear();
+        studentCourses.clear();
     }
 
     @Override
@@ -189,16 +172,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // TODO
         switch (item.getItemId()) {
             case R.id.action_logout:
                 if (authListener != null) {
@@ -226,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 fragment = new ProfileFragment(); break;
-//            case R.id.nav_addClass:
             case ADD_CLASS:
                 fragment = new AddCourseFragment(); break;
             default:
@@ -239,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
         }
 
-        // Close drawer
+        // Start fragment and close drawer
         getSupportFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
         drawerLayout.closeDrawer(GravityCompat.START);
         item.setChecked(false);
@@ -269,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onStop() {
         super.onStop();
         if (authListener != null) {
-//            auth.removeAuthStateListener(authListener);
+            auth.removeAuthStateListener(authListener);
         }
         if (userListener != null) {
             userRef.removeEventListener(userListener);
@@ -287,6 +266,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 student = dataSnapshot.getValue(Student.class);
+                loadStudent(student);
+                updateMenuList();
                 Log.i(TAG, "loadUser:onDataChange");
             }
             @Override
@@ -296,44 +277,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
 
 //         Course listener
-        dbListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                data = dataSnapshot;
-                updateMenuList();
-                Log.i(TAG, "loadDb:onDataChange");
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadDb:onCancelled", databaseError.toException());
-            }
-        };
-        dbReference = Database.ref;
-        dbReference.addValueEventListener(dbListener);
-
-        // Courses listener
-        coursesListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i(TAG, "loadCourses:onDataChange");
-                courses = dataSnapshot;
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        };
-        coursesRef.addValueEventListener(coursesListener);
-
-        // Groups listener
-        groupsListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i(TAG, "loadGroups:onDataChange");
-                groups = dataSnapshot;
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        };
-        groupsRef.addValueEventListener(groupsListener);
+//        dbListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                data = dataSnapshot;
+//                updateMenuList();
+//                Log.i(TAG, "loadDb:onDataChange");
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.w(TAG, "loadDb:onCancelled", databaseError.toException());
+//            }
+//        };
+//        dbReference = Database.ref;
+//        dbReference.addValueEventListener(dbListener);
 
         // Authorization listener
         authListener = new FirebaseAuth.AuthStateListener() {
@@ -350,5 +307,78 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         };
+    }
+
+    private void loadStudent(Student student) {
+        // Load student info
+        if (student != null) {
+            // Set user name and email
+            userName.setText(student.getName());
+            userEmail.setText(student.getEmail());
+            // Load courses and groups
+            Log.i(TAG, "Loading student info...");
+            loadCourses(student.getCourseKeys());
+            loadGroups(student.getGroupKeys());
+        } else {
+            Log.w(TAG, "Student is unexpectedly null");
+        }
+    }
+
+    private void loadCourses(ArrayList<String> courseKeys) {
+//        studentCourses.clear();
+        for (final String courseKey : courseKeys) {
+            Log.i(TAG, "Loading course " + courseKey + "...");
+            Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Course course = dataSnapshot.getValue(Course.class);
+                    if (course == null) {
+                        Log.e(TAG, "Course " + courseKey + " is unexpectedly null");
+                        Toast.makeText(MainActivity.this, "Error: Could not fetch student.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addCourse(course);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                }
+            });
+        }
+    }
+
+    private void loadGroups(ArrayList<String> groupKeys) {
+//        studentGroups.clear();
+        for (final String groupKey : groupKeys) {
+            Log.i(TAG, "Loading group " + groupKey + "...");
+            Database.ref.child("groups").child(groupKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Group group = dataSnapshot.getValue(Group.class);
+                    if (group == null) {
+                        Log.e(TAG, "Group " + groupKey + " is unexpectedly null");
+                        Toast.makeText(MainActivity.this, "Error: Could not fetch student.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addGroup(group);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                }
+            });
+        }
+    }
+
+    private void addCourse(Course course) {
+        Log.e(TAG, "Adding course " + course.getKey());
+        studentCourses.add(course);
+        Log.i(TAG, "Course size " + studentCourses.size());
+    }
+
+    private void addGroup(Group group) {
+        Log.e(TAG, "Adding group " + group.getKey());
+        studentGroups.add(group);
+        Log.i(TAG, "Group size " + studentGroups.size());
     }
 }
