@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/emailView"
         android:textStyle="bold"
-        android:textSize="26sp"
+        android:textSize="24sp"
         android:layout_weight="0.08" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/majorView"
         android:textStyle="bold"
-        android:textSize="26sp"
+        android:textSize="24sp"
         android:layout_weight="0.08"/>
 
     <TextView
@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/classView"
         android:textStyle="bold"
-        android:textSize="26sp"
+        android:textSize="24sp"
         android:layout_weight="0.08" />
 
     <Button
