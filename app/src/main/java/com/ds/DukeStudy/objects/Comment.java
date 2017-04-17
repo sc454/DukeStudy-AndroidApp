@@ -27,17 +27,18 @@ public class Comment {
     public String getKey() {return key;}
     public String getAuthor() {return author;}
     public String getText() {return text;}
-
+    public String getStudentKey(){return studentKey;}
     // Setters
 
     public void setKey(String key) {this.key = key;}
     public void setAuthor(String author) {this.author = author;}
     public void setText(String text) {this.text = text;}
+    public void setStudentKey(String uid){this.studentKey = uid;}
 
     // Database
 
     public void put(String path) {
-//        String path = "posts";
+//  String path = "posts";
         if (key == null || "".equals(key)) {
             key = Database.getNewKey(path);
         }

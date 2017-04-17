@@ -21,7 +21,10 @@ import android.widget.Toast;
 import com.ds.DukeStudy.fragments.AddCourseFragment;
 import com.ds.DukeStudy.fragments.CourseFragment;
 import com.ds.DukeStudy.fragments.EditProfileFragment;
+
+
 import com.ds.DukeStudy.fragments.GroupFragment;
+
 import com.ds.DukeStudy.fragments.ProfileFragment;
 import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.objects.Database;
@@ -41,6 +44,7 @@ import java.util.HashMap;
 
 // Main Activity which defaults to Profile page of the user
 // This activity handles navigation drawer clicks
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CourseFragment.OnFragmentInteractionListener {
 

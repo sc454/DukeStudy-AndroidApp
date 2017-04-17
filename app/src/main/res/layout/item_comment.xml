@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/comment_photo"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_action_account_circle_40"/>
 
