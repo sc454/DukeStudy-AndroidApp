@@ -76,7 +76,7 @@ public class EventsListFragment extends Fragment {
             }
         });
 
-        adapter1 = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.cutom_row_view_layout, curGroupsRef) {
+        adapter1 = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.general_row_view, curGroupsRef) {
             protected void populateView(final View v, final String model, final int position) {
                 //Get reference to particular student in database
                 DatabaseReference curStudentRef = eventsRef.child(model);

@@ -52,7 +52,7 @@ public class GroupFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_tabs, null);
+        View view =  inflater.inflate(R.layout.general_tabs, null);
 
         // Get arguments
         groupKey = getArguments().getString(GROUP_KEY_ARG);

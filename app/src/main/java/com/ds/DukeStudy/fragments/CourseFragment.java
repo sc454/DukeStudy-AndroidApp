@@ -50,7 +50,7 @@ public class CourseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_tabs, null);
+        View view =  inflater.inflate(R.layout.general_tabs, null);
 
         // Get arguments
         courseKey = getArguments().getString(COURSE_KEY_ARG);

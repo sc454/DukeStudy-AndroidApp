@@ -1,38 +1,27 @@
 package com.ds.DukeStudy.fragments;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ds.DukeStudy.LoginActivity;
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.NewGroupActivity;
-import com.ds.DukeStudy.NewPostActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.SignUpActivity;
 import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -94,7 +83,7 @@ public class GroupsListFragment extends Fragment {
         // List adapter
         groupKeysRef = Database.ref.child("courses").child(courseKey).child("groupKeys");
 
-        listAdapter = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.cutom_row_view_layout, groupKeysRef) {
+        listAdapter = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.general_row_view, groupKeysRef) {
             protected void populateView(final View v, final String model, final int position) {
                 final DatabaseReference groupRef = Database.ref.child("groups").child(model);
                 final TextView nameText = (TextView) v.findViewById(R.id.firstline);
