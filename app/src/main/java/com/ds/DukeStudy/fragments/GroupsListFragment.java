@@ -86,9 +86,9 @@ public class GroupsListFragment extends Fragment {
         listAdapter = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.general_row_view, groupKeysRef) {
             protected void populateView(final View v, final String model, final int position) {
                 final DatabaseReference groupRef = Database.ref.child("groups").child(model);
-                final TextView nameText = (TextView) v.findViewById(R.id.firstline);
-                final TextView countText = (TextView) v.findViewById(R.id.secondline);
-                final ImageButton toggleBtn = (ImageButton) v.findViewById(R.id.adddeletebutton);
+                final TextView nameText = (TextView) v.findViewById(R.id.firstLine);
+                final TextView countText = (TextView) v.findViewById(R.id.secondLine);
+                final ImageButton toggleBtn = (ImageButton) v.findViewById(R.id.toggleButton);
 
                 groupListener = new ValueEventListener() {
                     @Override

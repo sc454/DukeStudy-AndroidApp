@@ -37,9 +37,9 @@ public class AddCourseFragment extends Fragment {
         adapter1=new FirebaseListAdapter<Course>(getActivity(),Course.class,R.layout.general_row_view,coursesRef) {
             @Override
             protected void populateView(View v, final Course model, final int position) {
-                final TextView mytext1 = (TextView) v.findViewById(R.id.firstline);
-                final TextView mytext2 = (TextView) v.findViewById(R.id.secondline);
-                final ImageButton mybutton=(ImageButton) v.findViewById(R.id.adddeletebutton);
+                final TextView mytext1 = (TextView) v.findViewById(R.id.firstLine);
+                final TextView mytext2 = (TextView) v.findViewById(R.id.secondLine);
+                final ImageButton mybutton=(ImageButton) v.findViewById(R.id.toggleButton);
                 mytext1.setText(model.getDepartment()+model.getCode()+": "+model.getTitle());
                 mytext2.setText("# Students:"+Integer.toString(model.getStudentKeys().size()));
                 if (model.getStudentKeys().contains(student.getKey())){

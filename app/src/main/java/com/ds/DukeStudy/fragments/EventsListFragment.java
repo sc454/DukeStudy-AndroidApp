@@ -80,9 +80,9 @@ public class EventsListFragment extends Fragment {
             protected void populateView(final View v, final String model, final int position) {
                 //Get reference to particular student in database
                 DatabaseReference curStudentRef = eventsRef.child(model);
-                final TextView mytext1 = (TextView) v.findViewById(R.id.firstline);
-                final TextView mytext2 = (TextView) v.findViewById(R.id.secondline);
-                final ImageButton mybutton = (ImageButton) v.findViewById(R.id.adddeletebutton);
+                final TextView mytext1 = (TextView) v.findViewById(R.id.firstLine);
+                final TextView mytext2 = (TextView) v.findViewById(R.id.secondLine);
+                final ImageButton mybutton = (ImageButton) v.findViewById(R.id.toggleButton);
                 curStudentRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
