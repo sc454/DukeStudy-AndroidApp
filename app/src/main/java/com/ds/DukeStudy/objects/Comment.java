@@ -27,7 +27,8 @@ public class Comment {
     public String getKey() {return key;}
     public String getAuthor() {return author;}
     public String getText() {return text;}
-    public String getStudentKey(){return studentKey;}
+    public String getStudentKey() {return studentKey;}
+
     // Setters
 
     public void setKey(String key) {this.key = key;}
