@@ -9,9 +9,13 @@ import com.ds.DukeStudy.objects.Post;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
+    // Fields
+
     public TextView titleView;
     public TextView authorView;
     public TextView bodyView;
+
+    // Methods
 
     public PostViewHolder(View itemView) {
         super(itemView);

@@ -11,6 +11,7 @@ import com.ds.DukeStudy.fragments.PostsFragment;
 public class GroupAdapter extends FragmentPagerAdapter {
 
     // Fields
+
     private String groupKey;
     private static final int numTabs = 3;
 

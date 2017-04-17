@@ -64,6 +64,7 @@ public class ViewProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_view_profile, container, false);
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
@@ -76,7 +77,6 @@ public class ViewProfileFragment extends Fragment {
         Toast.makeText(getContext(), studentKey, Toast.LENGTH_SHORT).show();
 
         //Set all of the values for the current student.
-        final View view = inflater.inflate(R.layout.fragment_view_profile, container, false);
         final TextView studentName= (TextView) view.findViewById(R.id.studentName);
         final TextView studentEmail= (TextView) view.findViewById(R.id.studentEmail);
         final TextView studentMajor= (TextView) view.findViewById(R.id.studentMajor);

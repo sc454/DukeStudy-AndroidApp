@@ -55,6 +55,7 @@ public class NewEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_event);
 
         // Get arguments
         groupKey = getIntent().getStringExtra(GROUP_KEY_ARG);
@@ -62,9 +63,8 @@ public class NewEventActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
         }
 
+        // Set view
 //        final View view = inflater.inflate(R.layout.groupslist_layout,null);
-
-        setContentView(R.layout.activity_new_event);
         titleField = (EditText) findViewById(R.id.event_title);
         dateField = (EditText) findViewById(R.id.event_date);
         timeField = (EditText) findViewById(R.id.event_time);

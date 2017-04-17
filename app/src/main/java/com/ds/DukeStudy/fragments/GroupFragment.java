@@ -9,15 +9,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.misc.GroupAdapter;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Group;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,6 +52,7 @@ public class GroupFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.fragment_tabs, null);
 
         // Get arguments
         groupKey = getArguments().getString(GROUP_KEY_ARG);
@@ -63,7 +61,6 @@ public class GroupFragment extends Fragment {
         }
 
         // Create view
-        View view =  inflater.inflate(R.layout.tab_layout, null);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 

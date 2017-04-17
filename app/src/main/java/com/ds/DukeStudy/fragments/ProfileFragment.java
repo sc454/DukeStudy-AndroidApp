@@ -98,11 +98,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        // Inflate the layout for this fragment
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
         //  ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);

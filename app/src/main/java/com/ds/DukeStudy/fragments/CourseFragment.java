@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +15,9 @@ import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.misc.CourseAdapter;
 import com.ds.DukeStudy.objects.Database;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class CourseFragment extends Fragment {
@@ -55,6 +50,7 @@ public class CourseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.fragment_tabs, null);
 
         // Get arguments
         courseKey = getArguments().getString(COURSE_KEY_ARG);
@@ -63,7 +59,6 @@ public class CourseFragment extends Fragment {
         }
 
         // Create view
-        View view =  inflater.inflate(R.layout.tab_layout, null);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 

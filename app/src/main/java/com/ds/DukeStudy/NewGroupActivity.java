@@ -44,6 +44,7 @@ public class NewGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_group);
 
         // Get arguments
         courseKey = getIntent().getStringExtra(COURSE_KEY_ARG);
@@ -51,7 +52,7 @@ public class NewGroupActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass " + COURSE_KEY_ARG);
         }
 
-        setContentView(R.layout.activity_new_group);
+        // Set view
         nameField = (EditText) findViewById(R.id.field_title);
         submitBtn = (FloatingActionButton) findViewById(R.id.fab_submit_group);
         submitBtn.setOnClickListener(new View.OnClickListener() {

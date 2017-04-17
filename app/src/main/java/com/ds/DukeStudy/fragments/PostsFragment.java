@@ -2,24 +2,16 @@ package com.ds.DukeStudy.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import com.ds.DukeStudy.NewPostActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Post;
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +47,7 @@ public class PostsFragment extends Fragment {
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_posts, container, false);
 
         // Get arguments
         dbPath = getArguments().getString(PATH_ARG);
@@ -64,7 +57,6 @@ public class PostsFragment extends Fragment {
         dbRef = Database.ref.child(dbPath);
 
         // Set view
-        View view = inflater.inflate(R.layout.fragment_all_posts, container, false);
         mRecycler = (RecyclerView) view.findViewById(R.id.messages_list);
         mRecycler.setHasFixedSize(true);
 

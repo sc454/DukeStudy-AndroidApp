@@ -24,9 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-/**
- * Created by cheli on 3/5/2017.
- */
 //This is a fragment that retrieves class List from database and displays in listView
 public class AddCourseFragment extends Fragment {
     private DatabaseReference databaseRef;

@@ -1,34 +1,21 @@
 package com.ds.DukeStudy.fragments;
 
-import android.app.DatePickerDialog;
-
-import android.app.TimePickerDialog;
-
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.NewEventActivity;
-import com.ds.DukeStudy.NewGroupActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
-import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,8 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Locale;
 
 //This is an events fragment that retrieves events listed and displays them in a list for a given
     //course
@@ -68,6 +53,7 @@ public class EventsListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_events_list, container, false);
 
         // Get arguments
         groupKey = getArguments().getString(GROUP_KEY_ARG);
@@ -76,9 +62,6 @@ public class EventsListFragment extends Fragment {
         }
 
         student = ((MainActivity) EventsListFragment.this.getActivity()).getStudent();
-
-        final View view = inflater.inflate(R.layout.events_layout, container, false);
-
         eventsListView = (ListView) view.findViewById(R.id.eventsListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference curGroupsRef = Database.ref.child("groups").child(groupKey).child("eventKeys");

@@ -2,8 +2,6 @@ package com.ds.DukeStudy.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Database;
@@ -20,7 +17,6 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MembersFragment extends Fragment {
@@ -49,6 +45,7 @@ public class MembersFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_members,null);
 
         // Get arguments
         dbPrefix = getArguments().getString(PREFIX_ARG);
@@ -62,7 +59,6 @@ public class MembersFragment extends Fragment {
         }
 
         // Create view
-        View view = inflater.inflate(R.layout.members_layout,null);
         membersListView = (ListView) view.findViewById(R.id.membersListView);
 
         // Create database listener

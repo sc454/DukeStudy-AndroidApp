@@ -63,7 +63,6 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-        Log.i(TAG, "Creating post detail view");
 
         // Get post key from intent
         path = getIntent().getStringExtra(PATH_ARG);

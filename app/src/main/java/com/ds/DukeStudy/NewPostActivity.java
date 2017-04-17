@@ -48,6 +48,7 @@ public class NewPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_post);
 
         // Get arguments
         path = getIntent().getStringExtra(DB_PATH);
@@ -56,7 +57,6 @@ public class NewPostActivity extends AppCompatActivity {
         }
 
         // Set view
-        setContentView(R.layout.activity_new_post);
         titleField = (EditText) findViewById(R.id.field_title);
         bodyField = (EditText) findViewById(R.id.field_body);
         submitBtn = (FloatingActionButton) findViewById(R.id.fab_submit_post);

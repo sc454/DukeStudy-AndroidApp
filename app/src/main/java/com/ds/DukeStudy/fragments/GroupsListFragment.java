@@ -68,6 +68,7 @@ public class GroupsListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_groups_list, null);
 
         // Get arguments
         courseKey = getArguments().getString(COURSE_KEY_ARG);
@@ -76,7 +77,6 @@ public class GroupsListFragment extends Fragment {
         }
 
         // Get view
-        final View view = inflater.inflate(R.layout.fragment_groups_list, null);
         groupsListView = (ListView) view.findViewById(R.id.groupsListListView);
         plusIcon = getResources().getDrawable(R.drawable.ic_menu_addclass);
         minusIcon = getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp);

@@ -11,8 +11,12 @@ import com.ds.DukeStudy.fragments.PostsFragment;
 
 public class CourseAdapter extends FragmentPagerAdapter {
 
+    // Fields
+
     private String courseKey;
     private static final int numTabs = 3;
+
+    // Methods
 
     public CourseAdapter(FragmentManager fm, String courseKey) {
         super(fm);
