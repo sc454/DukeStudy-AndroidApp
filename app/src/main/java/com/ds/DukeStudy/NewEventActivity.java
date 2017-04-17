@@ -110,19 +110,22 @@ public class NewEventActivity extends AppCompatActivity {
         timeField.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                Calendar currCal = Calendar.getInstance();
-                int hour = currCal.get(Calendar.HOUR_OF_DAY);
-                int minute = currCal.get(Calendar.MINUTE);
-                TimePickerDialog timePicker = new TimePickerDialog(NewEventActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                timeField.setText( selectedHour + ":" + selectedMinute);
-                        }
-                }, hour, minute, true);//Yes 24 hour time
-                timePicker.setTitle("Select Time");
-                timePicker.show();
-                return true;
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Calendar currCal = Calendar.getInstance();
+                    int hour = currCal.get(Calendar.HOUR_OF_DAY);
+                    int minute = currCal.get(Calendar.MINUTE);
+                    TimePickerDialog timePicker = new TimePickerDialog(NewEventActivity.this,
+                            new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                    timeField.setText(selectedHour + ":" + selectedMinute);
+                                }
+                            }, hour, minute, true);//Yes 24 hour time
+                    timePicker.setTitle("Select Time");
+                    timePicker.show();
+                }
+                    return true;
+
             }
         });
 
