@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ public class AddCourseFragment extends Fragment {
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<Course> adapter1;
     private ListView courseListView;
+    private Student student;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,25 +36,45 @@ public class AddCourseFragment extends Fragment {
         courseListView=(ListView) view.findViewById(R.id.courseListListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference coursesRef=databaseRef.child("courses");
-        adapter1=new FirebaseListAdapter<Course>(getActivity(),Course.class,android.R.layout.two_line_list_item,coursesRef) {
+        student = ((MainActivity)AddCourseFragment.this.getActivity()).getStudent();
+        adapter1=new FirebaseListAdapter<Course>(getActivity(),Course.class,R.layout.cutom_row_view_layout,coursesRef) {
             @Override
-            protected void populateView(View v, Course model, final int position) {
-                TextView mytext=(TextView) v.findViewById(android.R.id.text1);
-                TextView mytext2=(TextView) v.findViewById(android.R.id.text2);
-                mytext.setText(model.getTitle());
-                mytext2.setText(model.getInstructor());
-                v.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view) {
-                        // Show key
-                        Context context = getActivity().getApplicationContext();
-                        CharSequence text = getRef(position).getKey();
-                        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                        toast.show();
-                        //Toggle course
-                        toggleCourse(text.toString());
+
+
+            protected void populateView(View v, final Course model, final int position) {
+                final TextView mytext1 = (TextView) v.findViewById(R.id.firstline);
+                final TextView mytext2 = (TextView) v.findViewById(R.id.secondline);
+                final ImageButton mybutton=(ImageButton) v.findViewById(R.id.adddeletebutton);
+                mytext1.setText(model.getDepartment()+model.getCode()+": "+model.getTitle());
+                mytext2.setText("# Students:"+Integer.toString(model.getStudentKeys().size()));
+                if (model.getStudentKeys().contains(student.getKey())){
+                    if (isAdded()) {
+                        mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
                     }
-                });
+                    mybutton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //If the course is clicked either add or remove your student key from it
+                            model.removeStudentKey(student.getKey());
+                            model.put();
+                            student.removeCourseKey(model.getKey());
+                            student.put();
+                        }
+                    });
+                }else{
+                    if (isAdded()) {
+                        mybutton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_addclass));};
+                    mybutton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //If the event is clicked on either add or remove your student key from it
+                            model.addStudentKey(student.getKey());
+                            model.put();
+                            student.addCourseKey(model.getKey());
+                            student.put();
+                        }
+                    });
+                }
             }
         };
         courseListView.setAdapter(adapter1);

@@ -198,6 +198,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 StorageReference myfileRef = storageRef.child(user.getUid());
                 pictureView.setDrawingCacheEnabled(true);
                 pictureView.buildDrawingCache();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
                 Bitmap bitmap = pictureView.getDrawingCache();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);

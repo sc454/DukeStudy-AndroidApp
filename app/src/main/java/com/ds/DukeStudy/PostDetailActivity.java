@@ -3,6 +3,14 @@ package com.ds.DukeStudy;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +33,7 @@ import com.ds.DukeStudy.objects.Post;
 import com.ds.DukeStudy.objects.Student;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -37,6 +46,7 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.squareup.picasso.Picasso;
 //import com.google.firebase.quickstart.database.models.Comment;
 //import com.google.firebase.quickstart.database.models.Post;
 //import com.google.firebase.quickstart.database.models.User;
@@ -51,6 +61,7 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
 
     private static final String TAG = "PostDetailActivity";
     public static final String EXTRA_POST_KEY = "post_key";
+    final long ONE_MEGABYTE = 500 * 500;
     FirebaseAuth auth;
     // creating an instance of Firebase Storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -61,6 +72,7 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
     private ValueEventListener mPostListener;
     private String mPostKey;
     private CommentAdapter mAdapter;
+    private StorageReference myfileRef1;
 
     private TextView mAuthorView;
     private TextView mTitleView;
@@ -114,34 +126,16 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
                 mAuthorView.setText(post.getAuthor());
                 mTitleView.setText(post.getTitle());
                 mBodyView.setText(post.getMessage());
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                    StorageReference myfileRef1 = storageRef.child(post.getUid().toString());
-
-                    File localFile = null;
-                    try {
-                        localFile = File.createTempFile("images", "jpg");
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                myfileRef1 = storageRef.child(post.getUid().toString());
+                myfileRef1.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        mImageView.setImageBitmap(getCircleBitmap(bitmap));
                     }
-                    final File myfile = localFile;
-                    final StorageTask<FileDownloadTask.TaskSnapshot> taskSnapshotStorageTask = myfileRef1.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot1) {
-                            Bitmap myBitmap = BitmapFactory.decodeFile(myfile.getAbsolutePath());
-                            mImageView.setImageBitmap(myBitmap);
-                            //Set the navBar image as well
-                            // ImageView navPic = (ImageView) initalProfileView.findViewById(R.id.navProfileIcon);
-                            //navPic.setImageBitmap(myBitmap);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle any errors
-                        }
-                    });
-                }
+                });
+
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -155,6 +149,28 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
         // Listen for comments
         mAdapter = new CommentAdapter(this, mCommentsReference);
         mCommentsRecycler.setAdapter(mAdapter);
+    }
+    private static Bitmap getCircleBitmap(Bitmap bitmap) {
+        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(output);
+
+        final int color = Color.RED;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawOval(rectF, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        bitmap.recycle();
+
+        return output;
     }
 
     @Override
@@ -194,9 +210,11 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
 
                         // Push the comment, it will appear in the list
                         mCommentsReference.push().setValue(comment);
-
                         // Clear the field
                         mCommentField.setText(null);
+
+                       // Log.d("UID",comment.getStudentKey().toString());
+
                     }
 
                     @Override
@@ -208,22 +226,25 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
 
         public TextView authorView;
         public TextView bodyView;
-
+        public ImageView imageView;
         public CommentViewHolder(View itemView) {
             super(itemView);
             authorView = (TextView) itemView.findViewById(R.id.comment_author);
             bodyView = (TextView) itemView.findViewById(R.id.comment_body);
+            imageView = (ImageView) itemView.findViewById(R.id.comment_photo);
+
         }
     }
 
-    private static class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
+    private class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
 
         private Context mContext;
         private DatabaseReference mDatabaseReference;
         private ChildEventListener mChildEventListener;
-
+        private StorageReference storageRef;
         private List<String> mCommentIds = new ArrayList<>();
         private List<Comment> mComments = new ArrayList<>();
+        private long ONE_MEGABYTE = 500 * 500;
 
         public CommentAdapter(final Context context, DatabaseReference ref) {
             mContext = context;
@@ -318,11 +339,14 @@ public class PostDetailActivity extends AppCompatActivity //extends BaseActivity
         }
 
         @Override
-        public void onBindViewHolder(CommentViewHolder holder, int position) {
+        public void onBindViewHolder(final CommentViewHolder holder, int position) {
             Comment comment = mComments.get(position);
             holder.authorView.setText(comment.getAuthor());
             holder.bodyView.setText(comment.getText());
+
+
         }
+
 
         @Override
         public int getItemCount() {

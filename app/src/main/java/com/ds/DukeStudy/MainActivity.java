@@ -200,7 +200,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SubMenu groupSubMenu = groupItems.getSubMenu();
         classSubMenu.clear();
         groupSubMenu.clear();
-
+courseMenuIds.clear();
+        groupMenuIds.clear();
         // Find keys
         ArrayList<String> courseKeys = new ArrayList<>();
         ArrayList<String> groupKeys = new ArrayList<>();
