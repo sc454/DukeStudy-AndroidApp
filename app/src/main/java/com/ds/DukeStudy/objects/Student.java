@@ -32,7 +32,8 @@ public class Student {
         this.profileUrl = "NoUrl";
     }
 
-    public Student(String email) {this("NoName", email, "NoMajor", "NoGradYear");}
+//    public Student(String email) {this("NoName", email, "NoMajor", "NoGradYear");}
+    public Student(String email) {this("Edit your information below...", email, "", "");}
 
     public Student() {this("NoEmail");}
 

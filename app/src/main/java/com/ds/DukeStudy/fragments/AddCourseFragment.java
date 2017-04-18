@@ -43,7 +43,7 @@ public class AddCourseFragment extends Fragment {
                 final TextView mytext1 = (TextView) v.findViewById(R.id.firstLine);
                 final TextView mytext2 = (TextView) v.findViewById(R.id.secondLine);
                 final ImageButton mybutton=(ImageButton) v.findViewById(R.id.toggleButton);
-                mytext1.setText(course.getDepartment()+course.getCode()+": "+course.getTitle());
+                mytext1.setText(course.getDepartment() + " " + course.getCode() + ": " + course.getTitle());
                 mytext2.setText("Students: " + course.getStudentKeys().size());
                 if (course.getStudentKeys().contains(student.getKey())){
                     if (isAdded()) {

@@ -98,7 +98,7 @@ public class EventsListFragment extends Fragment {
 
                         // Set title and details
                         titleText.setText(event.getTitle());
-                        detailsText.setText(event.getDate() + " at " + event.getTime());
+                        detailsText.setText(event.getDate() + " at " + event.getTime() + " in " + event.getLocation());
 //                        detailsText.setText("Location: " + event.getLocation() + "\tAttendees: " + event.getStudentKeys().size());
 
                         // Set icon
