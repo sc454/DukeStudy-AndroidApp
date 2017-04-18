@@ -271,12 +271,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (student == null) {
                     student = new Student(Database.getUser().getEmail());
                     student.put();
-                    loadStudent(student);
-                    updateMenuList();
-                } else {
-                    loadStudent(student);
-                    updateMenuList();
                 }
+                studentGroups.clear(); studentCourses.clear();
+                loadStudent(student);
+                updateMenuList();
                 Log.i(TAG, "loadUser:onDataChange");
             }
             @Override
