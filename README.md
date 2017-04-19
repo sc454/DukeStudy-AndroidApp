@@ -23,12 +23,20 @@ Each of these fragments are used to display and save user specific information t
 ##### 5. Group
 ##### 6. Student
 ##### 7. Util
-It should be noted that the fragments and objects are in seperate files in the java directory for organizational simiplicity. Also, there were some auxiliary activitys used for Login and user data entry, however they are not core to the functioning of our application and were implemented mostly for UI stylistic reasons. 
+It should be noted that the fragments and objects are in seperate files in the java directory for organizational simiplicity. Also, there were some auxiliary activities used for Login and user data entry, however they are not core to the functioning of our application and were implemented mostly for UI stylistic reasons. 
 
 ### APIs used
 The main API used in this application was the Firebase API. This is used beacuse it can convert developer defined objects into JSON for saving to database. On loads, it converts JSON to user define objects. Also, there are built-in listeners that trigger on changes to user specified portions to the database. These functionalities greatly simplified development.
 
+### Sources used
+We modified code from tutorials to complete our posts section and authentication. Originally, our posts section did not utilize this type of code, but we were not happy with the functionality and design of our implementation so we adapted a tutorial to our needs. The sources used are as follows:
+##### 1. Authentication: http://www.androidhive.info/2016/06/android-getting-started-firebase-simple-login-registration-auth/
+##### 2. Posts: https://github.com/firebase/quickstart-android/tree/master/database
+
+
 ### Additional Files
+Our documentation file can be found in our repository and is named JBiebsDocumentation.pdf.
+
 ### Test scripts
 Due to fact that much of our application dealt with database interaction and time constraints, we decided against automated testing. Instead we did manual test of the units, components, and system.
 :copyright: JBeibS 2017
