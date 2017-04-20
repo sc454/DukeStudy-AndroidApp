@@ -86,6 +86,7 @@ public class NewPostActivity extends AppCompatActivity {
         Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: loadStudent");
                 Student user = dataSnapshot.getValue(Student.class);
                 if (user == null) {
                     Log.e(TAG, "User " + uid + " is unexpectedly null");
@@ -99,7 +100,7 @@ public class NewPostActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                Log.w(TAG, "OnDataChangeCancelled: loadStudent", databaseError.toException());
                 setEditingEnabled(true);
             }
         });

@@ -45,7 +45,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         super.onCreateView(inflater, container, savedInstanceState);
         EditProfileView =  inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        // Get fields
+        // Get view items
         SubmitProfileButton = (Button)EditProfileView.findViewById(R.id.submitProfileButton);
         nameField = (EditText)EditProfileView.findViewById(R.id.userNameEdit);
         emailField = (EditText)EditProfileView.findViewById(R.id.userEmailEdit);

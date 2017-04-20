@@ -133,6 +133,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         mPostListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: postListener");
                 // Get Post object and use the values to update the UI
                 Post post = dataSnapshot.getValue(Post.class);
                 mAuthorView.setText(post.getAuthor());
@@ -149,7 +150,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                Log.w(TAG, "OnDataChangeCancelled: postListener", databaseError.toException());
                 Toast.makeText(PostDetailActivity.this, "Failed to load post.", Toast.LENGTH_SHORT).show();
             }
         };
@@ -207,6 +208,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: loadStudent");
                 // Get user information
                 Student user = dataSnapshot.getValue(Student.class);
                 String authorName = user.getName();
@@ -224,7 +226,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "OnDataChangeCancelled: loadStudent", databaseError.toException());
+            }
         });
     }
 

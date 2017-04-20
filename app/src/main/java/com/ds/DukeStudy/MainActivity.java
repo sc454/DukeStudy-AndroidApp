@@ -276,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: userListener");
                 student = dataSnapshot.getValue(Student.class);
                 if (student == null) {
                     student = new Student(Database.getUser().getEmail());
@@ -284,11 +285,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 studentGroups.clear(); studentCourses.clear();
                 loadStudent(student);
                 updateMenuList();
-                Log.i(TAG, "loadUser:onDataChange");
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
+                Log.w(TAG, "OnDataChangeCancelled: userListener", databaseError.toException());
             }
         };
 
@@ -312,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                Log.i(TAG, "onCreate:onAuthStateChanged");
+                Log.i(TAG, "OnAuthChange: authListener");
                 user = firebaseAuth.getCurrentUser();
                 if (user == null) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -347,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.i(TAG, "OnDataChange: loadCourses");
                     Course course = dataSnapshot.getValue(Course.class);
                     if (course == null) {
                         Log.e(TAG, "Course " + courseKey + " is unexpectedly null");
@@ -358,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                    Log.w(TAG, "OnDataChangeCancelled: loadCourses", databaseError.toException());
                 }
             });
         }
@@ -371,6 +372,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Database.ref.child("groups").child(groupKey).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.i(TAG, "OnDataChange: loadGroups");
                     Group group = dataSnapshot.getValue(Group.class);
                     if (group == null) {
                         Log.e(TAG, "Group " + groupKey + " is unexpectedly null");
@@ -382,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                    Log.w(TAG, "OnDataChangeCancelled: loadGroups", databaseError.toException());
                 }
             });
         }

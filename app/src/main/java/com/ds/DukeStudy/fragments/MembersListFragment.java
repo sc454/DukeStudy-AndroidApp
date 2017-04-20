@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class MembersListFragment extends Fragment {
                 Database.ref.child("students").child(studentKey).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.i(TAG, "OnDataChange: studentListener");
                         final Student student = dataSnapshot.getValue(Student.class);
 
                         // Set name and email
@@ -92,7 +94,9 @@ public class MembersListFragment extends Fragment {
                         });
                     }
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "OnDataChangeCancelled: studentListener", databaseError.toException());
+                    }
                 });
             }
         };

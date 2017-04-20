@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class CourseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view =  inflater.inflate(R.layout.general_tabs, null);
+        View view = inflater.inflate(R.layout.general_tabs, null);
 
         // Get arguments
         courseKey = getArguments().getString(COURSE_KEY_ARG);
@@ -77,10 +78,13 @@ public class CourseFragment extends Fragment {
         courseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: loadCourse");
                 setTitle(dataSnapshot.getValue(Course.class));
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "OnDataChangeCancelled: loadCourse", databaseError.toException());
+            }
         });
 
         return view;

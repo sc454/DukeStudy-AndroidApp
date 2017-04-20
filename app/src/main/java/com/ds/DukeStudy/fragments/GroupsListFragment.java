@@ -94,6 +94,7 @@ public class GroupsListFragment extends Fragment {
                 groupListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.i(TAG, "OnDataChange: groupListener");
                         final Group group = dataSnapshot.getValue(Group.class);
 
                         // Set name and count
@@ -114,7 +115,9 @@ public class GroupsListFragment extends Fragment {
                         });
                     }
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "OnDataChangeCancelled: groupListener", databaseError.toException());
+                    }
                 };
                 groupRef.addValueEventListener(groupListener);
             }};

@@ -94,6 +94,7 @@ public class EventsListFragment extends Fragment {
                 eventRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.i(TAG, "OnDataChange: loadEvent");
                         final Event event = dataSnapshot.getValue(Event.class);
 
                         // Set title and details
@@ -115,7 +116,9 @@ public class EventsListFragment extends Fragment {
                         });
                     }
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "OnDataChangeCancelled: loadEvent", databaseError.toException());
+                    }
                 });
             }
         };

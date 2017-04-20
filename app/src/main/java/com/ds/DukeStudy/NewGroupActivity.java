@@ -82,6 +82,7 @@ public class NewGroupActivity extends AppCompatActivity {
         Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: loadCourse");
                 Course course = dataSnapshot.getValue(Course.class);
                 if (course == null) {
                     Log.e(TAG, "Course " + courseKey + " is unexpectedly null");
@@ -99,10 +100,9 @@ public class NewGroupActivity extends AppCompatActivity {
                 setEditingEnabled(true);
                 finish();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                Log.w(TAG, "OnDataChangeCancelled: loadCourse", databaseError.toException());
                 setEditingEnabled(true);
             }
         });

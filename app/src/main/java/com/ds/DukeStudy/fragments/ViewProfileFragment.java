@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,18 +81,19 @@ public class ViewProfileFragment extends Fragment {
         }
         Toast.makeText(getContext(), studentKey, Toast.LENGTH_SHORT).show();
 
-        //Set all of the values for the current student.
+        // Get view items
         final TextView studentName= (TextView) view.findViewById(R.id.studentName);
         final TextView studentEmail= (TextView) view.findViewById(R.id.studentEmail);
         final TextView studentMajor= (TextView) view.findViewById(R.id.studentMajor);
         final TextView studentYear= (TextView) view.findViewById(R.id.studentYear);
         final ImageView studentImage= (ImageView) view.findViewById(R.id.studentImage);
 
-        //Get values from database
+        // Get values from database
         DatabaseReference curRef = Database.ref.child("students").child(studentKey);
         curRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: studentListener");
                 final Student curStudent= dataSnapshot.getValue(Student.class);
                 studentName.setText(curStudent.getName());
                 studentEmail.setText(curStudent.getEmail());
@@ -99,7 +101,9 @@ public class ViewProfileFragment extends Fragment {
                 studentYear.setText(curStudent.getGradYear());
             };
             @Override
-            public void onCancelled(DatabaseError databaseError) {};
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "OnDataChangeCancelled: studentListener", databaseError.toException());
+            };
         });
         //Get image from database if it exists
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();

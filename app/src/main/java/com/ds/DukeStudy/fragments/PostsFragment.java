@@ -56,7 +56,7 @@ public class PostsFragment extends Fragment {
         }
         dbRef = Database.ref.child(dbPath);
 
-        // Set view
+        // Get view items
         mRecycler = (RecyclerView) view.findViewById(R.id.messages_list);
         mRecycler.setHasFixedSize(true);
 

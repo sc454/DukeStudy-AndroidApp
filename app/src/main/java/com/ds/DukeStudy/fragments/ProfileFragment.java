@@ -106,9 +106,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         final View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Inflate the layout for this fragment
+        // Get view items
         Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
-        //  ImageView editImageButton = (ImageView) initalProfileView.findViewById(R.id.profileImageButton);
         userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
         emailView = (TextView) initalProfileView.findViewById(R.id.emailView);
         majorView = (TextView)initalProfileView.findViewById(R.id.majorView);
@@ -118,6 +117,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         //  profilePictureView = (ImageButton) initalProfileView.findViewById(R.id.profileImageButton);
         // Get a reference to the UID and retrieve profile details to show up on the layout
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+
 
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
             user = FirebaseAuth.getInstance().getCurrentUser();
@@ -149,6 +149,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 // Update the profile view with new data each time something changes
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.i(TAG, "OnDataChange: studentListener");
                     if (dataSnapshot.hasChild(user.getUid())){
                         //  Toast.makeText(getActivity(), "UID exists!",
                         //          Toast.LENGTH_SHORT).show();
@@ -174,10 +175,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
 
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    Log.w(TAG, "OnDataChangeCancelled: studentListener");
                 }
             });
 

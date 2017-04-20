@@ -178,6 +178,7 @@ public class NewEventActivity extends AppCompatActivity {
         Database.ref.child("groups").child(groupKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: loadGroup");
                 Group group = dataSnapshot.getValue(Group.class);
 
                 // Update group
@@ -200,7 +201,7 @@ public class NewEventActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                Log.w(TAG, "OnDataChangeCancelled: loadGroup", databaseError.toException());
                 setEditingEnabled(true);
             }
         });
@@ -226,6 +227,7 @@ public class NewEventActivity extends AppCompatActivity {
         Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: loadStudent");
                 student = dataSnapshot.getValue(Student.class);
                 if (student == null) {
                     Log.e(TAG, "Student " + uid + " is unexpectedly null");
@@ -234,7 +236,7 @@ public class NewEventActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                Log.w(TAG, "OnDataChangeCancelled: loadStudent", databaseError.toException());
             }
         });
     }

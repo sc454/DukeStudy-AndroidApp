@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class GroupFragment extends Fragment {
             throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
         }
 
-        // Create view
+        // Get view items
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
@@ -79,10 +80,13 @@ public class GroupFragment extends Fragment {
         GroupRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "OnDataChange: loadGroup");
                 setTitle(dataSnapshot.getValue(Group.class));
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "OnDataChangeCancelled: loadGroup", databaseError.toException());
+            }
         });
 
         return view;

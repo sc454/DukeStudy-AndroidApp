@@ -39,11 +39,15 @@ public class AddCourseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view=inflater.inflate(R.layout.fragment_course_list,null);
+        View view = inflater.inflate(R.layout.fragment_course_list,null);
+
+        // Get view items
         courseListView=(ListView) view.findViewById(R.id.courseListListView);
         databaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference coursesRef=databaseRef.child("courses");
         student = ((MainActivity)AddCourseFragment.this.getActivity()).getStudent();
+
+        // Create adapter
         adapter1=new FirebaseListAdapter<Course>(getActivity(), Course.class, R.layout.general_row_view_btn, coursesRef) {
             @Override
             protected void populateView(View v, final Course course, final int position) {
@@ -85,6 +89,7 @@ public class AddCourseFragment extends Fragment {
         courseListView.setAdapter(adapter1);
         return view;
     }
+
     public void toggleCourse(String key) {
         Student student = ((MainActivity)this.getActivity()).getStudent();
         ArrayList<String> courseKeys = student.getCourseKeys();
@@ -94,11 +99,13 @@ public class AddCourseFragment extends Fragment {
             addCourse(key);
         }
     }
+
     public void addCourse(String key) {
         Student student = ((MainActivity)this.getActivity()).getStudent();
         student.addCourseKey(key);
         student.put();
     }
+
     public void removeCourse(String key) {
         Student student = ((MainActivity)this.getActivity()).getStudent();
         student.removeCourseKey(key);
