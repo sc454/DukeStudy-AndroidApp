@@ -151,4 +151,22 @@ public class Student {
             put();
         }
     }
+
+    public void toggleAndPut(Course course) {
+        // Get keys
+        String cKey = course.getKey();
+
+        // Check
+        if (courseKeys.contains(cKey)) {
+            courseKeys.remove(cKey);
+            course.removeStudentKey(key);
+        } else {
+            courseKeys.add(cKey);
+            course.removeStudentKey(key);
+        }
+
+        // Update database
+        put();
+        course.put();
+    }
 }

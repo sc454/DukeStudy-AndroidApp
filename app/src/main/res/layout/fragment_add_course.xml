@@ -1,11 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ds.DukeStudy.MainActivity">
 
-    <ListView
-        android:id="@+id/courseListListView"
+    <!--<ListView-->
+        <!--android:id="@+id/courseListListView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <!--<android.widget.ToggleButton-->
+        <!--android:id="@+id/toggBtn"-->
+        <!--android:layout_toLeftOf="@+id/courses_list"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center" />-->
+
+    <!--<item android:id="@+id/search"-->
+        <!--android:title="@string/search_title"-->
+        <!--android:icon="@drawable/ic_search"-->
+        <!--android:showAsAction="collapseActionView|ifRoom"-->
+        <!--android:actionViewClass="android.widget.SearchView" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/courses_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="false"
+        android:clipToPadding="false"
+        android:padding="5dp"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_course" />
 
-</LinearLayout>
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab_new_post"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:src="@drawable/ic_image_edit"-->
+        <!--android:layout_margin="16dp"/>-->
+
+</RelativeLayout>
