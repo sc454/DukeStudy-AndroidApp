@@ -93,7 +93,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Get view items
+//        Course c = new Course("Random Signals and Noise", "ECE", "581", "Nolte");
+//        c.put();
+//        c = new Course("Probability", "ECE", "555", "Nolte");
+//        c.put();
+//        c = new Course("Compiler Construction", "ECE", "553", "Nolte");
+//        c.put();
+//        c = new Course("Compressed Sensing", "ECE", "741", "Nolte");
+//        c.put();
+
+            // Get view items
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navView = (NavigationView) findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(this);

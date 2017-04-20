@@ -16,7 +16,7 @@ public class Student {
     private String email;
     private String major;
     private String gradYear;
-    private String profileUrl;
+    // private String profileUrl;
     private ArrayList<String> courseKeys = new ArrayList<String>();
     private ArrayList<String> groupKeys = new ArrayList<String>();
     private ArrayList<String> eventKeys = new ArrayList<String>();
@@ -29,7 +29,7 @@ public class Student {
         this.email = email;
         this.major = major;
         this.gradYear = gradYear;
-        this.profileUrl = "NoUrl";
+        // this.profileUrl = "NoUrl";
     }
 
 //    public Student(String email) {this("NoName", email, "NoMajor", "NoGradYear");}
@@ -44,7 +44,7 @@ public class Student {
     public String getEmail() {return email;}
     public String getMajor() {return major;}
     public String getGradYear() {return gradYear;}
-    public String getProfileUrl() {return profileUrl;}
+    // public String getProfileUrl() {return profileUrl;}
     public ArrayList<String> getCourseKeys() {return courseKeys;}
     public ArrayList<String> getGroupKeys() {return groupKeys;}
     public ArrayList<String> getEventKeys() {return eventKeys;}
@@ -56,7 +56,7 @@ public class Student {
     public void setEmail(String email) {this.email = email;}
     public void setMajor(String major) {this.major = major;}
     public void setGradYear(String year) {gradYear = year;}
-    public void setProfileUrl(String url){profileUrl = url;}
+    // public void setProfileUrl(String url){profileUrl = url;}
     public void setCourseKeys(ArrayList<String> keys) {courseKeys = keys;}
     public void setGroupKeys(ArrayList<String> keys) {groupKeys = keys;}
     public void setEventKeys(ArrayList<String> keys) {eventKeys = keys;}
