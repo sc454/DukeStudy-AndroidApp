@@ -20,6 +20,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     // Fields
 
+    private static final String TAG = "ResetPasswordActivity";
     private FirebaseAuth auth;
     private EditText inputEmail;
     private Button btnReset, btnBack;

@@ -24,10 +24,17 @@ import java.util.ArrayList;
 
 //This is a fragment that retrieves class List from database and displays in listView
 public class AddCourseFragment extends Fragment {
+
+    // Fields
+
+    private static final String TAG = "AddCourseFragment";
     private DatabaseReference databaseRef;
     private FirebaseListAdapter<Course> adapter1;
     private ListView courseListView;
     private Student student;
+
+    // Methods
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

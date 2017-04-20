@@ -12,6 +12,7 @@ public class GroupAdapter extends FragmentPagerAdapter {
 
     // Fields
 
+    private static final String TAG = "GroupAdapter";
     private String groupKey;
     private static final int numTabs = 3;
 

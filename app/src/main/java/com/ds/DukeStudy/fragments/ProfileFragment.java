@@ -65,8 +65,10 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
 
+    // Fields
+
+    private static final String TAG = "ProfileFragment";
     private OnFragmentInteractionListener mListener;
     FirebaseUser user;
     TextView userNameView;
@@ -78,10 +80,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     String encodedImage;
     private static final int SELECT_PICTURE = 100;
     FirebaseAuth auth;
-    // creating an instance of Firebase Storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    //creating a storage reference,below URL is the Firebase storage URL.
     StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
+
+    // Constructors
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -91,6 +93,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         ProfileFragment fragment = new ProfileFragment();
         return fragment;
     }
+
+    // Other methods
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

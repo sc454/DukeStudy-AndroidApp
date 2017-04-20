@@ -22,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Fields
 
+    private static final String TAG = "LoginActivity";
     private FirebaseAuth auth;
     private EditText inputEmail, inputPassword;
     private Button btnSignup, btnLogin, btnReset;

@@ -12,6 +12,7 @@ public class CourseAdapter extends FragmentPagerAdapter {
 
     // Fields
 
+    private static final String TAG = "CourseAdapter";
     private String courseKey;
     private static final int numTabs = 3;
 

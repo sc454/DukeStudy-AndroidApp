@@ -27,9 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class EditProfileFragment extends Fragment implements View.OnClickListener {
 
-    private static final String REQUIRED = "Required";
-    private static final String DUKE_EMAIL = "Must be @duke.edu";
 
+    private static final String TAG = "EditProfileFragment";
     private Student student;
     private View EditProfileView;
     private Button SubmitProfileButton;

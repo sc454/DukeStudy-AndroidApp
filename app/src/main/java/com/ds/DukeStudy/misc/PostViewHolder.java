@@ -24,6 +24,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     // Fields
 
+    private static final String TAG = "PostViewHolder";
     private static final long ONE_MEGABYTE = 500*500;
 
     public TextView titleView;
@@ -32,7 +33,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageView;
     private StorageReference myfileRef1;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    //creating a storage reference,below URL is the Firebase storage URL.
     StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
 
     // Methods

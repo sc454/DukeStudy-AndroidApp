@@ -23,6 +23,7 @@ public class MembersListFragment extends Fragment {
 
     // Fields
 
+    private static final String TAG = "MembersListFragment";
     private static final String PATH_ARG = "dbPath";
 
     private String dbPath;

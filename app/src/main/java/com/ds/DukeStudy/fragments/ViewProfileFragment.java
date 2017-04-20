@@ -38,13 +38,14 @@ public class ViewProfileFragment extends Fragment {
 
     // Fields
 
+    private static final String TAG = "ViewProfileFragment";
     private static final String KEY_ARG = "key";
 
     public ViewPager viewPager;
     private String studentKey;
     private DatabaseReference databaseRef;
 
-    // Methods
+    // Constructors
 
     public ViewProfileFragment() {}
 
@@ -55,6 +56,8 @@ public class ViewProfileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    // Other methods
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

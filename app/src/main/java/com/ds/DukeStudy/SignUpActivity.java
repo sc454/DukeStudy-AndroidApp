@@ -20,6 +20,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     // Fields
 
+    private static final String TAG = "SignUpActivity";
     private FirebaseAuth auth;
     private EditText inputEmail, inputPassword;
     private Button btnSignIn, btnSignUp, btnResetPassword;
