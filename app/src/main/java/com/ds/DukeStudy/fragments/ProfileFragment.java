@@ -56,14 +56,6 @@ import static com.ds.DukeStudy.R.id.profileImageView;
 import static com.ds.DukeStudy.R.id.snap;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-/**
- * A simple {@link Fragment} subclass.
- * Main Activity that contains this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     // Fields
@@ -71,10 +63,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "ProfileFragment";
     private OnFragmentInteractionListener mListener;
     FirebaseUser user;
-    TextView userNameView;
-    TextView emailView;
-    TextView majorView;
-    TextView yearView;
+    TextView userNameView, emailView, majorView, yearView;
     Button uploadImageButton;
     ImageView pictureView;
     String encodedImage;
@@ -85,14 +74,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     // Constructors
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    public ProfileFragment() {}
 
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
-    }
+//    public static ProfileFragment newInstance(String param1, String param2) {
+//        ProfileFragment fragment = new ProfileFragment();
+//        return fragment;
+//    }
 
     // Other methods
 
@@ -104,17 +91,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final View initalProfileView = inflater.inflate(R.layout.fragment_profile, container, false);
+        final View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // Get view items
-        Button editProfileButton = (Button) initalProfileView.findViewById(R.id.editProfileButton);
-        userNameView = (TextView) initalProfileView.findViewById(R.id.userNameView);
-        emailView = (TextView) initalProfileView.findViewById(R.id.emailView);
-        majorView = (TextView)initalProfileView.findViewById(R.id.majorView);
-        yearView = (TextView)initalProfileView.findViewById(R.id.classView);
-        uploadImageButton = (Button)initalProfileView.findViewById(R.id.editImageButton);
-        pictureView = (ImageView)initalProfileView.findViewById(R.id.profileImageView);
-        //  profilePictureView = (ImageButton) initalProfileView.findViewById(R.id.profileImageButton);
+        Button editProfileButton = (Button) view.findViewById(R.id.editProfileButton);
+        userNameView = (TextView) view.findViewById(R.id.userNameView);
+        emailView = (TextView) view.findViewById(R.id.emailView);
+        majorView = (TextView)view.findViewById(R.id.majorView);
+        yearView = (TextView)view.findViewById(R.id.classView);
+        uploadImageButton = (Button)view.findViewById(R.id.editImageButton);
+        pictureView = (ImageView)view.findViewById(R.id.profileImageView);
+        //  profilePictureView = (ImageButton) view.findViewById(R.id.profileImageButton);
         // Get a reference to the UID and retrieve profile details to show up on the layout
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
@@ -136,7 +123,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     Bitmap myBitmap = BitmapFactory.decodeFile(myfile.getAbsolutePath());
                     pictureView.setImageBitmap(myBitmap);
                     //Set the navBar image as well
-                   // ImageView navPic = (ImageView) initalProfileView.findViewById(R.id.navProfileIcon);
+                   // ImageView navPic = (ImageView) view.findViewById(R.id.navProfileIcon);
                     //navPic.setImageBitmap(myBitmap);
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -249,7 +236,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
 
         //profilePictureView.setOnClickListener(this);
-        return initalProfileView;
+        return view;
     }
 
     @Override
@@ -283,7 +270,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     // Communicates with Main Activity to open Edit profile page upon clicking button
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(int tag,int viewID);
     }
 

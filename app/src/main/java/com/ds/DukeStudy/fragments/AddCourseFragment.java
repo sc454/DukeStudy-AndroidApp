@@ -1,7 +1,5 @@
 package com.ds.DukeStudy.fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import android.widget.Toast;
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Course;
@@ -39,7 +36,7 @@ public class AddCourseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_course_list,null);
+        View view = inflater.inflate(R.layout.fragment_add_course,null);
 
         // Get view items
         courseListView=(ListView) view.findViewById(R.id.courseListListView);

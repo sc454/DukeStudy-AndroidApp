@@ -23,16 +23,19 @@ import com.google.firebase.database.Query;
 
 public class PostsFragment extends Fragment {
 
+    // Fields
+
     private static final String TAG = "PostsFragment";
     public static final String PATH_ARG = "dbPath";
 
     private String dbPath;
-    private String dbKey;
     private DatabaseReference dbRef;
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
     private FloatingActionButton newPostBtn;
+
+    //  Constructors
 
     public PostsFragment() {}
 
@@ -43,6 +46,8 @@ public class PostsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    // Other methods
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
