@@ -8,8 +8,8 @@ Note that our development was performed using Android Studio 2.3. Our testing wa
 
 ## Workflow
 Once launched, the user will be prompted to sign in. If user is not currently signed up, registriation can be completed with an @duke.edu email address. Once logged in for the first time, the user can add classes for which they would like to find study groups. The first step is to press the Add Class button on the navigation bar. The added classes will be added to the navigation bar. By navigating to the added classes, groups can be added and navigated to in a similar fashion.
-##Support Details
-###Overall Structure of the code
+## Support Details
+### Overall Structure of the code
 For the overall stucture of the code, we have a Main Activity which calls fragments to deal with the different user interface components such as those for Course pages, Group pages, and Course Listings.
 The main fragments and the fragments they utilize are:
 ##### 1. CourseFragment (which utilizes PostsFragment, GroupListFragment, and MembersFragment)
@@ -23,12 +23,20 @@ Each of these fragments are used to display and save user specific information t
 ##### 5. Group
 ##### 6. Student
 ##### 7. Util
-It should be noted that the fragments and objects are in seperate files in the java directory for organizational simiplicity. Also, there were some auxiliary activitys used for Login and user data entry, however they are not core to the functioning of our application and were implemented mostly for UI stylistic reasons. 
+It should be noted that the fragments and objects are in seperate files in the java directory for organizational simiplicity. Also, there were some auxiliary activities used for Login and user data entry, however they are not core to the functioning of our application and were implemented mostly for UI stylistic reasons. 
 
-###APIs used
+### APIs used
 The main API used in this application was the Firebase API. This is used beacuse it can convert developer defined objects into JSON for saving to database. On loads, it converts JSON to user define objects. Also, there are built-in listeners that trigger on changes to user specified portions to the database. These functionalities greatly simplified development.
 
-###Additional Files
-###Test scripts
-Due to time constraint, manual testing was done to both 
+### Sources used
+We modified code from tutorials to complete our posts section and authentication. Originally, our posts section did not utilize this type of code, but we were not happy with the functionality and design of our implementation so we adapted a tutorial to our needs. The sources used are as follows:
+##### 1. Authentication: http://www.androidhive.info/2016/06/android-getting-started-firebase-simple-login-registration-auth/
+##### 2. Posts: https://github.com/firebase/quickstart-android/tree/master/database
+
+
+### Additional Files
+Our documentation file can be found in our repository and is named JBiebsDocumentation.pdf.
+
+### Test scripts
+Due to fact that much of our application dealt with database interaction and time constraints, we decided against automated testing. Instead we did manual test of the units, components, and system.
 :copyright: JBeibS 2017
