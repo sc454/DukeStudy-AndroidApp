@@ -24,8 +24,7 @@ public class Student {
         this.gradYear = gradYear;
     }
 
-//    public Student(String email) {this("NoName", email, "NoMajor", "NoGradYear");}
-    public Student(String email) {this("Edit your information below...", email, "", "");}
+    public Student(String email) {this("Edit your info below...", email, "", "");}
 
     public Student() {this("NoEmail");}
 
@@ -85,7 +84,7 @@ public class Student {
         Database.put(path + "/" + key, this);
     }
 
-    public void toggleAndPut(Course course) {
+    public void put(Course course) {
         // Get keys
         String cKey = course.getKey();
 
@@ -103,7 +102,7 @@ public class Student {
         course.put();
     }
 
-    public void toggleAndPut(Group group) {
+    public void put(Group group) {
         // Get keys
         String gKey = group.getKey();
 
@@ -123,7 +122,7 @@ public class Student {
         group.put();
     }
 
-    public void toggleAndPut(Event event) {
+    public void put(Event event) {
         // Get keys
         String cKey = event.getKey();
 

@@ -1,9 +1,6 @@
 package com.ds.DukeStudy.fragments;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,33 +9,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.ds.DukeStudy.GroupDetailActivity;
 import com.ds.DukeStudy.MainActivity;
-import com.ds.DukeStudy.NewEventActivity;
 import com.ds.DukeStudy.NewGroupActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.misc.EventViewHolder;
 import com.ds.DukeStudy.misc.GroupViewHolder;
 import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.ds.DukeStudy.objects.Util;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.vision.text.Text;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 //This fragment loads groups lists for a particular course from the database and displays in listview.
 
@@ -120,7 +103,7 @@ public class GroupsListFragment extends Fragment {
                 viewHolder.toggleBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        student.toggleAndPut(group);
+                        student.put(group);
                         Log.i(TAG, "Toggling group " + group.getName() + " at " + group.getKey());
                     }
                 });

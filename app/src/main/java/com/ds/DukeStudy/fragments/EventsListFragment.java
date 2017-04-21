@@ -1,8 +1,6 @@
 package com.ds.DukeStudy.fragments;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,32 +9,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.NewEventActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.misc.AddCourseViewHolder;
 import com.ds.DukeStudy.misc.EventViewHolder;
-import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
-import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
 import com.ds.DukeStudy.objects.Util;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 //This is an events fragment that retrieves events listed and displays them in a list for a given
 //course
@@ -120,7 +104,7 @@ public class EventsListFragment extends Fragment {
                 viewHolder.toggleBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        student.toggleAndPut(event);
+                        student.put(event);
                     }
                 });
 

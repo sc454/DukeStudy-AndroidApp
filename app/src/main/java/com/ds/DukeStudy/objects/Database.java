@@ -34,10 +34,4 @@ public class Database {
         ref.child(key).setValue(value);
         System.out.println("Writing to " + key);
     }
-
-//    public static <T> String put(String path, T value) {
-//        DatabaseReference db = ref.child(path).push();
-//        db.setValue(value);
-//        return db.getKey();
-//    }
 }

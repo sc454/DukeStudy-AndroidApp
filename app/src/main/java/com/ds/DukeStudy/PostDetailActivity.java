@@ -324,7 +324,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         public void onBindViewHolder(final CommentViewHolder holder, int position) {
             Comment comment = mComments.get(position);
             holder.authorView.setText(comment.getAuthor());
-            holder.bodyView.setText(comment.getText());
+            holder.bodyView.setText(comment.getMessage());
 
             String uid = mComments.get(position).getStudentKey();
             StorageReference fileRef = Database.store_ref.child(uid);

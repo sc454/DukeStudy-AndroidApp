@@ -19,6 +19,8 @@ import java.util.List;
 
 public class Util {
 
+    // Fields
+
     public static final String STUDENT_ROOT = "students";
     public static final String COURSE_ROOT = "courses";
     public static final String GROUP_ROOT = "groups";

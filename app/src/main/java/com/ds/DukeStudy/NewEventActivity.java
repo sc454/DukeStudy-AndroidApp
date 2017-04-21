@@ -175,14 +175,13 @@ public class NewEventActivity extends AppCompatActivity {
                 } else {
                     // Create event
                     Event event = new Event(title, date, time, location, dbPath);
-                    event.addStudentKey(student.getKey());
+//                    event.addStudentKey(student.getKey());
                     event.put(dbPath);
                     Log.i(TAG, "Stored event at " + event.getKey());
                     // Add to group and student
                     group.addEventKey(event.getKey());
-//                    student.addEventKey(event.getKey());
+//                    student.addEventKey(event.getKey()); student.put();
                     group.put();
-//                    student.put();
                 }
                 setEditingEnabled(true);
                 finish();

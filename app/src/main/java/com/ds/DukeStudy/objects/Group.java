@@ -12,7 +12,6 @@ public class Group {
     private String description;
     private ArrayList<String> studentKeys = new ArrayList<String>();
     private ArrayList<String> eventKeys = new ArrayList<String>();
-    private ArrayList<String> postKeys = new ArrayList<String>();
 
 //	Constructors
 
@@ -33,7 +32,6 @@ public class Group {
     public String getDescription() {return description;}
     public ArrayList<String> getStudentKeys() {return studentKeys;}
     public ArrayList<String> getEventKeys() {return eventKeys;}
-    public ArrayList<String> getPostKeys() {return postKeys;}
 
 //	Setters
 
@@ -43,7 +41,6 @@ public class Group {
     public void setDescription(String description) {this.description = description;}
     public void setStudentKeys(ArrayList<String> keys) {studentKeys = keys;}
     public void setEventKeys(ArrayList<String> keys) {eventKeys = keys;}
-    public void setPostKeys(ArrayList<String> keys) {postKeys = keys;}
 
 //  Other mutators
 
@@ -59,15 +56,8 @@ public class Group {
         }
     }
 
-    public void addPostKey(String key) {
-        if (!postKeys.contains(key)) {
-            postKeys.add(key);
-        }
-    }
-
     public void removeStudentKey(String key) {studentKeys.remove(key);}
     public void removeEventKey(String key) {eventKeys.remove(key);}
-    public void removePostKey(String key) {postKeys.remove(key);}
 
 //  Database
 

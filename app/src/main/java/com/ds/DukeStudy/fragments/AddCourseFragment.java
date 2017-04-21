@@ -81,7 +81,7 @@ public class AddCourseFragment extends Fragment {
                 viewHolder.toggleBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        student.toggleAndPut(course);
+                        student.put(course);
                         Log.i(TAG, "Toggling " + course.getTitle() + " at " + course.getKey());
                     }
                 });

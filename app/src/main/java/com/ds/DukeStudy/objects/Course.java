@@ -93,11 +93,4 @@ public class Course {
         }
         Database.put(path + "/" + key, this);
     }
-
-//    public void put() {
-//        if (key == null || "".equals(key)) {
-//            key = Database.getNewKey("");
-//        }
-//        Database.put(key, this);
-//    }
 }
