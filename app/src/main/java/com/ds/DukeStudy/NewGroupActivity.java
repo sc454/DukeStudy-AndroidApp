@@ -79,7 +79,7 @@ public class NewGroupActivity extends AppCompatActivity {
 
         // Add group to course
         final String userId = Database.getUser().getUid();
-        Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
+        Database.ref.child(Util.COURSE_ROOT).child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadCourse");
