@@ -19,12 +19,12 @@ import java.util.List;
 
 public class Util {
 
-    public static final String STUDENT_ROOT = "students2";
-    public static final String COURSE_ROOT = "courses2";
-    public static final String GROUP_ROOT = "groups2";
-    public static final String EVENT_ROOT = "events2";
-    public static final String POST_ROOT = "posts2";
-    public static final String COMMENT_ROOT = "post-comments2";
+    public static final String STUDENT_ROOT = "students";
+    public static final String COURSE_ROOT = "courses";
+    public static final String GROUP_ROOT = "groups";
+    public static final String EVENT_ROOT = "events";
+    public static final String POST_ROOT = "posts";
+    public static final String COMMENT_ROOT = "post-comments";
 
     private static final String EMPTY_FIELD = "Required!";
     private static final String INCORRECT_EMAIL = "Email must contain @duke.edu";
