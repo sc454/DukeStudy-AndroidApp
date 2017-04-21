@@ -81,7 +81,6 @@ public class ViewProfileFragment extends Fragment {
         if (studentKey == null) {
             throw new IllegalArgumentException("Must pass " + KEY_ARG);
         }
-        Toast.makeText(getContext(), studentKey, Toast.LENGTH_SHORT).show();
 
         // Get view items
         final TextView studentName= (TextView) view.findViewById(R.id.studentName);
