@@ -119,7 +119,7 @@ public class NewEventActivity extends AppCompatActivity {
                             new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                    timeField.setText(selectedHour + ":" + selectedMinute);
+                                    timeField.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
                                 }
                             }, hour, minute, false);//Yes 24 hour time
                     timePicker.setTitle("Select Time");
