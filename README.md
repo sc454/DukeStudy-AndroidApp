@@ -4,10 +4,10 @@ DukeStudy is a mobile Android application designed to help connect Duke Universi
 ## Installation
 DukeStudy should be imported into Android Studio as a project.
 
-Note that our development was performed using Android Studio 2.3. Our testing was performed with the Nexus 5 Emulator, API 24:5554.
+Note that our development was performed using Android Studio 2.3. Our testing was performed with the Nexus 5 Emulator, API 25:5554.
 
 ## Workflow
-Once launched, the user will be prompted to sign in. If user is not currently signed up, registriation can be completed with an @duke.edu email address. Once logged in for the first time, the user can add classes for which they would like to find study groups. The first step is to press the Add Class button on the navigation bar. The added classes will be added to the navigation bar. By navigating to the added classes, groups can be added and navigated to in a similar fashion.
+Once launched, the user will be prompted to sign in. If user is not currently signed up, registriation can be completed with an @duke.edu email address. Once logged in for the first time, the user can add classes for which they would like to find study groups. The first step is to press the Add Class button on the navigation bar. The added classes will be added to the navigation bar. By navigating to the added classes, groups can be added and navigated to in a similar fashion. Within particular groups or classes, posts can be viewed in created as well as biographical information for the members of the respective classes or groups.
 ## Support Details
 ### Overall Structure of the code
 For the overall stucture of the code, we have a Main Activity which calls fragments to deal with the different user interface components such as those for Course pages, Group pages, and Course Listings.
