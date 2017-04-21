@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.ds.DukeStudy.fragments.GroupsListFragment;
 import com.ds.DukeStudy.fragments.MembersListFragment;
 import com.ds.DukeStudy.fragments.PostsFragment;
+import com.ds.DukeStudy.objects.Util;
 
 public class CourseAdapter extends FragmentPagerAdapter {
 
@@ -31,7 +32,7 @@ public class CourseAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0: return new PostsFragment().newInstance(courseKey);
             case 1: return new GroupsListFragment().newInstance(courseKey);
-            case 2: return new MembersListFragment().newInstance("courses/" + courseKey);
+            case 2: return new MembersListFragment().newInstance(Util.COURSE_ROOT, courseKey);
         }
         return null;
     }

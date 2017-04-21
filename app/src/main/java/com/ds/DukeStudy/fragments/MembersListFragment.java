@@ -30,15 +30,16 @@ public class MembersListFragment extends Fragment {
     // Fields
 
     private static final String TAG = "MembersListFragment";
-    private static final String PATH_ARG = "dbPath";
+    private static final String DB_PATH_ARG = "dbPath";
+    private static final String DB_KEY_ARG = "dbKey";
 
-    private String dbPath;
+    private String dbPath, dbKey;
     private FirebaseListAdapter<String> listAdapter;
     private ListView listView;
 
     private Student student;
     private DatabaseReference dbRef;
-    private FirebaseRecyclerAdapter<Student,StudentViewHolder> mAdapter;
+    private FirebaseRecyclerAdapter<String,StudentViewHolder> mAdapter;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
 
@@ -46,10 +47,11 @@ public class MembersListFragment extends Fragment {
 
     public MembersListFragment() {}
 
-    public static MembersListFragment newInstance(String dpPath) {
+    public static MembersListFragment newInstance(String path, String key) {
         MembersListFragment fragment = new MembersListFragment();
         Bundle args = new Bundle();
-        args.putString(PATH_ARG, dpPath);
+        args.putString(DB_PATH_ARG, path);
+        args.putString(DB_KEY_ARG, key);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,14 +64,18 @@ public class MembersListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_members_list, null);
 
         // Get arguments
-        dbPath = getArguments().getString(PATH_ARG);
+        dbPath = getArguments().getString(DB_PATH_ARG);
         if (dbPath == null) {
-            throw new IllegalArgumentException("Must pass " + PATH_ARG);
+            throw new IllegalArgumentException("Must pass " + DB_PATH_ARG);
+        }
+        dbKey = getArguments().getString(DB_KEY_ARG);
+        if (dbKey == null) {
+            throw new IllegalArgumentException("Must pass " + DB_KEY_ARG);
         }
 
         // Get view items
-        Log.i(TAG, "Getting students from " + dbPath);
-        dbRef = Database.ref.child("students");
+        Log.i(TAG, "Getting students from " + dbPath + "/" + dbKey);
+        dbRef = Database.ref.child(dbPath).child(dbKey).child("studentKeys");
         student = ((MainActivity)getActivity()).getStudent();
         mRecycler = (RecyclerView) view.findViewById(R.id.students_list);
         mRecycler.setHasFixedSize(true);
@@ -90,14 +96,15 @@ public class MembersListFragment extends Fragment {
 
         // Set up FirebaseRecyclerAdapter with the Query
 //        ArrayList<String> keys = Database.ref.child(dbPath).child("studentKeys");
-        Log.i(TAG, "Querying students from " + dbPath);
-        Query studentsQuery = dbRef.limitToFirst(100);
+        Log.i(TAG, "Querying students from " + dbPath + "/" + dbKey);
+        Query studentKeysQuery = dbRef.limitToFirst(100);
 //        Query query = Database.ref.child(Util.STUDENT_ROOT).equalTo()
 //        Query eventsQuery = dbRef.orderByChild("department");
-        mAdapter = new FirebaseRecyclerAdapter<Student,StudentViewHolder>(Student.class, R.layout.item_course, StudentViewHolder.class, studentsQuery) {
+        mAdapter = new FirebaseRecyclerAdapter<String,StudentViewHolder>(String.class, R.layout.item_course, StudentViewHolder.class, studentKeysQuery) {
             @Override
-            protected void populateViewHolder(final StudentViewHolder viewHolder, final Student student, final int position) {
-                final String key = getRef(position).getKey();
+            protected void populateViewHolder(final StudentViewHolder viewHolder, final String studentKey, final int position) {
+//                final String key = getRef(position).getKey();
+                Log.i(TAG, "Populating viewholder for " + studentKey);
 
                 // Set listener for view holder
 //                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +119,7 @@ public class MembersListFragment extends Fragment {
 //                });
 
                 // Bind view to student
-                viewHolder.bindToStudent(student);
+                viewHolder.bindToStudent(studentKey);
             }
         };
         mRecycler.setAdapter(mAdapter);
@@ -133,9 +140,9 @@ public class MembersListFragment extends Fragment {
 //        View view = inflater.inflate(R.layout.fragment_members_list, null);
 //
 //        // Get arguments
-//        dbPath = getArguments().getString(PATH_ARG);
+//        dbPath = getArguments().getString(DB_PATH_ARG);
 //        if (dbPath == null) {
-//            throw new IllegalArgumentException("Must pass " + PATH_ARG);
+//            throw new IllegalArgumentException("Must pass " + DB_PATH_ARG);
 //        }
 //
 //        // Get view items

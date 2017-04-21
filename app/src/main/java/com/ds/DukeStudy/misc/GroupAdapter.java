@@ -32,7 +32,7 @@ public class GroupAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0: return new PostsFragment().newInstance(Util.removeFromPath(groupKey, 0));
             case 1: return new EventsListFragment().newInstance(groupKey);
-            case 2: return new MembersListFragment().newInstance(groupKey);
+            case 2: return new MembersListFragment().newInstance(Util.GROUP_ROOT, groupKey);
         }
         return null;
     }
