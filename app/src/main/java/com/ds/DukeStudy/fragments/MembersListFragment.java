@@ -1,5 +1,6 @@
 package com.ds.DukeStudy.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -107,16 +108,16 @@ public class MembersListFragment extends Fragment {
                 Log.i(TAG, "Populating viewholder for " + studentKey);
 
                 // Set listener for view holder
-//                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-////                        Context context = getActivity().getApplicationContext();
-////                        getActivity().getSupportFragmentManager().beginTransaction()
-////                                .replace(R.id.flContent, new ViewProfileFragment().newInstance(studentKey), null)
-////                                .addToBackStack(null)
-////                                .commit();
-//                        }
-//                });
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context context = getActivity().getApplicationContext();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.flContent, new ViewProfileFragment().newInstance(studentKey), null)
+                                .addToBackStack(null)
+                                .commit();
+                        }
+                });
 
                 // Bind view to student
                 viewHolder.bindToStudent(studentKey);

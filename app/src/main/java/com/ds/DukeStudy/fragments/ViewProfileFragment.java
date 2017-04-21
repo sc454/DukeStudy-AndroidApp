@@ -20,6 +20,7 @@ import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Student;
+import com.ds.DukeStudy.objects.Util;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -90,7 +91,7 @@ public class ViewProfileFragment extends Fragment {
         final ImageView studentImage= (ImageView) view.findViewById(R.id.studentImage);
 
         // Get values from database
-        DatabaseReference curRef = Database.ref.child("students").child(studentKey);
+        DatabaseReference curRef = Database.ref.child(Util.STUDENT_ROOT).child(studentKey);
         curRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

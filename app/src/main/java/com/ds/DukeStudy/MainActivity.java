@@ -365,11 +365,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Fill courses
         for (Course course : studentCourses) {
-            String title = course.getDepartment() + " " + course.getCode();
-            classSubMenu.add(0, itemId, Menu.NONE, title).setIcon(R.drawable.ic_menu_class);
-            courseMenuIds.put(itemId, course.getKey());
-//            Log.i(TAG, "Mapping item " + itemId + " to " + course.getKey() + " course");
-            itemId++;
+            String key = course.getKey();
+            if (!courseMenuIds.containsValue(key)) {
+//                Log.i(TAG, "Mapping item " + itemId + " to " + course.getKey() + " course");
+                String title = course.getDepartment() + " " + course.getCode();
+                classSubMenu.add(0, itemId, Menu.NONE, title).setIcon(R.drawable.ic_menu_class);
+                courseMenuIds.put(itemId, key);
+                itemId++;
+            }
         }
 
         // Add course
@@ -377,10 +380,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Fill groups
         for (Group group : studentGroups) {
-            groupSubMenu.add(0, itemId, Menu.NONE, group.getName()).setIcon(R.drawable.ic_menu_groups);
-            groupMenuIds.put(itemId, group.getKey());
+            String key = group.getKey();
+            if (!groupMenuIds.containsValue(key)) {
 //            Log.i(TAG, "Mapping item " + itemId + " to " + group.getKey() + " group");
-            itemId++;
+                groupSubMenu.add(0, itemId, Menu.NONE, group.getName()).setIcon(R.drawable.ic_menu_groups);
+                groupMenuIds.put(itemId, key);
+                itemId++;
+            }
         }
     }
 }
