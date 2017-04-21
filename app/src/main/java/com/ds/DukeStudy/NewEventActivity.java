@@ -121,7 +121,7 @@ public class NewEventActivity extends AppCompatActivity {
                                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                                     timeField.setText(selectedHour + ":" + selectedMinute);
                                 }
-                            }, hour, minute, true);//Yes 24 hour time
+                            }, hour, minute, false);//Yes 24 hour time
                     timePicker.setTitle("Select Time");
                     timePicker.show();
                 }
@@ -129,33 +129,6 @@ public class NewEventActivity extends AppCompatActivity {
 
             }
         });
-
-        //Set the onClick to add a new event
-//        Button addEventButton=(Button) view.findViewById(R.id.addeventbutton);
-//            addEventButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //Creating firebase object
-//                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-//                //database.child("note").push().setValue(usernameEdit.getText().toString());
-//
-//                final Event event = new Event(dateField.getText().toString(), timeField.getText().toString(),locationField.getText().toString());
-//                event.addStudent(student.getKey());
-//                event.put();
-//                //Need to add the event key to eventKeys for the group
-//                final DatabaseReference curGroupsRef=databaseRef.child("groups").child(groupKey);
-//                curGroupsRef.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        final Group curObj= dataSnapshot.getValue(Group.class);
-//                        curObj.addEventKey(event.getKey());
-//                        curGroupsRef.setValue(curObj);
-//                    }
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {}
-//                });
-//            }
-//        });
     }
 
     private void submitEvent() {

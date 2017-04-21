@@ -169,7 +169,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 i.setType("image/*");
                 i.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(i, "Select Picture"),SELECT_PICTURE );
-                uploadImage();
             }
         });
 
@@ -221,7 +220,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     Log.i("IMAGE PATH TAG", "Image Path : " + path);
                     // Set the image in ImageView
                     pictureView.setImageURI(selectedImageUri);
-
+                    uploadImage();
                 }
             }
         }
