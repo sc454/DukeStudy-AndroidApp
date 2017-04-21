@@ -103,6 +103,26 @@ public class Student {
         course.put();
     }
 
+    public void toggleAndPut(Group group) {
+        // Get keys
+        String gKey = group.getKey();
+
+        // Check
+        if (groupKeys.contains(gKey)) {
+            groupKeys.remove(gKey);
+            group.removeStudentKey(key);
+            System.out.println("Removing student " + key + " from " + group.getKey());
+        } else {
+            groupKeys.add(gKey);
+            group.addStudentKey(key);
+            System.out.println("Adding student " + key + " from " + group.getKey());
+        }
+
+        // Update database
+        put();
+        group.put();
+    }
+
     public void toggleAndPut(Event event) {
         // Get keys
         String cKey = event.getKey();
@@ -119,25 +139,5 @@ public class Student {
         // Update database
         put();
         event.put();
-    }
-
-    public void toggleAndPut(Group group) {
-        // Get keys
-        String gKey = group.getKey();
-
-        // Check
-        if (groupKeys.contains(gKey)) {
-            eventKeys.remove(gKey);
-            group.removeStudentKey(key);
-            System.out.println("Removing student " + key + " from " + group.getKey());
-        } else {
-            eventKeys.add(gKey);
-            group.addStudentKey(key);
-            System.out.println("Adding student " + key + " from " + group.getKey());
-        }
-
-        // Update database
-        put();
-        group.put();
     }
 }

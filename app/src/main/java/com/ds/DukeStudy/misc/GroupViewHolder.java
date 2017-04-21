@@ -28,7 +28,7 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
 
     // Fields
 
-    private static final String TAG = "StudentViewHolder";
+    private static final String TAG = "GroupViewHolder";
     public TextView titleView, bodyView;
     public ToggleButton toggleBtn;
 
@@ -42,7 +42,7 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindToGroup(Group group, Boolean checked) {
-        Log.i(TAG, "Binding Group");
+        Log.i(TAG, "Binding group");
         titleView.setText(group.getName());
         bodyView.setText("Members: " + group.getStudentKeys().size());
         toggleBtn.setChecked(checked);

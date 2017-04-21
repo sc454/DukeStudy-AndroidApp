@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.ds.DukeStudy.fragments.EventsListFragment;
 import com.ds.DukeStudy.fragments.MembersListFragment;
 import com.ds.DukeStudy.fragments.PostsFragment;
+import com.ds.DukeStudy.objects.Util;
 
 public class GroupAdapter extends FragmentPagerAdapter {
 
@@ -29,8 +30,8 @@ public class GroupAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return new PostsFragment().newInstance("posts/" + groupKey);
-            case 1: return new EventsListFragment().newInstance("events/" + groupKey);
+            case 0: return new PostsFragment().newInstance(Util.removeFromPath(groupKey, 0));
+            case 1: return new EventsListFragment().newInstance(groupKey);
             case 2: return new MembersListFragment().newInstance(groupKey);
         }
         return null;

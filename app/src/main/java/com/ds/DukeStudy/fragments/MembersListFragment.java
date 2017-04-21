@@ -17,10 +17,13 @@ import com.ds.DukeStudy.misc.StudentViewHolder;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
+import com.ds.DukeStudy.objects.Util;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
 
 public class MembersListFragment extends Fragment {
 
@@ -66,7 +69,7 @@ public class MembersListFragment extends Fragment {
 
         // Get view items
         Log.i(TAG, "Getting students from " + dbPath);
-        dbRef = Database.ref.child(dbPath);
+        dbRef = Database.ref.child("students");
         student = ((MainActivity)getActivity()).getStudent();
         mRecycler = (RecyclerView) view.findViewById(R.id.students_list);
         mRecycler.setHasFixedSize(true);
@@ -86,31 +89,33 @@ public class MembersListFragment extends Fragment {
         mRecycler.setLayoutManager(mManager);
 
         // Set up FirebaseRecyclerAdapter with the Query
+//        ArrayList<String> keys = Database.ref.child(dbPath).child("studentKeys");
         Log.i(TAG, "Querying students from " + dbPath);
         Query studentsQuery = dbRef.limitToFirst(100);
+//        Query query = Database.ref.child(Util.STUDENT_ROOT).equalTo()
 //        Query eventsQuery = dbRef.orderByChild("department");
-//        mAdapter = new FirebaseRecyclerAdapter<Student,StudentViewHolder>(Student.class, R.layout.item_course, StudentViewHolder.class, studentsQuery) {
-//            @Override
-//            protected void populateViewHolder(final StudentViewHolder viewHolder, final Student student, final int position) {
-//                final String key = getRef(position).getKey();
-//
-//                // Set listener for view holder
-////                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-////                    @Override
-////                    public void onClick(View v) {
-//////                        Context context = getActivity().getApplicationContext();
-//////                        getActivity().getSupportFragmentManager().beginTransaction()
-//////                                .replace(R.id.flContent, new ViewProfileFragment().newInstance(studentKey), null)
-//////                                .addToBackStack(null)
-//////                                .commit();
-////                        }
-////                });
-//
-//                // Bind view to student
+        mAdapter = new FirebaseRecyclerAdapter<Student,StudentViewHolder>(Student.class, R.layout.item_course, StudentViewHolder.class, studentsQuery) {
+            @Override
+            protected void populateViewHolder(final StudentViewHolder viewHolder, final Student student, final int position) {
+                final String key = getRef(position).getKey();
+
+                // Set listener for view holder
+//                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+////                        Context context = getActivity().getApplicationContext();
+////                        getActivity().getSupportFragmentManager().beginTransaction()
+////                                .replace(R.id.flContent, new ViewProfileFragment().newInstance(studentKey), null)
+////                                .addToBackStack(null)
+////                                .commit();
+//                        }
+//                });
+
+                // Bind view to student
 //                viewHolder.bindToStudent(student);
-//            }
-//        };
-//        mRecycler.setAdapter(mAdapter);
+            }
+        };
+        mRecycler.setAdapter(mAdapter);
     }
 
     @Override

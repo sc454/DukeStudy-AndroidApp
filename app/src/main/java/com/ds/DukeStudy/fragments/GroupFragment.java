@@ -17,6 +17,7 @@ import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.misc.GroupAdapter;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Database;
+import com.ds.DukeStudy.objects.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -77,14 +78,14 @@ public class GroupFragment extends Fragment {
         });
 
         // Get the Group name and change the title view
-        DatabaseReference GroupRef = Database.ref.child(groupKey);
+        DatabaseReference GroupRef = Database.ref.child(Util.GROUP_ROOT).child(groupKey);
         GroupRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadGroup");
                 Group group = dataSnapshot.getValue(Group.class);
                 if (group == null) {
-                    Toast.makeText((MainActivity)getActivity(), "Error: Could not fetch group", Toast.LENGTH_SHORT).show();
+                    Toast.makeText((MainActivity)getActivity(), "Error: Main could not fetch group", Toast.LENGTH_SHORT).show();
                 } else {
                     setTitle(group);
                 }

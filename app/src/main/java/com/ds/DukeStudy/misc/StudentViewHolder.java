@@ -39,6 +39,7 @@ public class StudentViewHolder extends RecyclerView.ViewHolder {
         titleView = (TextView) itemView.findViewById(R.id.course_title);
         bodyView = (TextView) itemView.findViewById(R.id.course_body);
         toggleBtn = (ToggleButton) itemView.findViewById(R.id.toggle_btn);
+        toggleBtn.setVisibility(View.GONE);
     }
 
     public void bindToStudent(Student student) {

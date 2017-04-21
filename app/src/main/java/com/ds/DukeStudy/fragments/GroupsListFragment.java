@@ -50,12 +50,12 @@ public class GroupsListFragment extends Fragment {
     private static final String COURSE_KEY_ARG = "courseKey";
     private String courseKey;
 
-    private ListView listView;
-    private FirebaseListAdapter<String> listAdapter;
-    private Drawable plusIcon, minusIcon;
+//    private ListView listView;
+//    private FirebaseListAdapter<String> listAdapter;
+//    private Drawable plusIcon, minusIcon;
     private FloatingActionButton newGroupBtn;
-    private DatabaseReference groupKeysRef;
-    private ValueEventListener groupListener;
+//    private DatabaseReference groupKeysRef;
+//    private ValueEventListener groupListener;
 
     private Student student;
     private DatabaseReference dbRef;
@@ -119,18 +119,18 @@ public class GroupsListFragment extends Fragment {
 
         // Set up FirebaseRecyclerAdapter with the Query
         Query groupsQuery = dbRef.limitToFirst(100);
-//        Query eventsQuery = dbRef.orderByChild("department");
         mAdapter = new FirebaseRecyclerAdapter<Group, GroupViewHolder>(Group.class, R.layout.item_course, GroupViewHolder.class, groupsQuery) {
             @Override
             protected void populateViewHolder(final GroupViewHolder viewHolder, final Group group, final int position) {
                 final String key = getRef(position).getKey();
+                Log.i(TAG, "Populating view for group " + group.getName());
 
                 // Set listener for button
                 viewHolder.toggleBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         student.toggleAndPut(group);
-                        Log.i(TAG, "Toggling " + group.getName() + " at " + group.getKey());
+                        Log.i(TAG, "Toggling group " + group.getName() + " at " + group.getKey());
                     }
                 });
 

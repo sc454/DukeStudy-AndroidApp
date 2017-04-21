@@ -248,8 +248,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 // Update UI
-                updateCourses();
-                updateGroups();
+                updateStudent();
+//                updateCourses();
+//                updateGroups();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -275,14 +276,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
-    private void updateCourses() {
+//    private void updateCourses() {
+//        studentCourses.clear();
+//        Database.ref.child(Util.COURSE_ROOT).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (String key : student.getCourseKeys()) {
+//                    if (key != null && dataSnapshot.hasChild(key)) {
+//                        Course course = dataSnapshot.child(key).getValue(Course.class);
+//                        studentCourses.add(course);
+//                        Log.i(TAG, "Adding " + course.getTitle());
+//                    } else {
+//                        Log.e(TAG, "Course is unexpectedly null");
+//                        Toast.makeText(MainActivity.this, "Error: Could not fetch course.", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//                updateUi();
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.w(TAG, "OnDataChangeCancelled: courses", databaseError.toException());
+//            }
+//        });
+//    }
+
+    private void updateStudent() {
+        // Clear courses and groups
         studentCourses.clear();
-        Database.ref.child(Util.COURSE_ROOT).addListenerForSingleValueEvent(new ValueEventListener() {
+        studentGroups.clear();
+
+        // Get new values
+        Database.ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Load courses
+                DataSnapshot courseSnapshot = dataSnapshot.child(Util.COURSE_ROOT);
                 for (String key : student.getCourseKeys()) {
-                    if (key != null && dataSnapshot.hasChild(key)) {
-                        Course course = dataSnapshot.child(key).getValue(Course.class);
+                    if (key != null && courseSnapshot.hasChild(key)) {
+                        Course course = courseSnapshot.child(key).getValue(Course.class);
                         studentCourses.add(course);
                         Log.i(TAG, "Adding " + course.getTitle());
                     } else {
@@ -290,35 +321,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Toast.makeText(MainActivity.this, "Error: Could not fetch course.", Toast.LENGTH_SHORT).show();
                     }
                 }
+
+                // Load groups
+                DataSnapshot groupSnapshot = dataSnapshot.child(Util.GROUP_ROOT);
+                for (String key : student.getGroupKeys()) {
+                    if (key != null && groupSnapshot.hasChild(key)) {
+                        Group group = groupSnapshot.child(key).getValue(Group.class);
+                        studentGroups.add(group);
+                        Log.i(TAG, "Adding " + group.getName());
+                    } else {
+                        Log.e(TAG, "Course is unexpectedly null");
+                        Toast.makeText(MainActivity.this, "Error: Could not fetch course.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                // Update menu
                 updateUi();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "OnDataChangeCancelled: courses", databaseError.toException());
-            }
-        });
-    }
-
-    private void updateGroups() {
-        studentGroups.clear();
-        Database.ref.child(Util.GROUP_ROOT).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (String key : student.getGroupKeys()) {
-                    if (key != null && dataSnapshot.hasChild(key)) {
-                        Group group = dataSnapshot.child(key).getValue(Group.class);
-                        studentGroups.add(group);
-                        Log.i(TAG, "Adding group " + group.getName());
-                    } else {
-                        Log.e(TAG, "Group is unexpectedly null");
-                        Toast.makeText(MainActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                updateUi();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "OnDataChangeCancelled: groups", databaseError.toException());
             }
         });
     }

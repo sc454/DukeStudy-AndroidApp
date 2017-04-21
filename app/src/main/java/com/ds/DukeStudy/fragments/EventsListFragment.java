@@ -25,6 +25,7 @@ import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
+import com.ds.DukeStudy.objects.Util;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseUser;
@@ -85,7 +86,7 @@ public class EventsListFragment extends Fragment {
         }
 
         // Get view items
-        dbRef = Database.ref.child(dbPath);
+        dbRef = Database.ref.child(Util.EVENT_ROOT).child(dbPath);
         student = ((MainActivity)getActivity()).getStudent();
         mRecycler = (RecyclerView) view.findViewById(R.id.courses_list);
         mRecycler.setHasFixedSize(true);

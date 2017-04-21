@@ -177,7 +177,7 @@ public class NewEventActivity extends AppCompatActivity {
         // Add event to group
         final String uid = Database.getUser().getUid();
         Log.i(TAG, "Looking for group at " + dbPath);
-        Database.ref.child(dbPath).addListenerForSingleValueEvent(new ValueEventListener() {
+        Database.ref.child(Util.GROUP_ROOT).child(dbPath).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadGroup");
@@ -185,14 +185,15 @@ public class NewEventActivity extends AppCompatActivity {
 
                 // Update group
                 if (group == null) {
-                    Log.e(TAG, "Group " + groupKey + " is unexpectedly null");
+                    Log.e(TAG, "Group is unexpectedly null");
                     Toast.makeText(NewEventActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Create event
                     Event event = new Event(title, date, time, location, dbPath);
                     event.addStudentKey(student.getKey());
-                    event.setKey(dbPath);
-                    event.put();
+//                    event.setKey(dbPath);
+                    event.put(dbPath);
+                    Log.i(TAG, "Stored event at " + event.getKey());
 //                    event.put("events/" + dbPath);
                     // Add to group and student
                     group.addEventKey(event.getKey());
@@ -202,7 +203,6 @@ public class NewEventActivity extends AppCompatActivity {
                 setEditingEnabled(true);
                 finish();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "OnDataChangeCancelled: loadGroup", databaseError.toException());
@@ -228,7 +228,7 @@ public class NewEventActivity extends AppCompatActivity {
 
     private void loadStudent() {
         final String uid = Database.getUser().getUid();
-        Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        Database.ref.child(Util.STUDENT_ROOT).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadStudent");
