@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ds.DukeStudy.MainActivity;
+import com.ds.DukeStudy.PostDetailActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.misc.CourseAdapter;
@@ -31,9 +33,9 @@ public class CourseFragment extends Fragment {
     private String courseKey;
     public TabLayout tabLayout;
     public ViewPager viewPager;
-    private OnFragmentInteractionListener fragmentListener;
+//    private OnFragmentInteractionListener fragmentListener;
 
-    // Methods
+    // Constructors
 
     public CourseFragment() {}
 
@@ -44,6 +46,8 @@ public class CourseFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    // Other methods
 
     @Override
     public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
@@ -60,11 +64,11 @@ public class CourseFragment extends Fragment {
             throw new IllegalArgumentException("Must pass " + COURSE_KEY_ARG);
         }
 
-        // Create view
+        // Get view items
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        // Set adapter for view pager
+        // Set adapter
         viewPager.setAdapter(new CourseAdapter(getChildFragmentManager(), courseKey));
         tabLayout.post(new Runnable() {
             @Override
@@ -73,13 +77,17 @@ public class CourseFragment extends Fragment {
             }
         });
 
-        // Get the course name and change the title view
-        DatabaseReference courseRef = Database.ref.child("courses").child(courseKey);
-        courseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Get the course name
+        Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadCourse");
-                setTitle(dataSnapshot.getValue(Course.class));
+                Course course = dataSnapshot.getValue(Course.class);
+                if (course == null) {
+                    Toast.makeText((MainActivity)getActivity(), "Error: Could not fetch course", Toast.LENGTH_SHORT).show();
+                } else {
+                    setTitle(course);
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -90,25 +98,25 @@ public class CourseFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            fragmentListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
-        }
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnFragmentInteractionListener) {
+//            OnFragmentInteractionListener fragmentListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
+//        }
+//    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        fragmentListener = null;
-    }
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+////        fragmentListener = null;
+//    }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(int tag, int view);
-    }
+//    public interface OnFragmentInteractionListener {
+//        void onFragmentInteraction(int tag, int view);
+//    }
 
     void setTitle(Course course) {
         String title = course.getDepartment() + " " + course.getCode() + ": " + course.getTitle();

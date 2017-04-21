@@ -39,9 +39,10 @@ public class NewEventActivity extends AppCompatActivity {
     // Fields
 
     private static final String TAG = "NewEventActivity";
-    private static final String GROUP_KEY_ARG = "groupKey";
+    private static final String DB_PATH_ARG = "dbPath";
 
-    private String groupKey;
+    private String groupKey; //deprecated
+    private String dbPath;
     private Student student;
     private EditText titleField, dateField, timeField, locationField;
     private FloatingActionButton submitBtn;
@@ -49,9 +50,9 @@ public class NewEventActivity extends AppCompatActivity {
 
     // Constructors
 
-    public static void start(Context context, String groupKey) {
+    public static void start(Context context, String path) {
         Intent intent = new Intent(context, NewEventActivity.class);
-        intent.putExtra(GROUP_KEY_ARG, groupKey);
+        intent.putExtra(DB_PATH_ARG, path);
         context.startActivity(intent);
     }
 
@@ -63,9 +64,9 @@ public class NewEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_event);
 
         // Get arguments
-        groupKey = getIntent().getStringExtra(GROUP_KEY_ARG);
-        if (groupKey == null) {
-            throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
+        dbPath = getIntent().getStringExtra(DB_PATH_ARG);
+        if (dbPath == null) {
+            throw new IllegalArgumentException("Must pass " + DB_PATH_ARG);
         }
 
         // Get view items
@@ -175,7 +176,8 @@ public class NewEventActivity extends AppCompatActivity {
 
         // Add event to group
         final String uid = Database.getUser().getUid();
-        Database.ref.child("groups").child(groupKey).addListenerForSingleValueEvent(new ValueEventListener() {
+        Log.i(TAG, "Looking for group at " + dbPath);
+        Database.ref.child(dbPath).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadGroup");
@@ -187,9 +189,11 @@ public class NewEventActivity extends AppCompatActivity {
                     Toast.makeText(NewEventActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Create event
-                    Event event = new Event(title, date, time, location);
+                    Event event = new Event(title, date, time, location, dbPath);
                     event.addStudentKey(student.getKey());
+                    event.setKey(dbPath);
                     event.put();
+//                    event.put("events/" + dbPath);
                     // Add to group and student
                     group.addEventKey(event.getKey());
                     student.addEventKey(event.getKey());

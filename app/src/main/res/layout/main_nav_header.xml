@@ -20,7 +20,7 @@
         android:layout_alignStart="@+id/navUserEmail"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:textColor="@color/white"
-        android:text="Justin Bieber"/>
+        android:text="My Name"/>
 
     <TextView
         android:id="@+id/navUserEmail"
@@ -30,6 +30,6 @@
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
         android:textColor="@color/white"
-        android:text="jb@duke.edu" />
+        android:text="myemail@duke.edu" />
 
 </RelativeLayout>

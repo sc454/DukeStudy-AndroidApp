@@ -49,7 +49,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         titleView.setText(post.getTitle());
         authorView.setText(post.getAuthor());
         bodyView.setText(post.getMessage());
-        myfileRef1 = storageRef.child(post.getUid().toString());
+        myfileRef1 = storageRef.child(post.getStudentKey());
         myfileRef1.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {

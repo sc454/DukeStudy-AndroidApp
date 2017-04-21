@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
@@ -76,12 +77,17 @@ public class GroupFragment extends Fragment {
         });
 
         // Get the Group name and change the title view
-        DatabaseReference GroupRef = Database.ref.child("groups").child(groupKey);
+        DatabaseReference GroupRef = Database.ref.child(groupKey);
         GroupRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadGroup");
-                setTitle(dataSnapshot.getValue(Group.class));
+                Group group = dataSnapshot.getValue(Group.class);
+                if (group == null) {
+                    Toast.makeText((MainActivity)getActivity(), "Error: Could not fetch group", Toast.LENGTH_SHORT).show();
+                } else {
+                    setTitle(group);
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

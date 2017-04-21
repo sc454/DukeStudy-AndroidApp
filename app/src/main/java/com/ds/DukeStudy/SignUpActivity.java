@@ -33,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        // Get view items
         auth = FirebaseAuth.getInstance();
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
@@ -41,8 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        // Reset password button
-
+        // Reset password
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,8 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        // Sign in button
-
+        // Sign in
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,8 +58,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        // Sign up button
-
+        // Sign up
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,7 +73,6 @@ public class SignUpActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Create user
-
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override

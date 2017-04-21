@@ -9,6 +9,7 @@ public class Event {
     // Fields
 
     private String key = "";
+    private String groupKey;
     private String title;
     private String date;
     private String time;
@@ -17,16 +18,17 @@ public class Event {
 
     // Constructors
 
-    public Event(String title, String date, String time, String location) {
+    public Event(String title, String date, String time, String location, String groupKey) {
         this.title = title;
         this.date = date;
         this.time = time;
         this.location = location;
+        this.groupKey = groupKey;
     }
 
-    public Event(String date) {this("NoTitle", date, "NoTime", "NoLocation");}
+    public Event(String date) {this("NoTitle", date, "NoTime", "NoLocation", "None");}
 
-    public Event() {this("NoTitle", "NoDate", "NoTime", "NoLocation");}
+    public Event() {this("NoTitle", "NoDate", "NoTime", "NoLocation", "None");}
 
     // Getters
 
@@ -35,6 +37,7 @@ public class Event {
     public String getDate() {return date;}
     public String getTime() {return time;}
     public String getLocation() {return location;}
+    public String getGroupKey() {return groupKey;}
     public ArrayList<String> getStudentKeys() {return studentKeys;}
 
     // Setters
@@ -44,6 +47,7 @@ public class Event {
     public void setDate(String date) {this.date = date;}
     public void setTime(String time) {this.time = time;}
     public void setLocation(String location) {this.location = location;}
+    public void setGroupKey(String key) {groupKey = key;}
     public void setStudentKeys(ArrayList<String> keys) {studentKeys = keys;}
 
     // Other mutators
@@ -58,30 +62,19 @@ public class Event {
 
     // Database
 
-    public void put() {
-        String path = "events";
+    public void put(String prefix) {
+        String path = Util.EVENT_ROOT;
         if (key == null || "".equals(key)) {
-            key = Database.getNewKey(path);
+            key = prefix + "/" + Database.getNewKey(path + "/" + prefix);
         }
-        Database.put(path, key, this);
+        Database.put(path + "/" + key, this);
     }
 
-    public void put(Student student) {
-        String thereKey = student.getKey();
-        boolean here = studentKeys.contains(thereKey);
-        boolean there = student.getEventKeys().contains(key);
-
-        if ((here && there) || !(here && there)) {
-            // Information up to date
-        } else if (!here) {
-            // Not here, add
-            studentKeys.add(thereKey);
-            put();
+    public void put() {
+        String path = Util.EVENT_ROOT;
+        if (key == null || "".equals(key)) {
+            key = Database.getNewKey("");
         }
-        else if (!there) {
-            // Not there, remove
-            studentKeys.remove(thereKey);
-            put();
-        }
+        Database.put(path + "/" + key, this);
     }
 }

@@ -1,7 +1,5 @@
 package com.ds.DukeStudy.objects;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 public class Post {
 
 //  Fields
@@ -10,23 +8,15 @@ public class Post {
     private String title;
     private String message;
     private String author;
-    private String time;
-    private String uid;
+    private String studentKey;
 
 //	Constructors
-
-//    public Post(String message, String author, String time) {
-//        this.title = "NoTitle";
-//        this.author = author;
-//        this.message = message;
-//        this.time = time;
-//    }
 
     public Post(String title, String message, String author) {
         this.title = title;
         this.message = message;
         this.author = author;
-        this.uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.studentKey = Database.getUser().getUid();
     }
 
     public Post() {this("NoMessage", "NoAuthor", "NoTime");}
@@ -37,22 +27,31 @@ public class Post {
     public String getTitle() {return title;}
     public String getMessage() {return message;}
     public String getAuthor() {return author;}
-    public String getTime() {return time;}
-    public String getUid(){return uid;}
+    public String getStudentKey(){return studentKey;}
+
 //	Setters
 
     public void setKey(String key) {this.key = key;}
     public void setTitle(String title) {this.title = title;}
     public void setMessage(String message) {this.message = message;}
     public void setAuthor(String author) {this.author = author;}
-    public void setTime(String time) {this.time = time;}
-    public void setUid(String uid){this.uid = uid;}
+    public void setStudentKey(String key){this.studentKey = key;}
+
 //  Database
 
-    public void put(String path) {
+    public void put(String prefix) {
+    String path = Util.POST_ROOT;
         if (key == null || "".equals(key)) {
-            key = Database.getNewKey(path);
+            key = prefix + "/" + Database.getNewKey(path + "/" + prefix);
         }
-        Database.put(path, key, this);
+        Database.put(path + "/" + key, this);
+    }
+
+    public void put() {
+        String path = Util.POST_ROOT;
+        if (key == null || "".equals(key)) {
+            key = Database.getNewKey("");
+        }
+        Database.put(path + "/" + key, this);
     }
 }

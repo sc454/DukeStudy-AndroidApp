@@ -1,11 +1,6 @@
 package com.ds.DukeStudy.objects;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-// TODO: mimic ondatachange method in ProfileFragment ln 92
 
 public class Student {
 
@@ -16,7 +11,6 @@ public class Student {
     private String email;
     private String major;
     private String gradYear;
-    // private String profileUrl;
     private ArrayList<String> courseKeys = new ArrayList<String>();
     private ArrayList<String> groupKeys = new ArrayList<String>();
     private ArrayList<String> eventKeys = new ArrayList<String>();
@@ -24,12 +18,10 @@ public class Student {
 //	Constructors
 
     public Student(String name, String email, String major, String gradYear) {
-        this.key = FirebaseAuth.getInstance().getCurrentUser().getUid();
         this.name = name;
         this.email = email;
         this.major = major;
         this.gradYear = gradYear;
-        // this.profileUrl = "NoUrl";
     }
 
 //    public Student(String email) {this("NoName", email, "NoMajor", "NoGradYear");}
@@ -44,7 +36,6 @@ public class Student {
     public String getEmail() {return email;}
     public String getMajor() {return major;}
     public String getGradYear() {return gradYear;}
-    // public String getProfileUrl() {return profileUrl;}
     public ArrayList<String> getCourseKeys() {return courseKeys;}
     public ArrayList<String> getGroupKeys() {return groupKeys;}
     public ArrayList<String> getEventKeys() {return eventKeys;}
@@ -56,7 +47,6 @@ public class Student {
     public void setEmail(String email) {this.email = email;}
     public void setMajor(String major) {this.major = major;}
     public void setGradYear(String year) {gradYear = year;}
-    // public void setProfileUrl(String url){profileUrl = url;}
     public void setCourseKeys(ArrayList<String> keys) {courseKeys = keys;}
     public void setGroupKeys(ArrayList<String> keys) {groupKeys = keys;}
     public void setEventKeys(ArrayList<String> keys) {eventKeys = keys;}
@@ -88,68 +78,11 @@ public class Student {
 //  Database
 
     public void put() {
-        String path = "students";
+        String path = Util.STUDENT_ROOT;
         if (key == null || "".equals(key)) {
-            key = Database.getNewKey(path);
+            key = Database.getUser().getUid();
         }
-        Database.put(path, key, this);
-    }
-
-    public void put(Course course) {
-        String thereKey = course.getKey();
-        boolean here = courseKeys.contains(thereKey);
-        boolean there = course.getStudentKeys().contains(key);
-
-        if ((here && there) || !(here && there)) {
-            // Information up to date
-        } else if (!here) {
-            // Not here, add
-            courseKeys.add(thereKey);
-            put();
-        }
-        else if (!there) {
-            // Not there, remove
-            courseKeys.remove(thereKey);
-            put();
-        }
-    }
-
-    public void put(Group group) {
-        String thereKey = group.getKey();
-        boolean here = groupKeys.contains(thereKey);
-        boolean there = group.getStudentKeys().contains(key);
-
-        if ((here && there) || !(here && there)) {
-            // Information up to date
-        } else if (!here) {
-            // Not here, add
-            groupKeys.add(thereKey);
-            put();
-        }
-        else if (!there) {
-            // Not there, remove
-            groupKeys.remove(thereKey);
-            put();
-        }
-    }
-
-    public void put(Event event) {
-        String thereKey = event.getKey();
-        boolean here = eventKeys.contains(thereKey);
-        boolean there = event.getStudentKeys().contains(key);
-
-        if ((here && there) || !(here && there)) {
-            // Information up to date
-        } else if (!here) {
-            // Not here, add
-            eventKeys.add(thereKey);
-            put();
-        }
-        else if (!there) {
-            // Not there, remove
-            eventKeys.remove(thereKey);
-            put();
-        }
+        Database.put(path + "/" + key, this);
     }
 
     public void toggleAndPut(Course course) {
@@ -162,11 +95,49 @@ public class Student {
             course.removeStudentKey(key);
         } else {
             courseKeys.add(cKey);
-            course.removeStudentKey(key);
+            course.addStudentKey(key);
         }
 
         // Update database
         put();
         course.put();
+    }
+
+    public void toggleAndPut(Event event) {
+        // Get keys
+        String cKey = event.getKey();
+
+        // Check
+        if (eventKeys.contains(cKey)) {
+            eventKeys.remove(cKey);
+            event.removeStudentKey(key);
+        } else {
+            eventKeys.add(cKey);
+            event.addStudentKey(key);
+        }
+
+        // Update database
+        put();
+        event.put();
+    }
+
+    public void toggleAndPut(Group group) {
+        // Get keys
+        String gKey = group.getKey();
+
+        // Check
+        if (groupKeys.contains(gKey)) {
+            eventKeys.remove(gKey);
+            group.removeStudentKey(key);
+            System.out.println("Removing student " + key + " from " + group.getKey());
+        } else {
+            eventKeys.add(gKey);
+            group.addStudentKey(key);
+            System.out.println("Adding student " + key + " from " + group.getKey());
+        }
+
+        // Update database
+        put();
+        group.put();
     }
 }

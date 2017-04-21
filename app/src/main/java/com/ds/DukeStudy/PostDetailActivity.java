@@ -62,34 +62,26 @@ import java.util.List;
 public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "PostDetailActivity";
-    public static final String PATH_ARG = "path";
+    public static final String DB_PATH_ARG = "path";
 
     final long ONE_MEGABYTE = 500 * 500;
     FirebaseAuth auth;
-    // creating an instance of Firebase Storage
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    //creating a storage reference,below URL is the Firebase storage URL.
-    StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
 
-    private DatabaseReference mPostReference;
-    private DatabaseReference mCommentsReference;
-    private ValueEventListener mPostListener;
     private String path;
+    private DatabaseReference mPostReference, mCommentsReference;
+    private ValueEventListener mPostListener;
     private CommentAdapter mAdapter;
     private StorageReference myfileRef1;
 
-    private TextView mAuthorView;
-    private TextView mTitleView;
-    private TextView mBodyView;
+    private TextView mAuthorView, mTitleView, mBodyView;
     private EditText mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
-    private ImageView mImageView;
-    private ImageView mCommentImageView;
+    private ImageView mImageView, mCommentImageView;
 
     public static void start(Context context, String path) {
         Intent intent = new Intent(context, PostDetailActivity.class);
-        intent.putExtra(PATH_ARG, path);
+        intent.putExtra(DB_PATH_ARG, path);
         context.startActivity(intent);
     }
 
@@ -100,17 +92,15 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         setTitle("Post Details");
 
         // Get post key from intent
-        path = getIntent().getStringExtra(PATH_ARG);
+        path = getIntent().getStringExtra(DB_PATH_ARG);
         if (path == null) {
-            throw new IllegalArgumentException("Must pass " + PATH_ARG);
+            throw new IllegalArgumentException("Must pass " + DB_PATH_ARG);
         }
 
         // Initialize Database
-        mPostReference = Database.ref.child(path);
+        mPostReference = Database.ref.child(Util.POST_ROOT).child(path);
         Log.i(TAG, "Path " + path);
-        String postFix = Util.removeFromPath(path, 0);
-        Log.i(TAG, "postFix " + postFix);
-        mCommentsReference = Database.ref.child("post-comments" + postFix);
+        mCommentsReference = Database.ref.child(Util.COMMENT_ROOT).child(path);
 
         // Initialize text fields
         mAuthorView = (TextView) findViewById(R.id.post_author);
@@ -136,17 +126,21 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 Log.i(TAG, "OnDataChange: postListener");
                 // Get Post object and use the values to update the UI
                 Post post = dataSnapshot.getValue(Post.class);
-                mAuthorView.setText(post.getAuthor());
-                mTitleView.setText(post.getTitle());
-                mBodyView.setText(post.getMessage());
-                myfileRef1 = storageRef.child(post.getUid().toString());
-                myfileRef1.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        mImageView.setImageBitmap(getCircleBitmap(bitmap));
-                    }
-                });
+                if (post == null) {
+                    Toast.makeText(PostDetailActivity.this, "Error: Could not fetch post", Toast.LENGTH_SHORT).show();
+                } else {
+                    mAuthorView.setText(post.getAuthor());
+                    mTitleView.setText(post.getTitle());
+                    mBodyView.setText(post.getMessage());
+                    myfileRef1 = Database.store_ref.child(post.getStudentKey());
+                    myfileRef1.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            mImageView.setImageBitmap(Util.getCircleBitmap(bitmap));
+                        }
+                    });
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -159,27 +153,6 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         mAdapter = new CommentAdapter(this, mCommentsReference);
         mCommentsRecycler.setAdapter(mAdapter);
     }
-    private static Bitmap getCircleBitmap(Bitmap bitmap) {
-        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(output);
-
-        final int color = Color.RED;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawOval(rectF, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        bitmap.recycle();
-
-        return output;
-    }
 
     @Override
     public void onStop() {
@@ -189,7 +162,6 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         if (mPostListener != null) {
             mPostReference.removeEventListener(mPostListener);
         }
-
         // Clean up comments listener
         mAdapter.cleanupListener();
     }
@@ -205,26 +177,28 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void postComment() {
         final String uid = getUid();
-        Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        Database.ref.child(Util.STUDENT_ROOT).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadStudent");
                 // Get user information
                 Student user = dataSnapshot.getValue(Student.class);
-                String authorName = user.getName();
 
-                // Create new comment object
-                String commentText = mCommentField.getText().toString();
-                Comment comment = new Comment(uid, authorName, commentText);
+                if (user == null) {
+                    Toast.makeText(PostDetailActivity.this, "Error: Could not fetch user", Toast.LENGTH_SHORT).show();
+                } else {
+                    String authorName = user.getName();
 
-                // Push the comment, it will appear in the list
-                mCommentsReference.push().setValue(comment);
-                // Clear the field
-                mCommentField.setText(null);
+                    // Create new comment object
+                    String commentText = mCommentField.getText().toString();
+                    Comment comment = new Comment(uid, authorName, commentText);
 
-               // Log.d("UID",comment.getStudentKey().toString());
+                    // Push the comment, it will appear in the list
+                    mCommentsReference.push().setValue(comment);
+                    // Clear the field
+                    mCommentField.setText(null);
+                }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "OnDataChangeCancelled: loadStudent", databaseError.toException());
@@ -273,16 +247,6 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     mCommentIds.add(dataSnapshot.getKey());
                     mComments.add(comment);
                     notifyItemInserted(mComments.size() - 1);
-
-//                    final ImageView image = (ImageView) findViewById(R.id.comment_photo);
-//                    StorageReference fileRef = Database.store_ref.child(comment.getStudentKey());
-//                    fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//                        @Override
-//                        public void onSuccess(byte[] bytes) {
-//                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                            image.setImageBitmap(getCircleBitmap(bitmap));
-//                        }
-//                    });
                 }
 
                 @Override
@@ -335,8 +299,6 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     // displaying this comment and if so move it.
                     Comment movedComment = dataSnapshot.getValue(Comment.class);
                     String commentKey = dataSnapshot.getKey();
-
-                    // ...
                 }
 
                 @Override
@@ -370,7 +332,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void onSuccess(byte[] bytes) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    holder.imageView.setImageBitmap(getCircleBitmap(bitmap));
+                    holder.imageView.setImageBitmap(Util.getCircleBitmap(bitmap));
                 }
             });
         }

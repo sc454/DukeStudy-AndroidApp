@@ -83,16 +83,17 @@ public class NewPostActivity extends AppCompatActivity {
 
         //
         final String uid = Database.getUser().getUid();
-        Database.ref.child("students").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        Database.ref.child(Util.STUDENT_ROOT).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: loadStudent");
                 Student user = dataSnapshot.getValue(Student.class);
                 if (user == null) {
                     Log.e(TAG, "User " + uid + " is unexpectedly null");
-                    Toast.makeText(NewPostActivity.this, "Error: Could not fetch user.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewPostActivity.this, "Error: Could not fetch student.", Toast.LENGTH_SHORT).show();
                 } else {
                     Post post = new Post(title, body, user.getName());
+//                    post.setKey(Util.POST_ROOTpath);
                     post.put(path);
                 }
                 setEditingEnabled(true);

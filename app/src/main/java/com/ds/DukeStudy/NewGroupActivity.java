@@ -89,8 +89,8 @@ public class NewGroupActivity extends AppCompatActivity {
                     Toast.makeText(NewGroupActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Create group
-                    Group group = new Group(title, description);
-                    group.put();
+                    Group group = new Group(title, description, courseKey);
+                    group.put(courseKey);
                     // Add to course
                     course.addGroupKey(group.getKey());
                     course.put();

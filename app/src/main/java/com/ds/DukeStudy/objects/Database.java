@@ -27,44 +27,17 @@ public class Database {
     // Other methods
 
     public static <T> String getNewKey(String path) {
-
-        // Navigate to path
-        List<String> pathlist = Arrays.asList(path.split("/"));
-        DatabaseReference db = ref;
-        for (String p : pathlist) {
-            db = db.child(p);
-        }
-
-        // Generate new key
-        db = db.push();
-        return db.getKey();
+        return ref.child(path).push().getKey();
     }
 
-    public static <T> String put(String path, T value) {
-
-        // Navigate to path
-        List<String> pathlist = Arrays.asList(path.split("/"));
-        DatabaseReference db = ref;
-        for (String p : pathlist) {
-            db = db.child(p);
-        }
-
-        // Write key value pair
-        db = db.push();
-        db.setValue(value);
-        return db.getKey();
+    public static <T> void put(String key, T value) {
+        ref.child(key).setValue(value);
+        System.out.println("Writing to " + key);
     }
 
-    public static <T> void put(String path, String key, T value) {
-
-        // Navigate to path
-        List<String> pathlist = Arrays.asList(path.split("/"));
-        DatabaseReference db = ref;
-        for (String p : pathlist) {
-            db = db.child(p);
-        }
-
-        // Write key value pair
-        db.child(key).setValue(value);
-    }
+//    public static <T> String put(String path, T value) {
+//        DatabaseReference db = ref.child(path).push();
+//        db.setValue(value);
+//        return db.getKey();
+//    }
 }

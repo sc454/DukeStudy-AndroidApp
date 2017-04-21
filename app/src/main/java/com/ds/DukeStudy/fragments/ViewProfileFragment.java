@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Student;
@@ -95,10 +96,14 @@ public class ViewProfileFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "OnDataChange: studentListener");
                 final Student curStudent= dataSnapshot.getValue(Student.class);
-                studentName.setText(curStudent.getName());
-                studentEmail.setText(curStudent.getEmail());
-                studentMajor.setText(curStudent.getMajor());
-                studentYear.setText(curStudent.getGradYear());
+                if (curStudent == null) {
+                    Toast.makeText((MainActivity)getActivity(), "Error: Could not fetch student", Toast.LENGTH_SHORT).show();
+                } else {
+                    studentName.setText(curStudent.getName());
+                    studentEmail.setText(curStudent.getEmail());
+                    studentMajor.setText(curStudent.getMajor());
+                    studentYear.setText(curStudent.getGradYear());
+                }
             };
             @Override
             public void onCancelled(DatabaseError databaseError) {

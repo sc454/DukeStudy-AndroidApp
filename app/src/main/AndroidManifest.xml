@@ -20,9 +20,11 @@
             android:name=".LoginActivity"
             android:label="DukeStudy"
             android:theme="@style/AppTheme.NoActionBar">
+
             <!-- Set as startup -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -52,8 +54,9 @@
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NewGroup" />
-        <activity android:name=".NewEventActivity"></activity>
+        <activity android:name=".NewEventActivity" />
+        <activity android:name=".CourseDetailActivity"></activity>
+        <activity android:name=".GroupDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -31,7 +31,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private static final String TAG = "EditProfileFragment";
     private Student student;
     private View EditProfileView;
-    private Button SubmitProfileButton;
+    private Button submitBtn;
     private EditText nameField, emailField, majorField, yearField;
     private OnFragmentInteractionListener mListener;
 
@@ -46,7 +46,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         EditProfileView =  inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
         // Get view items
-        SubmitProfileButton = (Button)EditProfileView.findViewById(R.id.submitProfileButton);
+        submitBtn = (Button)EditProfileView.findViewById(R.id.submitProfileButton);
         nameField = (EditText)EditProfileView.findViewById(R.id.userNameEdit);
         emailField = (EditText)EditProfileView.findViewById(R.id.userEmailEdit);
         majorField = (EditText)EditProfileView.findViewById(R.id.userMajorEdit);
@@ -62,7 +62,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         }
 
         // Submit button
-        SubmitProfileButton.setOnClickListener(this);
+        submitBtn.setOnClickListener(this);
 
         return EditProfileView;
     }

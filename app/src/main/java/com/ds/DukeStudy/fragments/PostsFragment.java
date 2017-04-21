@@ -2,6 +2,7 @@ package com.ds.DukeStudy.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.ds.DukeStudy.NewPostActivity;
 import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Post;
+import com.ds.DukeStudy.objects.Util;
 import com.google.firebase.database.DatabaseReference;
 
 import android.support.design.widget.FloatingActionButton;
@@ -26,9 +28,9 @@ public class PostsFragment extends Fragment {
     // Fields
 
     private static final String TAG = "PostsFragment";
-    public static final String PATH_ARG = "dbPath";
+    public static final String DB_KEY_ARG = "dbKey";
 
-    private String dbPath;
+    private String dbKey;
     private DatabaseReference dbRef;
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
     private RecyclerView mRecycler;
@@ -42,7 +44,7 @@ public class PostsFragment extends Fragment {
     public static PostsFragment newInstance(String path) {
         PostsFragment fragment = new PostsFragment();
         Bundle args = new Bundle();
-        args.putString(PATH_ARG, path);
+        args.putString(DB_KEY_ARG, path);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,11 +57,11 @@ public class PostsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
 
         // Get arguments
-        dbPath = getArguments().getString(PATH_ARG);
-        if (dbPath == null) {
-            throw new IllegalArgumentException("Must pass " + PATH_ARG);
+        dbKey = getArguments().getString(DB_KEY_ARG);
+        if (dbKey == null) {
+            throw new IllegalArgumentException("Must pass " + DB_KEY_ARG);
         }
-        dbRef = Database.ref.child(dbPath);
+        dbRef = Database.ref.child(Util.POST_ROOT).child(dbKey);
 
         // Get view items
         mRecycler = (RecyclerView) view.findViewById(R.id.messages_list);
@@ -70,7 +72,7 @@ public class PostsFragment extends Fragment {
         newPostBtn.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                  NewPostActivity.start(getActivity(), dbPath);
+                  NewPostActivity.start(getActivity(), dbKey);
               }
           });
 
@@ -88,6 +90,7 @@ public class PostsFragment extends Fragment {
         mRecycler.setLayoutManager(mManager);
 
         // Set up FirebaseRecyclerAdapter with the Query
+        Log.i(TAG, "Querying posts from " + dbKey);
         Query postsQuery = dbRef.limitToFirst(100);
         mAdapter = new FirebaseRecyclerAdapter<Post, PostViewHolder>(Post.class, R.layout.item_post, PostViewHolder.class, postsQuery) {
             @Override
@@ -97,7 +100,7 @@ public class PostsFragment extends Fragment {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        PostDetailActivity.start(getActivity(), dbPath + "/" + postKey);
+                        PostDetailActivity.start(getActivity(), dbKey + "/" + postKey);
                     }
                 });
                 viewHolder.bindToPost(post);

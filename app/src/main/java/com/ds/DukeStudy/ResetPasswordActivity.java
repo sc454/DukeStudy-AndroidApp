@@ -33,14 +33,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        // Get fields
+        // Get view items
         auth = FirebaseAuth.getInstance();
         inputEmail = (EditText) findViewById(R.id.email);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
         btnBack = (Button) findViewById(R.id.btn_back);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        // Back button
+        // Back
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,14 +48,14 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
         });
 
-        // Reset button
+        // Reset
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String email = inputEmail.getText().toString().trim();
 
-                // Check for empty email
+                // Validate email
                 if (!Util.validateEmail(email, inputEmail)) return;
 
                 // Send password reset email
@@ -66,7 +66,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(ResetPasswordActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(ResetPasswordActivity.this,LoginActivity.class));
+                                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
                                 } else {
                                     Toast.makeText(ResetPasswordActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
                                 }

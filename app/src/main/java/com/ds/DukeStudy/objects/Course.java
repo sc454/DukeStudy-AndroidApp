@@ -87,29 +87,17 @@ public class Course {
     // Database
 
     public void put() {
-        String path = "courses";
+        String path = Util.COURSE_ROOT;
         if (key == null || "".equals(key)) {
             key = Database.getNewKey(path);
         }
-        Database.put(path, key, this);
+        Database.put(path + "/" + key, this);
     }
 
-    public void put(Student student) {
-        String thereKey = student.getKey();
-        boolean here = studentKeys.contains(thereKey);
-        boolean there = student.getCourseKeys().contains(key);
-
-        if ((here && there) || !(here && there)) {
-            // Information up to date
-        } else if (!here) {
-            // Not here, add
-            studentKeys.add(thereKey);
-            put();
-        }
-        else if (!there) {
-            // Not there, remove
-            studentKeys.remove(thereKey);
-            put();
-        }
-    }
+//    public void put() {
+//        if (key == null || "".equals(key)) {
+//            key = Database.getNewKey("");
+//        }
+//        Database.put(key, this);
+//    }
 }

@@ -2,6 +2,7 @@ package com.ds.DukeStudy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
@@ -21,8 +22,6 @@ import android.widget.Toast;
 import com.ds.DukeStudy.fragments.AddCourseFragment;
 import com.ds.DukeStudy.fragments.CourseFragment;
 import com.ds.DukeStudy.fragments.EditProfileFragment;
-
-
 import com.ds.DukeStudy.fragments.GroupFragment;
 
 import com.ds.DukeStudy.fragments.ProfileFragment;
@@ -30,8 +29,10 @@ import com.ds.DukeStudy.objects.Course;
 import com.ds.DukeStudy.objects.Database;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Student;
+import com.ds.DukeStudy.objects.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,76 +40,62 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 // Main Activity which defaults to Profile page of the user
 // This activity handles navigation drawer clicks
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ProfileFragment.OnFragmentInteractionListener,GroupFragment.OnFragmentInteractionListener,EditProfileFragment.OnFragmentInteractionListener,CourseFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        ProfileFragment.OnFragmentInteractionListener,
+        GroupFragment.OnFragmentInteractionListener,
+        EditProfileFragment.OnFragmentInteractionListener {
+        //,CourseFragment.OnFragmentInteractionListener {
 
     // Fields
 
+    private static final String TAG = "MainActivity";
     public Student student;
     private FirebaseUser user;
     private FirebaseAuth auth;
-    private DataSnapshot courses, groups;
-    private DataSnapshot data;
 
-    private static final String TAG = "MainActivity";
-    private ValueEventListener userListener, coursesListener, groupsListener;
-    private DatabaseReference userRef, coursesRef, groupsRef;
+    private FirebaseAuth.AuthStateListener authListener;
+    private ValueEventListener studentListener;
+    private DatabaseReference studentRef;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
-    private ValueEventListener dbListener;
-    private DatabaseReference dbReference;
-    private FirebaseAuth.AuthStateListener authListener;
-
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReferenceFromUrl("gs://dukestudy-a11a3.appspot.com/");
-
     private NavigationView navView;
-    private TextView userName, userEmail;
+    private View navHeaderView;
+    private TextView navUserName, navUserEmail;
 
     private HashMap<Integer,String> courseMenuIds = new HashMap<Integer,String>();
     private HashMap<Integer,String> groupMenuIds = new HashMap<Integer,String>();
     private ArrayList<Course> studentCourses = new ArrayList<>();
     private ArrayList<Group> studentGroups = new ArrayList<>();
-
-    private static final int ADD_CLASS = 101; //TODO: random number
+    private static final int ADD_CLASS = 0;
 
     // Getters
 
-    public FirebaseUser getUser() {return user;}
+//    public FirebaseUser getUser() {return user;}
     public Student getStudent() {return student;}
-    public DataSnapshot getGroupData() {return groups;}
-    public DataSnapshot getCourseData() {return courses;}
 
-
-    // Android methods
+    // Other methods
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 //        Course c = new Course("Random Signals and Noise", "ECE", "581", "Nolte");
-//        c.put();
-//        c = new Course("Probability", "ECE", "555", "Nolte");
-//        c.put();
-//        c = new Course("Compiler Construction", "ECE", "553", "Nolte");
-//        c.put();
-//        c = new Course("Compressed Sensing", "ECE", "741", "Nolte");
-//        c.put();
 
-            // Get view items
+        // Get view items
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navView = (NavigationView) findViewById(R.id.nav_view);
         navView.setNavigationItemSelectedListener(this);
-        View headerView = navView.inflateHeaderView(R.layout.main_nav_header);
-        userName = (TextView) headerView.findViewById(R.id.navUserName);
-        userEmail = (TextView) headerView.findViewById(R.id.navUserEmail);
+        navHeaderView = navView.inflateHeaderView(R.layout.main_nav_header);
+        navUserName = (TextView) navHeaderView.findViewById(R.id.navUserName);
+        navUserEmail = (TextView) navHeaderView.findViewById(R.id.navUserEmail);
 
         // Set tool bar and drawer layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -119,11 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set references
         user = Database.getUser();
         auth = FirebaseAuth.getInstance();
-        coursesRef = Database.ref.child("courses");
-        groupsRef = Database.ref.child("groups");
-        userRef = Database.ref.child("students").child(user.getUid());
+        studentRef = Database.ref.child(Util.STUDENT_ROOT).child(user.getUid());
 
-        // Load information
+        // Initialize listeners
         createListeners();
 
         // Send to profile
@@ -136,46 +121,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerToggle.syncState();
     }
 
-    public void updateMenuList() {
-        Log.i(TAG, "Updating menu list");
-
-        // Clear navigation drawer options
-        Menu menu = navView.getMenu();
-        SubMenu classSubMenu = menu.getItem(1).getSubMenu();
-        SubMenu groupSubMenu = menu.getItem(2).getSubMenu();
-        classSubMenu.clear(); groupSubMenu.clear();
-        courseMenuIds.clear(); groupMenuIds.clear();
-
-        Log.i(TAG, "Found " + studentCourses.size() + " courses");
-        Log.i(TAG, "Found " + studentGroups.size() + " groups");
-        Integer itemId = 0;
-
-        // Fill courses
-        for (Course course : studentCourses) {
-            classSubMenu.add(0, itemId, Menu.NONE, course.getTitle()).setIcon(R.drawable.ic_menu_class);
-            courseMenuIds.put(itemId, course.getKey());
-            Log.i(TAG, "Mapping item " + itemId + " to " + course.getKey() + " course");
-            itemId++;
-        }
-
-        // Add course
-        classSubMenu.add(0, ADD_CLASS, 0, "Add Class").setIcon(R.drawable.ic_menu_addclass);
-
-        //Fill groups
-        for (Group group : studentGroups) {
-            groupSubMenu.add(0, itemId, Menu.NONE, group.getName()).setIcon(R.drawable.ic_menu_groups);
-            groupMenuIds.put(itemId, group.getKey());
-            Log.i(TAG, "Mapping item " + itemId + " to " + group.getKey() + " group");
-            itemId++;
-        }
-//        studentGroups.clear(); studentCourses.clear();
-    }
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -194,12 +143,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.action_logout:
                 if (authListener != null) {
                     auth.removeAuthStateListener(authListener);
-                    auth.signOut();
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
                 }
+                auth.signOut();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -225,14 +174,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (groupMenuIds.containsKey(item.getItemId())){
                     fragment = new GroupFragment().newInstance(groupMenuIds.get(item.getItemId()));
                 } else {
-                    Log.i(TAG, "Menu id not found");
+                    Log.e(TAG, "Menu id not found");
                 }
         }
 
-        // Start fragment and close drawer
-        getSupportFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
+        // Check item and close drawer
+        unCheckAllMenuItems(navView.getMenu());
+        item.setChecked(true);
         drawerLayout.closeDrawer(GravityCompat.START);
-        item.setChecked(false);
+
+        // Start fragment
+        getSupportFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
         return true;
     }
 
@@ -261,52 +213,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
         }
-        if (userListener != null) {
-            userRef.removeEventListener(userListener);
-        }
-        if (dbListener != null) {
-            dbReference.removeEventListener(dbListener);
+        if (studentListener != null) {
+            studentRef.removeEventListener(studentListener);
         }
         //FirebaseAuth.getInstance().signOut();
     }
 
+    private void unCheckAllMenuItems(@NonNull final Menu menu) {
+        int size = menu.size();
+        for (int i = 0; i < size; i++) {
+            final MenuItem item = menu.getItem(i);
+            if(item.hasSubMenu()) {
+                unCheckAllMenuItems(item.getSubMenu());
+            } else {
+                item.setChecked(false);
+            }
+        }
+    }
+
     void createListeners() {
 
-        // User listener
-        userListener = new ValueEventListener() {
+        // Student listener
+        studentListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i(TAG, "OnDataChange: userListener");
+                Log.i(TAG, "OnDataChange: studentListener");
                 student = dataSnapshot.getValue(Student.class);
+
+                // Create new student, if needed
                 if (student == null) {
+                    Toast.makeText(MainActivity.this, "Creating new student...", Toast.LENGTH_SHORT).show();
                     student = new Student(Database.getUser().getEmail());
                     student.put();
                 }
-                studentGroups.clear(); studentCourses.clear();
-                loadStudent(student);
-                updateMenuList();
+
+                // Update UI
+                updateCourses();
+                updateGroups();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "OnDataChangeCancelled: userListener", databaseError.toException());
+                Log.w(TAG, "OnDataChangeCancelled: studentListener", databaseError.toException());
             }
         };
-
-//         Course listener
-//        dbListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                data = dataSnapshot;
-//                updateMenuList();
-//                Log.i(TAG, "loadDb:onDataChange");
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.w(TAG, "loadDb:onCancelled", databaseError.toException());
-//            }
-//        };
-//        dbReference = Database.ref;
-//        dbReference.addValueEventListener(dbListener);
 
         // Authorization listener
         authListener = new FirebaseAuth.AuthStateListener() {
@@ -318,87 +267,98 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                 } else {
-                    userRef = Database.ref.child("students").child(user.getUid());
-                    userRef.addValueEventListener(userListener);
+                    Log.i(TAG, "Loading auth...");
+                    studentRef = Database.ref.child(Util.STUDENT_ROOT).child(user.getUid());
+                    studentRef.addValueEventListener(studentListener);
                 }
             }
         };
     }
 
-    private void loadStudent(Student student) {
-        // Load student info
-        if (student != null) {
-            // Set user name and email
-            userName.setText(student.getName());
-            userEmail.setText(student.getEmail());
-            // Load courses and groups
-            Log.i(TAG, "Loading student info...");
-            loadCourses(student.getCourseKeys());
-            loadGroups(student.getGroupKeys());
-        } else {
-            Log.w(TAG, "Student is unexpectedly null");
-        }
-    }
-
-    private void loadCourses(ArrayList<String> courseKeys) {
+    private void updateCourses() {
         studentCourses.clear();
-        for (final String courseKey : courseKeys) {
-            Log.i(TAG, "Loading course " + courseKey + "...");
-            Database.ref.child("courses").child(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.i(TAG, "OnDataChange: loadCourses");
-                    Course course = dataSnapshot.getValue(Course.class);
-                    if (course == null) {
-                        Log.e(TAG, "Course " + courseKey + " is unexpectedly null");
-                        Toast.makeText(MainActivity.this, "Error: Could not fetch student.", Toast.LENGTH_SHORT).show();
+        Database.ref.child(Util.COURSE_ROOT).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (String key : student.getCourseKeys()) {
+                    if (key != null && dataSnapshot.hasChild(key)) {
+                        Course course = dataSnapshot.child(key).getValue(Course.class);
+                        studentCourses.add(course);
+                        Log.i(TAG, "Adding " + course.getTitle());
                     } else {
-                        addCourse(course);
-                        updateMenuList();
+                        Log.e(TAG, "Course is unexpectedly null");
+                        Toast.makeText(MainActivity.this, "Error: Could not fetch course.", Toast.LENGTH_SHORT).show();
                     }
                 }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "OnDataChangeCancelled: loadCourses", databaseError.toException());
-                }
-            });
-        }
+                updateUi();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "OnDataChangeCancelled: courses", databaseError.toException());
+            }
+        });
     }
 
-    private void loadGroups(ArrayList<String> groupKeys) {
+    private void updateGroups() {
         studentGroups.clear();
-        for (final String groupKey : groupKeys) {
-            Log.i(TAG, "Loading group " + groupKey + "...");
-            Database.ref.child("groups").child(groupKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.i(TAG, "OnDataChange: loadGroups");
-                    Group group = dataSnapshot.getValue(Group.class);
-                    if (group == null) {
-                        Log.e(TAG, "Group " + groupKey + " is unexpectedly null");
-                        Toast.makeText(MainActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
+        Database.ref.child(Util.GROUP_ROOT).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (String key : student.getGroupKeys()) {
+                    if (key != null && dataSnapshot.hasChild(key)) {
+                        Group group = dataSnapshot.child(key).getValue(Group.class);
+                        studentGroups.add(group);
+                        Log.i(TAG, "Adding group " + group.getName());
                     } else {
-                        addGroup(group);
-                        updateMenuList();
+                        Log.e(TAG, "Group is unexpectedly null");
+                        Toast.makeText(MainActivity.this, "Error: Could not fetch group.", Toast.LENGTH_SHORT).show();
                     }
                 }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "OnDataChangeCancelled: loadGroups", databaseError.toException());
-                }
-            });
+                updateUi();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "OnDataChangeCancelled: groups", databaseError.toException());
+            }
+        });
+    }
+
+    public void updateUi() {
+        Log.i(TAG, "Updating nav list");
+
+        // Update nav
+        navUserName.setText(student.getName());
+        navUserEmail.setText(student.getEmail());
+
+        // Clear navigation drawer options
+        Menu menu = navView.getMenu();
+        SubMenu classSubMenu = menu.getItem(1).getSubMenu();
+        SubMenu groupSubMenu = menu.getItem(2).getSubMenu();
+        classSubMenu.clear(); groupSubMenu.clear();
+        courseMenuIds.clear(); groupMenuIds.clear();
+
+        Log.i(TAG, "Found " + studentCourses.size() + " courses");
+        Log.i(TAG, "Found " + studentGroups.size() + " groups");
+        Integer itemId = 1;
+
+        // Fill courses
+        for (Course course : studentCourses) {
+            String title = course.getDepartment() + " " + course.getCode();
+            classSubMenu.add(0, itemId, Menu.NONE, title).setIcon(R.drawable.ic_menu_class);
+            courseMenuIds.put(itemId, course.getKey());
+//            Log.i(TAG, "Mapping item " + itemId + " to " + course.getKey() + " course");
+            itemId++;
         }
-    }
 
-    private void addCourse(Course course) {
-        Log.e(TAG, "Adding course " + course.getKey());
-        studentCourses.add(course);
-        Log.i(TAG, "Course size " + studentCourses.size());
-    }
+        // Add course
+        classSubMenu.add(0, ADD_CLASS, 0, "Add Class").setIcon(R.drawable.ic_menu_addclass);
 
-    private void addGroup(Group group) {
-        Log.e(TAG, "Adding group " + group.getKey());
-        studentGroups.add(group);
-        Log.i(TAG, "Group size " + studentGroups.size());
+        // Fill groups
+        for (Group group : studentGroups) {
+            groupSubMenu.add(0, itemId, Menu.NONE, group.getName()).setIcon(R.drawable.ic_menu_groups);
+            groupMenuIds.put(itemId, group.getKey());
+//            Log.i(TAG, "Mapping item " + itemId + " to " + group.getKey() + " group");
+            itemId++;
+        }
     }
 }

@@ -28,7 +28,11 @@ import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.objects.Database;
+import com.ds.DukeStudy.objects.Student;
+import com.ds.DukeStudy.objects.Util;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -94,6 +98,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         final View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // Get view items
+        user = Database.getUser();
         Button editProfileButton = (Button) view.findViewById(R.id.editProfileButton);
         userNameView = (TextView) view.findViewById(R.id.userNameView);
         emailView = (TextView) view.findViewById(R.id.emailView);
@@ -103,11 +108,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         pictureView = (ImageView)view.findViewById(R.id.profileImageView);
         //  profilePictureView = (ImageButton) view.findViewById(R.id.profileImageButton);
         // Get a reference to the UID and retrieve profile details to show up on the layout
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
+        if (user != null) {
 
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-            user = FirebaseAuth.getInstance().getCurrentUser();
             StorageReference myfileRef1 = storageRef.child(user.getUid());
 
             File localFile = null;
@@ -132,18 +135,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     // Handle any errors
                 }
             });
-            rootRef.child("students").addValueEventListener(new ValueEventListener() {
+            Database.ref.child(Util.STUDENT_ROOT).child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 // Update the profile view with new data each time something changes
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.i(TAG, "OnDataChange: studentListener");
-                    if (dataSnapshot.hasChild(user.getUid())){
-                        //  Toast.makeText(getActivity(), "UID exists!",
-                        //          Toast.LENGTH_SHORT).show();
-                        userNameView.setText("Name : "+dataSnapshot.child(user.getUid()).child("name").getValue().toString());
-                        emailView.setText("Email : "+dataSnapshot.child(user.getUid()).child("email").getValue().toString());
-                        majorView.setText("Major : "+dataSnapshot.child(user.getUid()).child("major").getValue().toString());
-                        yearView.setText("Graduation Year : "+dataSnapshot.child(user.getUid()).child("gradYear").getValue().toString());
+                    Student student = dataSnapshot.getValue(Student.class);
+                    if (student != null) {
+                        userNameView.setText("Name : " + student.getName());
+                        emailView.setText("Email : " + student.getEmail());
+                        majorView.setText("Major : " + student.getMajor());
+                        yearView.setText("Graduation Year : " + student.getGradYear());
                   /*      if(!dataSnapshot.child(user.getUid()).child("profileUrl").getValue().equals("NoUrl")){
                             byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
                             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -151,8 +153,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         }
 */                    }
                     else{
-                        //    Toast.makeText(getActivity(), "UID doesn't exist!",
-                        //          Toast.LENGTH_SHORT).show();
+                        Toast.makeText((MainActivity)getActivity(), "Error: Profile could not fetch student", Toast.LENGTH_SHORT).show();
                         userNameView.setText("Name");
                         emailView.setText("Email");
                         majorView.setText("Major");

@@ -19,6 +19,13 @@ import java.util.List;
 
 public class Util {
 
+    public static final String STUDENT_ROOT = "students2";
+    public static final String COURSE_ROOT = "courses2";
+    public static final String GROUP_ROOT = "groups2";
+    public static final String EVENT_ROOT = "events2";
+    public static final String POST_ROOT = "posts2";
+    public static final String COMMENT_ROOT = "post-comments2";
+
     private static final String EMPTY_FIELD = "Required!";
     private static final String INCORRECT_EMAIL = "Email must contain @duke.edu";
     private static final String INCORRECT_PASSWORD = "Password too short! Enter at least 6 characters.";
@@ -82,7 +89,7 @@ public class Util {
 
     // Pictures
 
-    private static Bitmap getCircleBitmap(Bitmap bitmap) {
+    public static Bitmap getCircleBitmap(Bitmap bitmap) {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);
 

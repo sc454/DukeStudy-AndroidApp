@@ -1,8 +1,5 @@
 package com.ds.DukeStudy.objects;
 
-//import com.google.firebase.database.IgnoreExtraProperties;
-
-//@IgnoreExtraProperties
 public class Comment {
 
     // Fields
@@ -38,11 +35,18 @@ public class Comment {
 
     // Database
 
-    public void put(String path) {
-//  String path = "posts";
+    public void put(String prefix) {
+        String path = Util.COMMENT_ROOT;
         if (key == null || "".equals(key)) {
-            key = Database.getNewKey(path);
+            key = prefix + "/" + Database.getNewKey(path);
         }
-        Database.put(path, key, this);
+        Database.put(path + "/" + key, this);
     }
+
+//    public void put() {
+//        if (key == null || "".equals(key)) {
+//            key = Database.getNewKey("");
+//        }
+//        Database.put(key, this);
+//    }
 }

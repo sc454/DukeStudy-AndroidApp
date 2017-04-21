@@ -17,14 +17,14 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Event;
 import com.ds.DukeStudy.objects.Group;
 import com.ds.DukeStudy.objects.Post;
+import com.ds.DukeStudy.objects.Student;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class GroupViewHolder extends RecyclerView.ViewHolder {
+public class StudentViewHolder extends RecyclerView.ViewHolder {
 
     // Fields
 
@@ -34,17 +34,16 @@ public class GroupViewHolder extends RecyclerView.ViewHolder {
 
     // Methods
 
-    public GroupViewHolder(View itemView) {
+    public StudentViewHolder(View itemView) {
         super(itemView);
         titleView = (TextView) itemView.findViewById(R.id.course_title);
         bodyView = (TextView) itemView.findViewById(R.id.course_body);
         toggleBtn = (ToggleButton) itemView.findViewById(R.id.toggle_btn);
     }
 
-    public void bindToGroup(Group group, Boolean checked) {
-        Log.i(TAG, "Binding Group");
-        titleView.setText(group.getName());
-        bodyView.setText("Members: " + group.getStudentKeys().size());
-        toggleBtn.setChecked(checked);
+    public void bindToStudent(Student student) {
+        Log.i(TAG, "Binding Student");
+        titleView.setText(student.getName());
+        bodyView.setText(student.getEmail());
     }
 }

@@ -16,13 +16,14 @@ public class Group {
 
 //	Constructors
 
-    public Group(String name, String description)
+    public Group(String name, String description, String courseKey)
     {
         this.name = name;
         this.description = description;
+        this.courseKey = courseKey;
     }
 
-    public Group() {this("NoName", "NoDescription");}
+    public Group() {this("NoName", "NoDescription", "none");}
 
 //	Getters
 
@@ -70,30 +71,19 @@ public class Group {
 
 //  Database
 
-    public void put() {
-        String path = "groups";
+    public void put(String prefix) {
+        String path = Util.GROUP_ROOT;
         if (key == null || "".equals(key)) {
-            key = Database.getNewKey(path);
+            key = prefix + "/" + Database.getNewKey(path);
         }
-        Database.put(path, key, this);
+        Database.put(path + "/" + key, this);
     }
 
-    public void put(Student student) {
-        String thereKey = student.getKey();
-        boolean here = studentKeys.contains(thereKey);
-        boolean there = student.getGroupKeys().contains(key);
-
-        if ((here && there) || !(here && there)) {
-            // Information up to date
-        } else if (!here) {
-            // Not here, add
-            studentKeys.add(thereKey);
-            put();
+    public void put() {
+        String path = Util.GROUP_ROOT;
+        if (key == null || "".equals(key)) {
+            key = Database.getNewKey("");
         }
-        else if (!there) {
-            // Not there, remove
-            studentKeys.remove(thereKey);
-            put();
-        }
+        Database.put(path + "/" + key, this);
     }
 }
