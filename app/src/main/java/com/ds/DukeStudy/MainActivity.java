@@ -88,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        Course c = new Course("Random Signals and Noise", "ECE", "581", "Nolte");
+        Course c = new Course("Software Engineering", "ECE", "651", "Richard Telford");
+        c.setStartTime("10:05 AM");
+        c.setEndTime("11:20 AM");
+        c.setLocation("Hudson Hall 207");
+        c.put();
 
         // Get view items
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
