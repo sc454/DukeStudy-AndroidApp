@@ -68,7 +68,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private OnFragmentInteractionListener mListener;
     FirebaseUser user;
     TextView userNameView, emailView, majorView, yearView;
-    Button uploadImageButton;
     ImageView pictureView;
     String encodedImage;
     private static final int SELECT_PICTURE = 100;
@@ -104,7 +103,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         emailView = (TextView) view.findViewById(R.id.emailView);
         majorView = (TextView)view.findViewById(R.id.majorView);
         yearView = (TextView)view.findViewById(R.id.classView);
-        uploadImageButton = (Button)view.findViewById(R.id.editImageButton);
         pictureView = (ImageView)view.findViewById(R.id.profileImageView);
         //  profilePictureView = (ImageButton) view.findViewById(R.id.profileImageButton);
         // Get a reference to the UID and retrieve profile details to show up on the layout
@@ -160,8 +158,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         yearView.setText("Year");
                         //pictureView.setImageResource(R.drawable.ic_menu_profile);;
                     }
-
-
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -179,60 +175,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 i.setType("image/*");
                 i.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(i, "Select Picture"),SELECT_PICTURE );
-            }
-        });
-
-        uploadImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Creating a reference to the full path of the file. myfileRef now points
-                // gs://fir-demo-d7354.appspot.com/myuploadedfile.jpg
-                StorageReference myfileRef = storageRef.child(user.getUid());
-                pictureView.setDrawingCacheEnabled(true);
-                pictureView.buildDrawingCache();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 8;
-                Bitmap bitmap = pictureView.getDrawingCache();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
-                //   encodedImage = Base64.encodeToString(data, Base64.NO_WRAP);
-                // DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-               /* auth=FirebaseAuth.getInstance();
-                if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-                    user = FirebaseAuth.getInstance().getCurrentUser();
-                    database.child("students").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.hasChild(user.getUid())) {
-                                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-                                database.child("students").child(auth.getCurrentUser().getUid()).child("profileUrl").setValue(encodedImage);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-                */
-                UploadTask uploadTask1 = myfileRef.putBytes(data);
-                final StorageTask<UploadTask.TaskSnapshot> taskSnapshotStorageTask1 = uploadTask1.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(getContext().getApplicationContext(), "TASK FAILED", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot1) {
-                        Toast.makeText(getContext().getApplicationContext(), "TASK SUCCEEDED", Toast.LENGTH_SHORT).show();
-                        //Uri downloadUrl = taskSnapshot1.getDownloadUrl();
-                        //String DOWNLOAD_URL = downloadUrl.getPath();
-                        //Log.v("DOWNLOAD URL", DOWNLOAD_URL);
-                        //Toast.makeText(getContext().getApplicationContext(), DOWNLOAD_URL, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                uploadImage();
             }
         });
 
@@ -289,6 +232,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
     private String getPathFromURI(Uri contentUri) {
         String res = null;
         String[] proj = {MediaStore.Images.Media.DATA};
@@ -299,5 +243,32 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
         cursor.close();
         return res;
+    }
+
+    private void uploadImage() {
+        // Creating a reference to the full path of the file. myfileRef now points
+        // gs://fir-demo-d7354.appspot.com/myuploadedfile.jpg
+        StorageReference myfileRef = storageRef.child(user.getUid());
+        pictureView.setDrawingCacheEnabled(true);
+        pictureView.buildDrawingCache();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        Bitmap bitmap = pictureView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask1 = myfileRef.putBytes(data);
+        final StorageTask<UploadTask.TaskSnapshot> taskSnapshotStorageTask1 = uploadTask1.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getContext().getApplicationContext(), "Profile picture not updated.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot1) {
+                Toast.makeText(getContext().getApplicationContext(), "Profile picture updated.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
