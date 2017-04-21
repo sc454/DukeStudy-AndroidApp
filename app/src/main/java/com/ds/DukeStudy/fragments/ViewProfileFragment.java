@@ -99,10 +99,10 @@ public class ViewProfileFragment extends Fragment {
                 if (curStudent == null) {
                     Toast.makeText((MainActivity)getActivity(), "Error: Could not fetch student", Toast.LENGTH_SHORT).show();
                 } else {
-                    studentName.setText(curStudent.getName());
-                    studentEmail.setText(curStudent.getEmail());
-                    studentMajor.setText(curStudent.getMajor());
-                    studentYear.setText(curStudent.getGradYear());
+                    studentName.setText("Name: " + curStudent.getName());
+                    studentEmail.setText("Email: " + curStudent.getEmail());
+                    studentMajor.setText("Major: " + curStudent.getMajor());
+                    studentYear.setText("Graduation Year: " + curStudent.getGradYear());
                 }
             };
             @Override

@@ -134,7 +134,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         majorView.setText("Major: " + student.getMajor());
                         yearView.setText("Graduation Year: " + student.getGradYear());
                     } else{
-                        Toast.makeText((MainActivity)getActivity(), "Error: Profile could not fetch student", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText((MainActivity)getActivity(), "Error: Profile could not fetch student", Toast.LENGTH_SHORT).show();
                         userNameView.setText("Name");
                         emailView.setText("Email");
                         majorView.setText("Major");

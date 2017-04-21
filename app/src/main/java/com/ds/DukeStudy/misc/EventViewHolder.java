@@ -45,8 +45,10 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
     public void bindToEvent(Event event, Boolean checked) {
         Log.i(TAG, "Binding Event");
+        String info = event.getDate() + " at " + event.getTime() + " in " + event.getLocation();
+        String count = "Attendees: " + event.getStudentKeys().size();
         titleView.setText(event.getTitle());
-        bodyView.setText(event.getDate() + " at " + event.getTime() + " in " + event.getLocation());
+        bodyView.setText(info + "\n" + count);
         toggleBtn.setChecked(checked);
     }
 }

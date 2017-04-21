@@ -5,9 +5,18 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/studentImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@color/black" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="Name"
         android:ems="10"
         android:id="@+id/studentName" />
@@ -15,6 +24,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="Email"
         android:ems="10"
         android:id="@+id/studentEmail" />
@@ -22,6 +32,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:inputType="textPersonName"
         android:text="Major"
         android:ems="10"
@@ -31,14 +42,9 @@
         android:id="@+id/studentYear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:ems="10"
         android:text="Year" />
-
-    <ImageView
-        android:id="@+id/studentImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@color/black" />
 
     <Button
         android:id="@+id/exitProfile"

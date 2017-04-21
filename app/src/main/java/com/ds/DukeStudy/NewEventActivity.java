@@ -180,8 +180,9 @@ public class NewEventActivity extends AppCompatActivity {
                     Log.i(TAG, "Stored event at " + event.getKey());
                     // Add to group and student
                     group.addEventKey(event.getKey());
-                    student.addEventKey(event.getKey());
-                    group.put(); student.put();
+//                    student.addEventKey(event.getKey());
+                    group.put();
+//                    student.put();
                 }
                 setEditingEnabled(true);
                 finish();

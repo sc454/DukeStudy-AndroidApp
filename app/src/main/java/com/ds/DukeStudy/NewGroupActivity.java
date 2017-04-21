@@ -94,8 +94,6 @@ public class NewGroupActivity extends AppCompatActivity {
                     // Add to course
                     course.addGroupKey(group.getKey());
                     course.put();
-                    // Add student TODO
-//                    group.addStudentKey();
                 }
                 setEditingEnabled(true);
                 finish();
