@@ -112,7 +112,7 @@ public class MembersListFragment extends Fragment {
 //                });
 
                 // Bind view to student
-//                viewHolder.bindToStudent(student);
+                viewHolder.bindToStudent(student);
             }
         };
         mRecycler.setAdapter(mAdapter);
