@@ -33,7 +33,6 @@ public class CourseFragment extends Fragment {
     private String courseKey;
     public TabLayout tabLayout;
     public ViewPager viewPager;
-//    private OnFragmentInteractionListener fragmentListener;
 
     // Constructors
 
@@ -97,26 +96,6 @@ public class CourseFragment extends Fragment {
 
         return view;
     }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            OnFragmentInteractionListener fragmentListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-////        fragmentListener = null;
-//    }
-
-//    public interface OnFragmentInteractionListener {
-//        void onFragmentInteraction(int tag, int view);
-//    }
 
     void setTitle(Course course) {
         String title = course.getDepartment() + " " + course.getCode() + ": " + course.getTitle();

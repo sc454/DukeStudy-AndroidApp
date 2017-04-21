@@ -79,11 +79,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     public ProfileFragment() {}
 
-//    public static ProfileFragment newInstance(String param1, String param2) {
-//        ProfileFragment fragment = new ProfileFragment();
-//        return fragment;
-//    }
-
     // Other methods
 
     @Override
@@ -104,9 +99,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         majorView = (TextView)view.findViewById(R.id.majorView);
         yearView = (TextView)view.findViewById(R.id.classView);
         pictureView = (ImageView)view.findViewById(R.id.profileImageView);
-        //  profilePictureView = (ImageButton) view.findViewById(R.id.profileImageButton);
-        // Get a reference to the UID and retrieve profile details to show up on the layout
 
+        // Get a reference to the UID and retrieve profile details to show up on the layout
         if (user != null) {
 
             StorageReference myfileRef1 = storageRef.child(user.getUid());
@@ -123,15 +117,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot1) {
                     Bitmap myBitmap = BitmapFactory.decodeFile(myfile.getAbsolutePath());
                     pictureView.setImageBitmap(myBitmap);
-                    //Set the navBar image as well
-                   // ImageView navPic = (ImageView) view.findViewById(R.id.navProfileIcon);
-                    //navPic.setImageBitmap(myBitmap);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
-                }
+                public void onFailure(@NonNull Exception exception) {}
             });
             Database.ref.child(Util.STUDENT_ROOT).child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 // Update the profile view with new data each time something changes
@@ -172,7 +161,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        //profilePictureView.setOnClickListener(this);
         return view;
     }
 

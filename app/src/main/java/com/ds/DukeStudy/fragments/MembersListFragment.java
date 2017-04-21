@@ -87,24 +87,17 @@ public class MembersListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        Log.i(TAG, "Creating group list from " + dbPath);
 
         // Set up Layout Manager, reverse layout
         mManager = new LinearLayoutManager(getActivity());
-//        mManager.setReverseLayout(true);
-//        mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
         // Set up FirebaseRecyclerAdapter with the Query
-//        ArrayList<String> keys = Database.ref.child(dbPath).child("studentKeys");
         Log.i(TAG, "Querying students from " + dbPath + "/" + dbKey);
         Query studentKeysQuery = dbRef.limitToFirst(100);
-//        Query query = Database.ref.child(Util.STUDENT_ROOT).equalTo()
-//        Query eventsQuery = dbRef.orderByChild("department");
         mAdapter = new FirebaseRecyclerAdapter<String,StudentViewHolder>(String.class, R.layout.item_course, StudentViewHolder.class, studentKeysQuery) {
             @Override
             protected void populateViewHolder(final StudentViewHolder viewHolder, final String studentKey, final int position) {
-//                final String key = getRef(position).getKey();
                 Log.i(TAG, "Populating viewholder for " + studentKey);
 
                 // Set listener for view holder
@@ -133,63 +126,4 @@ public class MembersListFragment extends Fragment {
             mAdapter.cleanup();
         }
     }
-
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreateView(inflater, container, savedInstanceState);
-//        View view = inflater.inflate(R.layout.fragment_members_list, null);
-//
-//        // Get arguments
-//        dbPath = getArguments().getString(DB_PATH_ARG);
-//        if (dbPath == null) {
-//            throw new IllegalArgumentException("Must pass " + DB_PATH_ARG);
-//        }
-//
-//        // Get view items
-//        listView = (ListView) view.findViewById(R.id.memberList);
-//        DatabaseReference studentKeysRef = Database.ref.child(dbPath).child("studentKeys");
-//
-//        // Create adapter to list all members
-//        listAdapter = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.general_row_view, studentKeysRef) {
-//            @Override
-//            protected void populateView(final View view, final String studentKey,final int position) {
-//
-//                // Get view items
-//                final TextView memberName = (TextView) view.findViewById(R.id.firstLine);
-//                final TextView memberEmail = (TextView) view.findViewById(R.id.secondLine);
-//
-//                // Get each student
-//                Database.ref.child("students").child(studentKey).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        Log.i(TAG, "OnDataChange: studentListener");
-//                        final Student student = dataSnapshot.getValue(Student.class);
-//
-//                        // Set name and email
-//                        memberName.setText(student.getName());
-//                        memberEmail.setText(student.getEmail());
-//
-//                        // Send to profile on click
-//                        view.setOnClickListener(new View.OnClickListener(){
-//                            @Override
-//                            public void onClick(View view) {
-//                                Context context = getActivity().getApplicationContext();
-//                                getActivity().getSupportFragmentManager().beginTransaction()
-//                                        .replace(R.id.flContent, new ViewProfileFragment().newInstance(studentKey), null)
-//                                        .addToBackStack(null)
-//                                        .commit();
-//                            }
-//                        });
-//                    }
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                        Log.w(TAG, "OnDataChangeCancelled: studentListener", databaseError.toException());
-//                    }
-//                });
-//            }
-//        };
-//        listView.setAdapter(listAdapter);
-//        return view;
-//    }
 }

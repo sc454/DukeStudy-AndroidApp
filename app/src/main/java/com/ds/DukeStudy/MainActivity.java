@@ -48,10 +48,8 @@ import java.util.HashMap;
 // This activity handles navigation drawer clicks
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        ProfileFragment.OnFragmentInteractionListener,
-        GroupFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener, GroupFragment.OnFragmentInteractionListener,
         EditProfileFragment.OnFragmentInteractionListener {
-        //,CourseFragment.OnFragmentInteractionListener {
 
     // Fields
 
@@ -78,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Getters
 
-//    public FirebaseUser getUser() {return user;}
     public Student getStudent() {return student;}
 
     // Other methods
@@ -87,11 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Course c = new Course("Compiler Construction", "COMPSCI", "553", "Andrew Hilton");
-//        c.setStartTime("1:25 PM");
-//        c.setEndTime("2:40 PM");
-//        c.setLocation("Schiciano A");
-//        c.put();
+//        loadCourse();
 
         // Get view items
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -142,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO
         switch (item.getItemId()) {
             case R.id.action_logout:
                 if (authListener != null) {
@@ -158,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-//    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         getSupportActionBar().setTitle(item.getTitle());
@@ -192,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    //TODO
     @Override
     public void onFragmentInteraction(int tag, int view) {
         //On clicking edit profile, start up edit profile fragment
@@ -220,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (studentListener != null) {
             studentRef.removeEventListener(studentListener);
         }
-        //FirebaseAuth.getInstance().signOut();
     }
 
     private void unCheckAllMenuItems(@NonNull final Menu menu) {
@@ -253,8 +242,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 // Update UI
                 updateStudent();
-//                updateCourses();
-//                updateGroups();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -279,30 +266,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
     }
-
-//    private void updateCourses() {
-//        studentCourses.clear();
-//        Database.ref.child(Util.COURSE_ROOT).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (String key : student.getCourseKeys()) {
-//                    if (key != null && dataSnapshot.hasChild(key)) {
-//                        Course course = dataSnapshot.child(key).getValue(Course.class);
-//                        studentCourses.add(course);
-//                        Log.i(TAG, "Adding " + course.getTitle());
-//                    } else {
-//                        Log.e(TAG, "Course is unexpectedly null");
-//                        Toast.makeText(MainActivity.this, "Error: Could not fetch course.", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//                updateUi();
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.w(TAG, "OnDataChangeCancelled: courses", databaseError.toException());
-//            }
-//        });
-//    }
 
     private void updateStudent() {
         // Clear courses and groups
@@ -392,5 +355,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 itemId++;
             }
         }
+    }
+
+    void loadCourse() {
+        Course c = new Course("Compiler Construction", "COMPSCI", "553", "Andrew Hilton");
+        c.setStartTime("1:25 PM");
+        c.setEndTime("2:40 PM");
+        c.setLocation("Schiciano A");
+        c.put();
     }
 }

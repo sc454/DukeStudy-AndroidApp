@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
 import java.util.Locale;
 
 public class NewEventActivity extends AppCompatActivity {
@@ -119,14 +120,25 @@ public class NewEventActivity extends AppCompatActivity {
                             new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                                    timeField.setText(String.format("%02d:%02d", selectedHour, selectedMinute));
+//                                    String time = String.format("%02d:%02d", selectedHour, selectedMinute);
+                                    String time = selectedHour + ":" + selectedMinute;
+
+                                    try {
+                                        final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+                                        final Date dateObj = sdf.parse(time);
+                                        String outputTime = new SimpleDateFormat("K:mm a").format(dateObj);
+                                        timeField.setText(outputTime);
+                                    } catch (final java.text.ParseException e) {
+                                        e.printStackTrace();
+                                        timeField.setText(time);
+                                    }
+
                                 }
-                            }, hour, minute, false);//Yes 24 hour time
+                            }, hour, minute, false);
                     timePicker.setTitle("Select Time");
                     timePicker.show();
                 }
                     return true;
-
             }
         });
     }
@@ -145,7 +157,7 @@ public class NewEventActivity extends AppCompatActivity {
 
         // Disable button so there are no multi-posts
         setEditingEnabled(false);
-        Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Creating event...", Toast.LENGTH_SHORT).show();
 
         // Add event to group
         final String uid = Database.getUser().getUid();
@@ -164,10 +176,8 @@ public class NewEventActivity extends AppCompatActivity {
                     // Create event
                     Event event = new Event(title, date, time, location, dbPath);
                     event.addStudentKey(student.getKey());
-//                    event.setKey(dbPath);
                     event.put(dbPath);
                     Log.i(TAG, "Stored event at " + event.getKey());
-//                    event.put("events/" + dbPath);
                     // Add to group and student
                     group.addEventKey(event.getKey());
                     student.addEventKey(event.getKey());

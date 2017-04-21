@@ -59,15 +59,6 @@ public class AddCourseFragment extends Fragment {
         mRecycler = (RecyclerView) view.findViewById(R.id.courses_list);
         mRecycler.setHasFixedSize(true);
 
-        // New post button
-//        newPostBtn = (FloatingActionButton) view.findViewById(R.id.fab_new_post);
-//        newPostBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                NewPostActivity.start(getActivity(), dbPath);
-//            }
-//        });
-
         return view;
     }
 
@@ -77,12 +68,9 @@ public class AddCourseFragment extends Fragment {
 
         // Set up Layout Manager, reverse layout
         mManager = new LinearLayoutManager(getActivity());
-//        mManager.setReverseLayout(true);
-//        mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
         // Set up FirebaseRecyclerAdapter with the Query
-//        Query coursesQuery = dbRef.limitToFirst(100);
         Query coursesQuery = dbRef.orderByChild("department");
         mAdapter = new FirebaseRecyclerAdapter<Course, AddCourseViewHolder>(Course.class, R.layout.item_course, AddCourseViewHolder.class, coursesQuery) {
             @Override

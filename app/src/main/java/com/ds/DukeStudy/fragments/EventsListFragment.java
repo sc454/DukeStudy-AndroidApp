@@ -39,19 +39,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 //This is an events fragment that retrieves events listed and displays them in a list for a given
-    //course
+//course
+
 public class EventsListFragment extends Fragment {
 
     // Fields
 
     public static final String TAG = "EventsListFragment";
     public static final String DB_PATH_ARG = "dbKey";
-//    private FirebaseListAdapter<String> listAdapter;
-//    private ListView listView;
-//    private Drawable plusIcon, minusIcon;
     private String dbPath;
-//    private Student student;
-//    private DatabaseReference eventKeysRef;
     private FloatingActionButton newEventBtn;
 
     private Student student;
@@ -110,14 +106,11 @@ public class EventsListFragment extends Fragment {
 
         // Set up Layout Manager, reverse layout
         mManager = new LinearLayoutManager(getActivity());
-//        mManager.setReverseLayout(true);
-//        mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
         // Set up FirebaseRecyclerAdapter with the Query
         Log.i(TAG, "Querying events from " + dbPath);
         Query eventsQuery = dbRef.limitToFirst(100);
-//        Query eventsQuery = dbRef.orderByChild("department");
         mAdapter = new FirebaseRecyclerAdapter<Event, EventViewHolder>(Event.class, R.layout.item_course, EventViewHolder.class, eventsQuery) {
             @Override
             protected void populateViewHolder(final EventViewHolder viewHolder, final Event event, final int position) {
@@ -156,103 +149,3 @@ public class EventsListFragment extends Fragment {
     }
 
 }
-
-//    public void toggle(ImageButton button, Boolean isChecked) {
-//        if (isChecked) {
-//            button.setImageDrawable(minusIcon);
-//        } else {
-//            button.setImageDrawable(plusIcon);
-//        }
-//    }
-//
-//    public void toggle(Event event) {
-//        ArrayList<String> groupKeys = student.getEventKeys();
-//        String key = event.getKey();
-//        if (groupKeys.contains(key)) {
-//            //remove
-//            student.removeEventKey(key);
-//            event.removeStudentKey(student.getKey());
-//            student.put(); event.put();
-//        } else {
-//            //add
-//            student.addEventKey(key);
-//            event.addStudentKey(student.getKey());
-//            student.put(); event.put();
-//        }
-//    }
-
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreateView(inflater, container, savedInstanceState);
-//        final View view = inflater.inflate(R.layout.fragment_events_list, container, false);
-//
-//        // Get arguments
-//        groupKey = getArguments().getString(GROUP_KEY_ARG);
-//        if (groupKey == null) {
-//            throw new IllegalArgumentException("Must pass " + GROUP_KEY_ARG);
-//        }
-//
-//        // Get view items
-//        student = ((MainActivity) getActivity()).getStudent();
-//        listView = (ListView) view.findViewById(R.id.eventList);
-//        plusIcon = getResources().getDrawable(R.drawable.ic_menu_addclass);
-//        minusIcon = getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp);
-//        eventKeysRef = Database.ref.child("groups").child(groupKey).child("eventKeys");
-//
-//        // Create adapter to list all events
-//        listAdapter = new FirebaseListAdapter<String>(getActivity(), String.class, R.layout.general_row_view_btn, eventKeysRef) {
-//            protected void populateView(final View v, final String eventKey, final int position) {
-//
-//                // Get view items
-//                DatabaseReference eventRef = Database.ref.child("events").child(eventKey);
-//                final TextView titleText = (TextView) v.findViewById(R.id.firstLine);
-//                final TextView detailsText = (TextView) v.findViewById(R.id.secondLine);
-//                final ImageButton toggleBtn = (ImageButton) v.findViewById(R.id.toggleButton);
-//
-//                // Get event
-//                Log.i(TAG, "Populating view for " + eventKey);
-//                eventRef.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        Log.i(TAG, "OnDataChange: loadEvent");
-//                        final Event event = dataSnapshot.getValue(Event.class);
-//
-//                        // Set title and details
-//                        titleText.setText(event.getTitle());
-//                        detailsText.setText(event.getDate() + " at " + event.getTime() + " in " + event.getLocation());
-////                        detailsText.setText("Location: " + event.getLocation() + "\tAttendees: " + event.getStudentKeys().size());
-//
-//                        // Set icon
-//                        Boolean isMember = event.getStudentKeys().contains(student.getKey());
-//                        Log.i(TAG, "Event " + event.getTitle() + ": isMember " + isMember);
-//                        toggle(toggleBtn, isMember);
-//
-//                        // Toggle on click
-//                        toggleBtn.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                toggle(event);
-//                            }
-//                        });
-//                    }
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                        Log.w(TAG, "OnDataChangeCancelled: loadEvent", databaseError.toException());
-//                    }
-//                });
-//            }
-//        };
-//        listView.setAdapter(listAdapter);
-//
-//        // New event button
-//        newEventBtn = (FloatingActionButton) view.findViewById(R.id.fab_new_event);
-//        newEventBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                NewEventActivity.start(getActivity(), groupKey);
-//            }
-//        });
-//
-//        return view;
-//    }

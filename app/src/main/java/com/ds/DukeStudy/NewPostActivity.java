@@ -93,7 +93,6 @@ public class NewPostActivity extends AppCompatActivity {
                     Toast.makeText(NewPostActivity.this, "Error: Could not fetch student.", Toast.LENGTH_SHORT).show();
                 } else {
                     Post post = new Post(title, body, user.getName());
-//                    post.setKey(Util.POST_ROOTpath);
                     post.put(path);
                 }
                 setEditingEnabled(true);
