@@ -1,35 +1,18 @@
-package com.ds.DukeStudy.misc;
+package com.ds.DukeStudy.adapters;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Group;
-import com.ds.DukeStudy.objects.Post;
-import com.ds.DukeStudy.objects.Student;
-import com.ds.DukeStudy.objects.Util;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Student;
+import com.ds.DukeStudy.items.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 public class StudentViewHolder extends RecyclerView.ViewHolder {
 

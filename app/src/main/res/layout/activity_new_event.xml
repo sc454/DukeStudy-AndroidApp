@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ds.DukeStudy.NewEventActivity">
+    tools:context="com.ds.DukeStudy.activities.NewEventActivity">
 
     <EditText
         android:id="@+id/event_title"

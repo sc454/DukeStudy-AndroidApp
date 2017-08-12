@@ -11,20 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.ds.DukeStudy.MainActivity;
+import com.ds.DukeStudy.activities.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.misc.GroupViewHolder;
-import com.ds.DukeStudy.misc.StudentViewHolder;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Group;
-import com.ds.DukeStudy.objects.Student;
-import com.ds.DukeStudy.objects.Util;
+import com.ds.DukeStudy.adapters.StudentViewHolder;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Student;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-
-import java.util.ArrayList;
 
 public class MembersListFragment extends Fragment {
 

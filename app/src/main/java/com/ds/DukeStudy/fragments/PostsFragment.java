@@ -7,19 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ds.DukeStudy.NewPostActivity;
+import com.ds.DukeStudy.activities.NewPostActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Post;
-import com.ds.DukeStudy.objects.Util;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Post;
+import com.ds.DukeStudy.items.Util;
 import com.google.firebase.database.DatabaseReference;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.ds.DukeStudy.PostDetailActivity;
-import com.ds.DukeStudy.misc.PostViewHolder;
+import com.ds.DukeStudy.activities.PostDetailActivity;
+import com.ds.DukeStudy.adapters.PostViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 

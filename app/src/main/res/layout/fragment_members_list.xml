@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ds.DukeStudy.MainActivity">
+    tools:context="com.ds.DukeStudy.activities.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/students_list"

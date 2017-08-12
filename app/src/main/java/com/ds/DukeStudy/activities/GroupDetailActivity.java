@@ -1,4 +1,4 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +8,10 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ds.DukeStudy.objects.Course;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Group;
-import com.ds.DukeStudy.objects.Util;
+import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Group;
+import com.ds.DukeStudy.items.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;

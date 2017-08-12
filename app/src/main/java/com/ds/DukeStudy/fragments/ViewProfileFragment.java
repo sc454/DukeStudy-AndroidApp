@@ -16,11 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ds.DukeStudy.MainActivity;
+import com.ds.DukeStudy.activities.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Student;
-import com.ds.DukeStudy.objects.Util;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Student;
+import com.ds.DukeStudy.items.Util;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;

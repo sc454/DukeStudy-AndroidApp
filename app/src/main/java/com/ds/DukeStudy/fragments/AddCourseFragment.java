@@ -1,8 +1,6 @@
 package com.ds.DukeStudy.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,29 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.ds.DukeStudy.CourseDetailActivity;
-import com.ds.DukeStudy.MainActivity;
-import com.ds.DukeStudy.NewPostActivity;
-import com.ds.DukeStudy.PostDetailActivity;
+import com.ds.DukeStudy.activities.CourseDetailActivity;
+import com.ds.DukeStudy.activities.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.misc.AddCourseViewHolder;
-import com.ds.DukeStudy.misc.PostViewHolder;
-import com.ds.DukeStudy.objects.Course;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Post;
-import com.ds.DukeStudy.objects.Student;
-import com.ds.DukeStudy.objects.Util;
-import com.firebase.ui.database.FirebaseListAdapter;
+import com.ds.DukeStudy.adapters.AddCourseViewHolder;
+import com.ds.DukeStudy.items.Course;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Student;
+import com.ds.DukeStudy.items.Util;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-
-import java.util.ArrayList;
 
 public class AddCourseFragment extends Fragment {
 

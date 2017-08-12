@@ -1,27 +1,27 @@
-package com.ds.DukeStudy.misc;
+package com.ds.DukeStudy.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.ds.DukeStudy.fragments.EventsListFragment;
+import com.ds.DukeStudy.fragments.GroupsListFragment;
 import com.ds.DukeStudy.fragments.MembersListFragment;
 import com.ds.DukeStudy.fragments.PostsFragment;
-import com.ds.DukeStudy.objects.Util;
+import com.ds.DukeStudy.items.Util;
 
-public class GroupAdapter extends FragmentPagerAdapter {
+public class CourseAdapter extends FragmentPagerAdapter {
 
     // Fields
 
-    private static final String TAG = "GroupAdapter";
-    private String groupKey;
+    private static final String TAG = "CourseAdapter";
+    private String courseKey;
     private static final int numTabs = 3;
 
     // Methods
 
-    public GroupAdapter(FragmentManager fm, String groupKey) {
+    public CourseAdapter(FragmentManager fm, String courseKey) {
         super(fm);
-        this.groupKey = groupKey;
+        this.courseKey = courseKey;
     }
 
     @Override
@@ -30,9 +30,9 @@ public class GroupAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return new PostsFragment().newInstance(Util.removeFromPath(groupKey, 0));
-            case 1: return new EventsListFragment().newInstance(groupKey);
-            case 2: return new MembersListFragment().newInstance(Util.GROUP_ROOT, groupKey);
+            case 0: return new PostsFragment().newInstance(courseKey);
+            case 1: return new GroupsListFragment().newInstance(courseKey);
+            case 2: return new MembersListFragment().newInstance(Util.COURSE_ROOT, courseKey);
         }
         return null;
     }
@@ -41,11 +41,9 @@ public class GroupAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0: return "Posts";
-            case 1: return "Events";
+            case 1: return "Groups";
             case 2: return "Members";
         }
         return null;
     }
-
-
 }

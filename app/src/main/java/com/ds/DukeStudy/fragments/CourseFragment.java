@@ -1,6 +1,5 @@
 package com.ds.DukeStudy.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -12,15 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.ds.DukeStudy.MainActivity;
-import com.ds.DukeStudy.PostDetailActivity;
+import com.ds.DukeStudy.activities.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Course;
-import com.ds.DukeStudy.misc.CourseAdapter;
-import com.ds.DukeStudy.objects.Database;
+import com.ds.DukeStudy.items.Course;
+import com.ds.DukeStudy.adapters.CourseAdapter;
+import com.ds.DukeStudy.items.Database;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 public class CourseFragment extends Fragment {

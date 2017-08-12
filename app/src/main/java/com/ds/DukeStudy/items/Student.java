@@ -1,4 +1,4 @@
-package com.ds.DukeStudy.objects;
+package com.ds.DukeStudy.items;
 
 import java.util.ArrayList;
 
