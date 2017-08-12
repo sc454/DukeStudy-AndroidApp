@@ -1,8 +1,7 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
@@ -19,28 +18,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ds.DukeStudy.R;
 import com.ds.DukeStudy.fragments.AddCourseFragment;
 import com.ds.DukeStudy.fragments.CourseFragment;
 import com.ds.DukeStudy.fragments.EditProfileFragment;
 import com.ds.DukeStudy.fragments.GroupFragment;
 
 import com.ds.DukeStudy.fragments.ProfileFragment;
-import com.ds.DukeStudy.objects.Course;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Group;
-import com.ds.DukeStudy.objects.Student;
-import com.ds.DukeStudy.objects.Util;
+import com.ds.DukeStudy.items.Course;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Group;
+import com.ds.DukeStudy.items.Student;
+import com.ds.DukeStudy.items.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 

@@ -1,4 +1,4 @@
-package com.ds.DukeStudy.misc;
+package com.ds.DukeStudy.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Post;
+import com.ds.DukeStudy.items.Post;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;

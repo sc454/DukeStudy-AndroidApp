@@ -1,4 +1,4 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -12,23 +12,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.ds.DukeStudy.objects.Course;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Event;
-import com.ds.DukeStudy.objects.Group;
-import com.ds.DukeStudy.objects.Student;
-import com.ds.DukeStudy.objects.Util;
-import com.google.firebase.auth.FirebaseAuth;
+import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Event;
+import com.ds.DukeStudy.items.Group;
+import com.ds.DukeStudy.items.Student;
+import com.ds.DukeStudy.items.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;

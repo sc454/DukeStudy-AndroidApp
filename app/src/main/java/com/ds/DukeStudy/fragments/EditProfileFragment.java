@@ -1,29 +1,18 @@
 package com.ds.DukeStudy.fragments;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ds.DukeStudy.MainActivity;
+import com.ds.DukeStudy.activities.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Student;
-import com.ds.DukeStudy.objects.Util;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.ds.DukeStudy.items.Student;
+import com.ds.DukeStudy.items.Util;
 
 public class EditProfileFragment extends Fragment implements View.OnClickListener {
 

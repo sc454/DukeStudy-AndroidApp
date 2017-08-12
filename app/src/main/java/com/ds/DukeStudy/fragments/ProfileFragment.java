@@ -7,40 +7,28 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.ds.DukeStudy.MainActivity;
 import com.ds.DukeStudy.R;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Student;
-import com.ds.DukeStudy.objects.Util;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Student;
+import com.ds.DukeStudy.items.Util;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -53,12 +41,6 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static com.ds.DukeStudy.R.drawable.ic_menu_profile;
-import static com.ds.DukeStudy.R.id.editProfileButton;
-import static com.ds.DukeStudy.R.id.emailView;
-import static com.ds.DukeStudy.R.id.profileImageView;
-import static com.ds.DukeStudy.R.id.snap;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 

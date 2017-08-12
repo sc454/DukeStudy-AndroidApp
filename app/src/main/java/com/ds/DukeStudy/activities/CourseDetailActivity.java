@@ -1,30 +1,20 @@
-package com.ds.DukeStudy;
+package com.ds.DukeStudy.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ds.DukeStudy.objects.Course;
-import com.ds.DukeStudy.objects.Database;
-import com.ds.DukeStudy.objects.Group;
-import com.ds.DukeStudy.objects.Util;
-import com.google.firebase.auth.FirebaseAuth;
+import com.ds.DukeStudy.R;
+import com.ds.DukeStudy.items.Course;
+import com.ds.DukeStudy.items.Database;
+import com.ds.DukeStudy.items.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 public class CourseDetailActivity extends AppCompatActivity {
 

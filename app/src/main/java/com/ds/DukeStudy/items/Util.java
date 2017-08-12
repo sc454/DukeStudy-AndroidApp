@@ -1,4 +1,4 @@
-package com.ds.DukeStudy.objects;
+package com.ds.DukeStudy.items;
 
 //  Utility fields and methods
 
@@ -15,7 +15,6 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Util {
 

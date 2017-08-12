@@ -1,6 +1,4 @@
-package com.ds.DukeStudy.objects;
-
-import com.ds.DukeStudy.objects.Database;
+package com.ds.DukeStudy.items;
 
 import java.util.ArrayList;
 
